@@ -23,13 +23,46 @@ namespace PollPlus.Repositorio
         }
 
         /// <summary>
+        /// Método para Atualizar uma enquete
+        /// </summary>
+        /// <param name="e">Enquete</param>
+        /// <returns>Verdadeiro ou falso para a inserção</returns>
+
+        public async Task<bool> AtualizarEnquete(Enquete e)
+        {
+            this.Atualizar(e);
+            return await this.AtualizarEnquete(e);
+        }
+
+        /// <summary>
+        /// Método para Deletar uma enquete
+        /// </summary>
+        /// <param name="e">Enquete</param>
+        /// <returns>Verdadeiro ou falso para a inserção</returns>
+        public async Task<bool> DeletarEnquete(Enquete e)
+        {
+            this.Deletar(e);
+            return await this.DeletarEnquete(e);
+        }
+
+        /// <summary>
         /// Método para retorno de uma Enquete pelo seu identificador no Banco de Dados
         /// </summary>
         /// <param name="id">Identificador do registro no Banco de Dados</param>
         /// <returns>Objeto Enquete</returns>
-        public async Task<Enquete> RetornarEnquenetePorId(int id)
+        public async Task<Enquete> RetornarEnquetePorId(int id)
         {
-            return await this.RetornarEnquenetePorId(id);
+            return await this.RetornarEnquetePorId(id);
+        }
+        
+        /// <summary>
+        /// Método para retorno de uma Enquete pelo seu identificador no Banco de Dados
+        /// </summary>
+        /// <param name="id">Identificador do registro no Banco de Dados</param>
+        /// <returns>Objeto Enquete</returns>
+        public async Task<ICollection<Enquete>> RetornarTodos()
+        {
+            return await this.RetornarTodos();
         }
     }
 }
