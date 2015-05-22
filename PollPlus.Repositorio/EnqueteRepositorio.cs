@@ -4,6 +4,7 @@ using PollPlus.Repositorio.EFContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace PollPlus.Repositorio
         public async Task<bool> AtualizarEnquete(Enquete e)
         {
             this.Atualizar(e);
-            return await this.AtualizarEnquete(e);
+            return await this.Salvar();
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace PollPlus.Repositorio
         public async Task<bool> DeletarEnquete(Enquete e)
         {
             this.Deletar(e);
-            return await this.DeletarEnquete(e);
+            return await this.Salvar();
         }
 
         /// <summary>
@@ -52,15 +53,16 @@ namespace PollPlus.Repositorio
         /// <returns>Objeto Enquete</returns>
         public async Task<Enquete> RetornarEnquetePorId(int id)
         {
-            return await this.RetornarEnquetePorId(id);
+            Expression<Func<Enquete, bool>> porId = (x) => x.Id == id;
+            return await this.RetornarPorId(porId);
         }
-        
+
         /// <summary>
         /// Método para retorno de uma Enquete pelo seu identificador no Banco de Dados
         /// </summary>
         /// <param name="id">Identificador do registro no Banco de Dados</param>
         /// <returns>Objeto Enquete</returns>
-        public async Task<ICollection<Enquete>> RetornarTodos()
+        public async Task<ICollection<Enquete>> RetornarTodasEnquetes()
         {
             return await this.RetornarTodos();
         }
