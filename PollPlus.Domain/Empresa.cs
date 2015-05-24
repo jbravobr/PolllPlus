@@ -10,7 +10,7 @@ namespace PollPlus.Domain
     {
         public string Nome { get; protected set; }
         public string Logo { get; protected set; }
-
+        public int QtdePush { get; protected set; }
         public virtual Documento Documento { get; protected set; }
         public virtual ICollection<Categoria> Categorias { get; protected set; }
     }
