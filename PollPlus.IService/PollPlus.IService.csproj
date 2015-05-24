@@ -47,7 +47,10 @@
     <Compile Include="IGeolocalizacaoService.cs" />
     <Compile Include="IMensagemService.cs" />
     <Compile Include="IOpcaoEnqueteService.cs" />
+    <Compile Include="IOpcaoRespostaService.cs" />
+    <Compile Include="IPlataformaService.cs" />
     <Compile Include="IUsuarioService.cs" />
+    <Compile Include="IVoucherService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
