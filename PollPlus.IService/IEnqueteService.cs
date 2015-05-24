@@ -10,6 +10,9 @@ namespace PollPlus.IService
     public interface IEnqueteService
     {
         Task<bool> InserirEnquete(Enquete e);
+        Task<bool> AtualizarEnquete(Enquete e);
+        Task<bool> DeletarEnquete(Enquete e);
         Task<Enquete> RetornarEnquetePorId(int id);
+        Task<ICollection<Enquete>> RetornarTodasEnquetes();
     }
 }

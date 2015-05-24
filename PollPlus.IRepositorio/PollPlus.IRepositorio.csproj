@@ -41,7 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IBaseRepositorio.cs" />
+    <Compile Include="ICategoriaRepositorio.cs" />
+    <Compile Include="IDocumentoRepositorio.cs" />
     <Compile Include="IEnqueteRepositorio.cs" />
+    <Compile Include="IUsuarioRepositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
