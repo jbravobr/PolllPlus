@@ -42,7 +42,11 @@
   <ItemGroup>
     <Compile Include="ICategoriaService.cs" />
     <Compile Include="IDocumentoService.cs" />
+    <Compile Include="IEmpresaService.cs" />
     <Compile Include="IEnqueteService.cs" />
+    <Compile Include="IGeolocalizacaoService.cs" />
+    <Compile Include="IMensagemService.cs" />
+    <Compile Include="IOpcaoEnqueteService.cs" />
     <Compile Include="IUsuarioService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

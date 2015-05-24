@@ -43,7 +43,11 @@
     <Compile Include="IBaseRepositorio.cs" />
     <Compile Include="ICategoriaRepositorio.cs" />
     <Compile Include="IDocumentoRepositorio.cs" />
+    <Compile Include="IEmpresaRepositorio.cs" />
     <Compile Include="IEnqueteRepositorio.cs" />
+    <Compile Include="IGeolocalizacaoRepositorio.cs" />
+    <Compile Include="IMensagemRepositorio.cs" />
+    <Compile Include="IOpcaoEnqueteRepositorio.cs" />
     <Compile Include="IUsuarioRepositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
