@@ -18,6 +18,7 @@ namespace PollPlus.Domain
         public DateTime DataNascimento { get; protected set; }
         public string Municipio { get; protected set; } //TODO: Analisar como será a inclusão e Municipios
         public EnumStatusUsuario Status { get; protected set; }
+        public EnumPerfil Perfil { get; set; }
 
         public virtual Categoria CategoriaInteresse { get; protected set; }
         public virtual ICollection<Geolocalizacao> Localizacoes { get; protected set; }
