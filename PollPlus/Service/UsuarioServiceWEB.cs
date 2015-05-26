@@ -33,14 +33,19 @@ namespace PollPlus.Service
             return await this._service.InserirUsuario(usuario);
         }
 
+        public async Task<bool> LogarUsuario(Usuario usuario)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ICollection<Usuario>> RetornarTodosUsuarios()
         {
             return await this._service.RetornarTodosUsuarios();
         }
 
-        public Task<Usuario> RetornarUsuarioPorId(int id)
+        public async Task<Usuario> RetornarUsuarioPorId(int id)
         {
-            throw new NotImplementedException();
+            return await this._service.RetornarUsuarioPorId(id);
         }
     }
 }

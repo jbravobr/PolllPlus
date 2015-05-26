@@ -28,6 +28,8 @@ namespace PollPlus.Controllers
             this.service = Service;
         }
 
+        public AccountController() { }
+
         [OnlyAuthorizedUser(true), HttpGet]
         public async Task<ActionResult> Login()
         {
