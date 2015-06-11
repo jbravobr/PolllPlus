@@ -52,12 +52,13 @@
     <Compile Include="Enumeradores\EnumStatusUsuario.cs" />
     <Compile Include="Enumeradores\EnumStatusVoucher.cs" />
     <Compile Include="Enumeradores\EnumTipoDocumento.cs" />
+    <Compile Include="Enumeradores\EnumTipoEnquete.cs" />
     <Compile Include="Enumeradores\EnumTipoImagem.cs" />
     <Compile Include="Enumeradores\EnumTipoMensagem.cs" />
     <Compile Include="Geolocalizacao.cs" />
     <Compile Include="Mensagem.cs" />
-    <Compile Include="OpcaoResposta.cs" />
-    <Compile Include="OpcaoEnquetes.cs" />
+    <Compile Include="Resposta.cs" />
+    <Compile Include="Pergunta.cs" />
     <Compile Include="Permissao.cs" />
     <Compile Include="Plataforma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,5 +10,7 @@ namespace PollPlus.Domain
     {
         public double Latitude { get; protected set; }
         public double Longitude { get; protected set; }
+
+        public int AppID { get; protected set; }
     }
 }

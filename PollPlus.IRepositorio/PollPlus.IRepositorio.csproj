@@ -47,8 +47,6 @@
     <Compile Include="IEnqueteRepositorio.cs" />
     <Compile Include="IGeolocalizacaoRepositorio.cs" />
     <Compile Include="IMensagemRepositorio.cs" />
-    <Compile Include="IOpcaoEnqueteRepositorio.cs" />
-    <Compile Include="IOpcaoRespostaRepositorio.cs" />
     <Compile Include="IPlataformaRepositorio.cs" />
     <Compile Include="IUsuarioRepositorio.cs" />
     <Compile Include="IVoucherRepositorio.cs" />

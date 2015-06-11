@@ -58,8 +58,6 @@
     <Compile Include="EnqueteRepositorio.cs" />
     <Compile Include="GeolocalizacaoRepositorio.cs" />
     <Compile Include="MensagemRepositorio.cs" />
-    <Compile Include="OpcaoEnqueteRepositorio.cs" />
-    <Compile Include="OpcaoRespostaRepositorio.cs" />
     <Compile Include="PlataformaRepositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioRepositorio.cs" />

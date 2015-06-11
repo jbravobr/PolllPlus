@@ -11,7 +11,5 @@ namespace PollPlus.Domain
     public class Subcategoria : EntityBase
     {
         public string NomeSubCategoria { get; protected set; }
-        public int CategoriaId { get; protected set; }
-        public Categoria Categoria { get; protected set; }
     }
 }

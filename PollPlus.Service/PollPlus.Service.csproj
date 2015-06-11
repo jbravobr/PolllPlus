@@ -46,8 +46,6 @@
     <Compile Include="EnqueteService.cs" />
     <Compile Include="GeolocalizacaoService.cs" />
     <Compile Include="MensagemService.cs" />
-    <Compile Include="OpcaoEnqueteService.cs" />
-    <Compile Include="OpcaoRespostaService.cs" />
     <Compile Include="PlataformaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioService.cs" />

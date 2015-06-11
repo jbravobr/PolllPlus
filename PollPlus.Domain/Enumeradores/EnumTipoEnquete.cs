@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PollPlus.Domain
+namespace PollPlus.Domain.Enumeradores
 {
-    public class OpcaoEnquete : EntityBase
+    public enum EnumTipoEnquete
     {
-        public string Descricao { get; protected set; }
+        Publica =1, 
+        Interesse = 2
     }
 }

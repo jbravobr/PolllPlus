@@ -17,10 +17,11 @@ namespace PollPlus.Migration.Context
         DbSet<Enquete> Enquete { get; set; }
         DbSet<Geolocalizacao> Geolocalizacao { get; set; }
         DbSet<Mensagem> Mensagem { get; set; }
-        DbSet<OpcaoEnquete> OpcaoEnquete { get; set; }
         DbSet<Plataforma> Plataforma { get; set; }
         DbSet<Usuario> Usuario { get; set; }
         DbSet<Voucher> Voucher { get; set; }
+        DbSet<Pergunta> Pergunta { get; set; }
+        DbSet<Resposta> Resposta { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

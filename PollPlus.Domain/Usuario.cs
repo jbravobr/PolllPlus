@@ -20,7 +20,7 @@ namespace PollPlus.Domain
         public EnumStatusUsuario Status { get; protected set; }
         public EnumPerfil Perfil { get; set; }
 
-        public virtual Categoria CategoriaInteresse { get; protected set; }
+        public virtual ICollection<Categoria> CategoriasInteresse { get; protected set; }
         public virtual ICollection<Geolocalizacao> Localizacoes { get; protected set; }
         public virtual ICollection<Plataforma> Plataformas { get; protected set; }
     }
