@@ -47,7 +47,7 @@
         <div class="form-group">
             @Html.Label("Categorias", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
-                @Html.Partial("_MultiSelectCategorias", (ICollection<PollPlus.Domain.Categoria>)ViewBag.CategoriasInteresse)
+                @Html.Partial("_MultiSelectCategorias", (ICollection<PollPlus.Models.CategoriaViewModel>)ViewBag.CategoriasInteresse)
                 @Html.ValidationMessageFor(x => x.DataNascimento)
             </div>
         </div>

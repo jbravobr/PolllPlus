@@ -46,14 +46,16 @@ namespace PollPlus.Controllers
         [HttpGet, OnlyAuthorizedUser(true)]
         public async Task<ActionResult> NovoUsuario()
         {
-            ViewBag.CategoriasInteresse = await this.service.RetornarCategoriasDisponniveis();
+            var categorias = await this.service.RetornarCategoriasDisponniveis();
+            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
-            ViewBag.CategoriasInteresse = await this.service.RetornarCategoriasDisponniveis();
+            var categorias = await this.service.RetornarCategoriasDisponniveis();
+            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
 
             if (!ModelState.IsValid)
                 return View(model);

@@ -21,6 +21,7 @@ namespace PollPlus.Mappers
         protected override void Configure()
         {
             Mapper.CreateMap<Usuario, UsuarioViewModel>();
+            Mapper.CreateMap<Categoria, CategoriaViewModel>();
         }
     }
 }

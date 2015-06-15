@@ -22,15 +22,16 @@ namespace PollPlus.Mappers
         protected override void Configure()
         {
             Mapper.CreateMap<UsuarioViewModel, Usuario>()
-                .BeforeMap((viewModel, dominio) =>
+                .BeforeMap((vm, d) =>
                 {
-                    var categorias = ViewBag["CategoriasInteresse"];
-
-                    foreach (var cat in viewModel.CategoriasInteresse)
+                    foreach (var cat in vm.CategoriasInteresse)
                     {
-                        dominio.CategoriasInteresse.Add()
+                        d.AdicionaCategoria(new Categoria { });
                     }
                 });
+
+            Mapper.CreateMap<CategoriaViewModel, Categoria>()
+;
         }
     }
 }

@@ -224,6 +224,7 @@
     <Compile Include="Mappers\AutoMapperConfig.cs" />
     <Compile Include="Mappers\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappers\ViewModelToDomainMappingProfile.cs" />
+    <Compile Include="Models\CategoriaViewModel.cs" />
     <Compile Include="Models\UsuarioLogado.cs" />
     <Compile Include="Models\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

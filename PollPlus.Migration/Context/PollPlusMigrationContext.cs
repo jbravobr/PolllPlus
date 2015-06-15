@@ -32,7 +32,7 @@ namespace PollPlus.Migration.Context
         }
 
         public PollPlusMigrationContext()
-            : base("PollPlusDataBase")
+            : base("MaisConnectionString")
         { }
     }
 }

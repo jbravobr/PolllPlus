@@ -19,6 +19,6 @@ namespace PollPlus.Models
         public EnumStatusUsuario Status { get; set; }
         public EnumPerfil Perfil { get; set; }
 
-        public List<int> CategoriasInteresse { get; set; }
+        public List<CategoriaViewModel> CategoriasInteresse { get; set; }
     }
 }

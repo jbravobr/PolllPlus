@@ -1,4 +1,4 @@
-﻿@model ICollection<PollPlus.Domain.Categoria>
+﻿@model ICollection<PollPlus.Models.CategoriaViewModel>
 
 <div class="btn-group open">
     <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" style="width: auto;">
@@ -10,7 +10,7 @@
         {
             <li class="">
                 <a href="javascript:void(0);">
-                    <label class="checkbox"><input type="checkbox" value="@cat.Id" name="CategoriasInteresse"> @cat.Nome</label>
+                    <label class="checkbox"><input type="checkbox" value="@cat.Id" name="CategoriaInteresse"> @cat.Nome</label>
                 </a>
             </li>
         }
