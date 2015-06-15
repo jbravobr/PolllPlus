@@ -9,13 +9,12 @@ namespace PollPlus.Domain
 {
     public class Mensagem : EntityBase
     {
-        public string Texto { get; protected set; }
-        public int AlcanceEmKm { get; protected set; }
-        public bool EhRascunho { get; protected set; }
-        public EnumTipoMensagem Tipo { get; protected set; }
+        public string Texto { get; set; }
+        public int AlcanceEmKm { get; set; }
+        public bool EhRascunho { get; set; }
+        public EnumTipoMensagem Tipo { get; set; }
 
-        public virtual ICollection<Categoria> Categorias { get; protected set; }
-        public virtual ICollection<Empresa> Empresas { get; protected set; }
-        public virtual ICollection<Plataforma> Plataformas { get; protected set; }
+        public virtual ICollection<Categoria> Categorias { get; set; }
+        public virtual Empresa Empresa { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
+using PollPlus.IRepositorio;
 
 namespace PollPlus.Service
 {
@@ -13,15 +14,15 @@ namespace PollPlus.Service
         /// <summary>
         /// Propriedade de exposição para a injeção de dependência
         /// </summary>
-        readonly IUsuarioService _servico;
+        readonly IUsuarioRepositorio _repositorio;
 
         /// <summary>
         /// Construtor parametrizado com a injeção de dependência
         /// </summary>
-        /// <param name="servico">IUsuarioService</param>
-        public UsuarioService(IUsuarioService servico)
+        /// <param name="repositorio">IUsuarioService</param>
+        public UsuarioService(IUsuarioRepositorio repositorio)
         {
-            this._servico = servico;
+            this._repositorio = repositorio;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirUsuario(Usuario e)
         {
-            return await this._servico.InserirUsuario(e);
+            return await this._repositorio.InserirUsuario(e);
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> AtualizarUsuario(Usuario e)
         {
-            return await this._servico.AtualizarUsuario(e);
+            return await this._repositorio.AtualizarUsuario(e);
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> DeletarUsuario(Usuario e)
         {
-            return await this._servico.DeletarUsuario(e);
+            return await this._repositorio.DeletarUsuario(e);
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Usuario</returns>
         public async Task<Usuario> RetornarUsuarioPorId(int id)
         {
-            return await this._servico.RetornarUsuarioPorId(id);
+            return await this._repositorio.RetornarUsuarioPorId(id);
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Usuario</returns>
         public async Task<ICollection<Usuario>> RetornarTodosUsuarios()
         {
-            return await this._servico.RetornarTodosUsuarios();
+            return await this._repositorio.RetornarTodosUsuarios();
         }
     }
 }

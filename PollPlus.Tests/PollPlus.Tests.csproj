@@ -92,6 +92,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PollPlus.Domain\PollPlus.Domain.csproj">
+      <Project>{4453B321-0B2F-4B50-AD60-0FCB599234D5}</Project>
+      <Name>PollPlus.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PollPlus\PollPlus.csproj">
       <Project>{11B84E28-F511-4A44-B091-5FD013810B3D}</Project>
       <Name>PollPlus</Name>

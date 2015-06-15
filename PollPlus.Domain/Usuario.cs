@@ -9,19 +9,27 @@ namespace PollPlus.Domain
 {
     public class Usuario : EntityBase
     {
-        public string Nome { get; protected set; }
-        public string Email { get; protected set; }
-        public string Senha { get; protected set; }
-        public EnumSexo Sexo { get; protected set; }
-        public int DDD { get; protected set; }
-        public string Telefone { get; protected set; }
-        public DateTime DataNascimento { get; protected set; }
-        public string Municipio { get; protected set; } //TODO: Analisar como será a inclusão e Municipios
-        public EnumStatusUsuario Status { get; protected set; }
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public string Senha { get; set; }
+        public EnumSexo Sexo { get; set; }
+        public int DDD { get; set; }
+        public string Telefone { get; set; }
+        public DateTime DataNascimento { get; set; }
+        public string Municipio { get; set; }
+        public EnumStatusUsuario Status { get; set; }
         public EnumPerfil Perfil { get; set; }
 
-        public virtual ICollection<Categoria> CategoriasInteresse { get; protected set; }
-        public virtual ICollection<Geolocalizacao> Localizacoes { get; protected set; }
-        public virtual ICollection<Plataforma> Plataformas { get; protected set; }
+        public virtual ICollection<Categoria> CategoriasInteresse { get; set; }
+        public virtual ICollection<Geolocalizacao> Localizacoes { get; set; }
+        public virtual ICollection<Plataforma> Plataformas { get; set; }
+
+        public void AdicionaCategoria(Categoria cat)
+        {
+            if (this.CategoriasInteresse == null)
+                this.CategoriasInteresse = new List<Categoria>();
+
+            this.CategoriasInteresse.Add(cat);
+        }
     }
 }

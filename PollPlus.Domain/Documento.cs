@@ -9,7 +9,7 @@ namespace PollPlus.Domain
 {
     public class Documento : EntityBase
     {
-        public int Numero { get; protected set; }
-        public EnumTipoDocumento Tipo { get; protected set; }
+        public int Numero { get; set; }
+        public EnumTipoDocumento Tipo { get; set; }
     }
 }

@@ -13,9 +13,12 @@ namespace PollPlus.Service
     {
         readonly IUsuarioService _service;
 
-        public UsuarioServiceWEB(IUsuarioService Service)
+        readonly ICategoriaService _serviceCategoria;
+
+        public UsuarioServiceWEB(IUsuarioService Service, ICategoriaService ServiceCategoria)
         {
             this._service = Service;
+            this._serviceCategoria = ServiceCategoria;
         }
 
         public async Task<bool> AtualizarUsuario(Usuario usuario)
@@ -36,6 +39,11 @@ namespace PollPlus.Service
         public async Task<bool> LogarUsuario(Usuario usuario)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()
+        {
+            return await this._serviceCategoria.RetornarTodasCategorias();
         }
 
         public async Task<ICollection<Usuario>> RetornarTodosUsuarios()

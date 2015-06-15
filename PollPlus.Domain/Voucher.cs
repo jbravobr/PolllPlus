@@ -9,8 +9,9 @@ namespace PollPlus.Domain
 {
     public class Voucher : EntityBase
     {
-        public Guid Identificador { get; protected set; }
-        public EnumStatusVoucher Status { get; protected set; }
-        public virtual ICollection<Enquete> Enquetes { get; protected set; }
+        public Guid Identificador { get; set; }
+        public EnumStatusVoucher Status { get; set; }
+
+        public virtual ICollection<Enquete> Enquetes { get; set; }
     }
 }

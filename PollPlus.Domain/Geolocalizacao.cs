@@ -8,9 +8,9 @@ namespace PollPlus.Domain
 {
     public class Geolocalizacao : EntityBase
     {
-        public double Latitude { get; protected set; }
-        public double Longitude { get; protected set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
-        public int AppID { get; protected set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

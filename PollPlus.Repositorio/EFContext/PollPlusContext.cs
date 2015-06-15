@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PollPlus.Domain;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -12,14 +13,12 @@ namespace PollPlus.Repositorio.EFContext
     {
         public DbSet<T> DBEntity { get; set; }
 
-        public PollPlusContext() : base("name=PollPlusConnectionString") { }
+        public PollPlusContext() : base("name=MaisConnectionString") { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
-            //TODO: Montar lógica de relacionamentos.
         }
     }
 }

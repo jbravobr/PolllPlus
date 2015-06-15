@@ -8,10 +8,12 @@ namespace PollPlus.Domain
 {
     public class Empresa : EntityBase
     {
-        public string Nome { get; protected set; }
-        public string Logo { get; protected set; }
-        public int QtdePush { get; protected set; }
-        public virtual Documento Documento { get; protected set; }
-        public virtual ICollection<Categoria> Categorias { get; protected set; }
+        public string Nome { get; set; }
+        public string Logo { get; set; }
+        public int QtdePush { get; set; }
+
+        public virtual Documento Documento { get; set; }
+        public virtual ICollection<Mensagem> Mensagens { get; set; }
+        public virtual ICollection<Enquete> Enquetes { get; set; }
     }
 }

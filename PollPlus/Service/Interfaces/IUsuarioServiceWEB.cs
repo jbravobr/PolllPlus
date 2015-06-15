@@ -15,6 +15,8 @@ namespace PollPlus.Service.Interfaces
         Task<Usuario> RetornarUsuarioPorId(int id);
         Task<ICollection<Usuario>> RetornarTodosUsuarios();
 
+        Task<ICollection<Categoria>> RetornarCategoriasDisponniveis();
+
         Task<bool> LogarUsuario(Usuario usuario);
     }
 }

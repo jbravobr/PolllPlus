@@ -1,9 +1,8 @@
-﻿using PollPlus.Domain.Enumeradores;
+﻿using PollPlus.Domain;
+using PollPlus.Domain.Enumeradores;
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PollPlus.Models
 {
@@ -16,9 +15,10 @@ namespace PollPlus.Models
         public int DDD { get; set; }
         public string Telefone { get; set; }
         public DateTime DataNascimento { get; set; }
-        public string Municipio { get; set; } //TODO: Analisar como será a inclusão e Municipios
+        public string Municipio { get; set; }
         public EnumStatusUsuario Status { get; set; }
         public EnumPerfil Perfil { get; set; }
 
+        public List<int> CategoriasInteresse { get; set; }
     }
 }

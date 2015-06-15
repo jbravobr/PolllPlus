@@ -8,9 +8,9 @@ namespace PollPlus.Domain
 {
     public class Resposta : EntityBase
     {
-        public string TextoResposta { get; protected set; }
-        public DateTime? DataResposta { get; protected set; }
+        public string TextoResposta { get; set; }
+        public DateTime? DataResposta { get; set; }
 
-        public virtual Pergunta Pergunta { get; protected set; }
+        public virtual Pergunta Pergunta { get; set; }
     }
 }

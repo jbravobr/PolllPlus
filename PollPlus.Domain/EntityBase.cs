@@ -9,7 +9,7 @@ namespace PollPlus.Domain
     public class EntityBase
     {
         public int Id { get; set; }
-        public DateTime DataCriacao { get; protected set; }
-        public DateTime DataAtualizacao { get; protected set; }
+        public DateTime DataCriacao { get; set; }
+        public DateTime? DataAtualizacao { get; set; }
     }
 }

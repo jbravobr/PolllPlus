@@ -56,6 +56,10 @@
       <Project>{4453b321-0b2f-4b50-ad60-0fcb599234d5}</Project>
       <Name>PollPlus.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PollPlus.IRepositorio\PollPlus.IRepositorio.csproj">
+      <Project>{54c095d4-e712-4d8a-867b-e23410a40cb0}</Project>
+      <Name>PollPlus.IRepositorio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PollPlus.IService\PollPlus.IService.csproj">
       <Project>{32757113-5da4-4ec0-806f-6f82bb02a636}</Project>
       <Name>PollPlus.IService</Name>

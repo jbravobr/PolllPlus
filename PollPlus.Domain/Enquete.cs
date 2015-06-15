@@ -9,18 +9,17 @@ namespace PollPlus.Domain
 {
     public class Enquete : EntityBase
     {
-        public string Titulo { get; protected set; }
-        public EnumStatusEnquete Status { get; protected set; }
-        public EnumTipoEnquete Tipo { get; protected set; }
-        public EnumTipoImagem TipoImagem { get; protected set; }
-        public string Imagem { get; protected set; }
-        public int ClientId { get; protected set; }
-        public string UrlVideo { get; protected set; }
+        public string Titulo { get; set; }
+        public EnumStatusEnquete Status { get; set; }
+        public EnumTipoEnquete Tipo { get; set; }
+        public EnumTipoImagem TipoImagem { get; set; }
+        public string Imagem { get; set; }
+        public int ClientId { get; set; }
+        public string UrlVideo { get; set; }
 
-        public virtual Usuario UsuarioCriador { get; protected set; }
-        public virtual Empresa EmpresaProprietaria { get; protected set; }
-        public virtual ICollection<Categoria> Categorias { get; protected set; }
-        public virtual Pergunta Pergunta { get; protected set; }
-       
+        public virtual Usuario UsuarioCriador { get; set; }
+        public virtual Empresa EmpresaProprietaria { get; set; }
+        public virtual ICollection<Categoria> Categorias { get; set; }
+        public virtual ICollection<Voucher> Vouchers { get; set; }
     }
 }

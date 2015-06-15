@@ -14,6 +14,8 @@ namespace PollPlus.DependecyResolver
         public override void Load()
         {
             Bind<IEnqueteRepositorio>().To<EnqueteRepositorio>();
+            Bind<ICategoriaRepositorio>().To<CategoriaRepositorio>();
+            Bind<IUsuarioRepositorio>().To<UsuarioRepositorio>();
         }
     }
 }

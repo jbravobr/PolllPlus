@@ -15,10 +15,11 @@ using PollPlus.Domain;
 using PagedList;
 using PollPlus.Filters;
 using PollPlus.Domain.Enumeradores;
+using System.Collections.Generic;
 
 namespace PollPlus.Controllers
 {
-    [OnlyAuthorizedUser]
+    //[OnlyAuthorizedUser]
     public class AccountController : BaseController
     {
         readonly IUsuarioServiceWEB service;
@@ -42,16 +43,18 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        [HttpGet]
-        [CustomActionFilter(PerfilAutorizado = new[] { EnumPerfil.AdministradorEmpresa, EnumPerfil.AdministradorMaster })]
+        [HttpGet, OnlyAuthorizedUser(true)]
         public async Task<ActionResult> NovoUsuario()
         {
+            ViewBag.CategoriasInteresse = await this.service.RetornarCategoriasDisponniveis();
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
+            ViewBag.CategoriasInteresse = await this.service.RetornarCategoriasDisponniveis();
+
             if (!ModelState.IsValid)
                 return View(model);
             else if (await this.service.InserirUsuario(AutoMapper.Mapper.Map<Usuario>(model)))

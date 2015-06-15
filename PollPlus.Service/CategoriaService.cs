@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
+using PollPlus.IRepositorio;
 
 namespace PollPlus.Service
 {
@@ -14,15 +15,15 @@ namespace PollPlus.Service
         /// <summary>
         /// Propriedade de exposição para a injeção de dependência
         /// </summary>
-        readonly ICategoriaService _servico;
+        readonly ICategoriaRepositorio _repositorio;
 
         /// <summary>
         /// Construtor parametrizado com a injeção de dependência
         /// </summary>
-        /// <param name="servico">IEnqueteService</param>
-        public CategoriaService(ICategoriaService servico)
+        /// <param name="repositorio">IEnqueteService</param>
+        public CategoriaService(ICategoriaRepositorio repositorio)
         {
-            this._servico = servico;
+            this._repositorio = repositorio;
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirCategoria(Categoria e)
         {
-            return await this._servico.InserirCategoria(e);
+            return await this._repositorio.InserirCategoria(e);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> AtualizarCategoria(Categoria e)
         {
-            return await this._servico.AtualizarCategoria(e);
+            return await this._repositorio.AtualizarCategoria(e);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> DeletarCategoria(Categoria e)
         {
-            return await this._servico.DeletarCategoria(e);
+            return await this._repositorio.DeletarCategoria(e);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Categoria</returns>
         public async Task<Categoria> RetornarCategoriaPorId(int id)
         {
-            return await this._servico.RetornarCategoriaPorId(id);
+            return await this._repositorio.RetornarCategoriaPorId(id);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Categoria</returns>
         public async Task<ICollection<Categoria>> RetornarTodasCategorias()
         {
-            return await this._servico.RetornarTodasCategorias();
+            return await this._repositorio.RetornarTodasCategorias();
         }
     }
 }

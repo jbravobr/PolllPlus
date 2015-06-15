@@ -1,0 +1,18 @@
+﻿@model ICollection<PollPlus.Domain.Categoria>
+
+<div class="btn-group open">
+    <button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="None selected" style="width: auto;">
+        Nenhuma Categoria Selecionada <b class="caret">
+        </b>
+    </button>
+    <ul class="multiselect-container dropdown-menu">
+        @foreach (var cat in Model)
+        {
+            <li class="">
+                <a href="javascript:void(0);">
+                    <label class="checkbox"><input type="checkbox" value="@cat.Id" name="CategoriasInteresse"> @cat.Nome</label>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

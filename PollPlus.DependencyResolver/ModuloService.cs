@@ -14,6 +14,8 @@ namespace Aldeia.Tamis.DependecyResolver
         public override void Load()
         {
             Bind<IEnqueteService>().To<EnqueteService>();
+            Bind<ICategoriaService>().To<CategoriaService>();
+            Bind<IUsuarioService>().To<UsuarioService>();
         }
     }
 }

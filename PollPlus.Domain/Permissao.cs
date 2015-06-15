@@ -9,10 +9,10 @@ namespace PollPlus.Domain
 {
     public class Permissao : EntityBase
     {
-        public bool Inclusao { get; protected set; }
-        public bool Atualizacao { get; protected set; }
-        public bool Exclusao { get; protected set; }
-        public bool Consulta { get; protected set; }
-        public EnumPerfil Perfil { get; protected set; }
+        public bool Inclusao { get; set; }
+        public bool Atualizacao { get; set; }
+        public bool Exclusao { get; set; }
+        public bool Consulta { get; set; }
+        public EnumPerfil Perfil { get; set; }
     }
 }

@@ -31,7 +31,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +47,7 @@
     <Compile Include="Empresa.cs" />
     <Compile Include="Enquete.cs" />
     <Compile Include="EntityBase.cs" />
+    <Compile Include="Enumeradores\EnumExtensions.cs" />
     <Compile Include="Enumeradores\EnumPerfil.cs" />
     <Compile Include="Enumeradores\EnumSexo.cs" />
     <Compile Include="Enumeradores\EnumStatusCategoria.cs" />

@@ -8,8 +8,10 @@ namespace PollPlus.Domain
 {
     public class Plataforma : EntityBase
     {
-        public string Nome { get; protected set; }
-        public string Descricao { get; protected set; }
-        public int AppID { get; protected set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public int AppID { get; set; }
+
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

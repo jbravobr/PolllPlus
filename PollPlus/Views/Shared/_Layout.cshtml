@@ -1,44 +1,200 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using PollPlus.Helpers
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <link rel="shortcut icon" href="@Url.Content("/Content/Theme/images/icon.png")">
+    <title>Mais - Administração</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+    <link href="/Content/Theme/fonts/font-awesome-4/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/css/style.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Scripts/Theme/jquery.fullcalendar/fullcalendar/fullcalendar.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Scripts/Theme//bootstrap/dist/css/bootstrap.css")">
+    <link href="@Url.Content("~/Scripts/Theme/jquery.datatables/bootstrap-adapter/css/datatables.css")" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/Theme/bootstrap.datetimepicker/css/bootstrap-datetimepicker.min.css")">
+    <link href="~/Scripts/Theme/jquery.icheck/skins/flat/blue.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/CssTheme0")
+    <link rel="stylesheet" href="@Url.Content("/Content/fonts/font-awesome-4/css/font-awesome.min.css")">
+    <link href="@Url.Content("~/Content/jquery-ui.min.css")" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+          <script src="@Url.Content("../../assets/js/html5shiv.js")"></script>
+      <script src="@Url.Content("../../assets/js/respond.min.js")"></script>
+    <![endif]-->
+
+    <style>
+        .tamanho-reduzido {
+            width: 87%;
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+    </style>
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+<body class="animated">
+
+    <div id="cl-wrapper">
+        <div class="cl-sidebar">
+            <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+            <div class="cl-navblock">
+
+                @*MENU*@
+                <div class="menu-space">
+                    <div class="content">
+                        <div class="sidebar-logo">
+                            <div class="logo">
+                                <a href="@Url.Action("Index", "Home")"></a>
+                            </div>
+                        </div>
+                        <ul class="cl-vnavigation" style="margin-top:15px;">
+                            @*<Vendas>*@
+                            @{Html.RenderAction("MontaMenuVendas", "Menu");}
+                            @*</Vendas>*@
+
+                            @*<Empresas>*@
+                            @{Html.RenderAction("MontaMenuEmpresas", "Menu"); }
+                            @*</Empresas>*@
+
+                            @*<Cadastro Usuarios Administrativos>*@
+                            @{Html.RenderAction("MontaMenuUsuariosAdministrativos", "Menu");}
+                            @*</Cadastro Usuarios Administrativos>*@
+
+                            @*<Relatórios>*@
+                            @{Html.RenderAction("MontaMenuRelatorios", "Menu");}
+                            @*</Relatórios>*@
+
+                            @*<Documentos>*@
+                            @{Html.RenderAction("MontaMenuDocumentos", "Menu");}
+                            @*</Documentos>*@
+
+                            @*<Comunicados - Lojista>*@
+                            @{Html.RenderAction("MontaMenuComunicadosParaLojistas", "Menu");}
+                            @*</Comunicados - Lojista>*@
+
+                            @*<Comunicados - Administradores>*@
+                            @{Html.RenderAction("MontaMenuComunicadosParaAdministradores", "Menu");}
+                            @*</Comunicados - Administradores>*@
+                        </ul>
+                    </div>
+                </div>
+                @*MENU*@
+
+                @*<div class="text-right collapse-button" style="padding:7px 9px;">
+                        <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
+                    </div>*@
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        <div class="container-fluid" id="pcont">
+            <!-- TOP NAVBAR -->
+            <div id="head-nav" class="navbar navbar-default" style="min-height:65px !important;">
+                <div class="container-fluid">
+                    <div class="navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right user-nav">
+                            <li class="dropdown profile_menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img alt="Avatar" src="@Url.Content("/Content/Theme/images/ico-user.jpg")" width="30" height="30" />
+                                    @{
+                                        var _usuarioNome = UsuarioLogado.UsuarioAutenticado().Nome;
+                                    }
+                                    <span>@Html.Raw(_usuarioNome.ToUpper())</span>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Logout", "Logout", "Usuario")</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--/.nav-collapse animate-collapse -->
+                </div>
+            </div>
+            <div class="cl-mcont">
+                <div class="block-flat">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jsTheme0")
+    <script src="@Url.Content("~/Scripts/Theme/jquery.niftymodals/js/jquery.modalEffects.js")"></script>
+    <script src="~/Scripts/Theme/jquery.icheck/icheck.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var link = $('link[href="css/style.css"]');
+            if ($.cookie("css")) {
+                link.attr("href", 'css/skin-' + $.cookie("css") + '.css');
+            }
+
+            $("ul.cl-vnavigation li a[href!='#']").bind('click', function () {
+                window.location.href = $(this).attr('href');
+            });
+
+            $(function () {
+                $("#color-switcher .toggle").click(function () {
+                    var s = $(this).parent();
+                    if (s.hasClass("open")) {
+                        s.animate({ 'margin-right': '-109px' }, 400).toggleClass("open");
+                    } else {
+                        s.animate({ 'margin-right': '0' }, 400).toggleClass("open");
+                    }
+                });
+                $("#color-switcher .color").click(function () {
+                    var color = $(this).data("color");
+                    $("body").fadeOut(function () {
+                        //link.attr('href','css/skin-' + color + '.css');
+                        $.cookie("css", color, { expires: 365, path: '/' });
+                        window.location.href = "";
+                        $(this).fadeIn("slow");
+                    });
+                });
+            });
+
+            // Aplicação de estilo nos inputs do tipo 'radio' e 'checkbox'
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+
+            // Inicialiação do Datepicker nos campos com class '.datetime'.
+            $('.datetime').datepicker();
+        });
+
+    </script>
+
+    @Scripts.Render("~/bundles/jsTheme1")
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/jsTheme2")
+    @*<script src="@Url.Content("~/Scripts/Theme/jquery.ui/jquery-ui.js")" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/Theme/bootstrap/dist/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.mask.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.maskmoney.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.2.js")"></script>
+    <script src="@Url.Content("~/Scripts/Theme/jquery.datatables/jquery.datatables.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/Theme/jquery.datatables/bootstrap-adapter/js/datatables.js")"></script>
+    <script src="@Url.Content("~/Scripts/Theme/jquery.niftymodals/js/jquery.modalEffects.js")"></script>
+    <script src="@Url.Content("~/Scripts/Theme/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+
+    <script src="~/Scripts/datepicker-pt-BR.js"></script>
+    @RenderSection("Scripts", false)
+
 </body>
 </html>
