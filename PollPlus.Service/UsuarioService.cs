@@ -74,5 +74,15 @@ namespace PollPlus.Service
         {
             return await this._repositorio.RetornarTodosUsuarios();
         }
+
+        /// <summary>
+        /// Insere e retornar um usuário
+        /// </summary>
+        /// <param name="e">Usuário a ser inserido</param>
+        /// <returns></returns>
+        public async Task<Usuario> InserirRetornarUsuario(Usuario e)
+        {
+            return await this._repositorio.InserirRetornarUsuario(e);
+        }
     }
 }

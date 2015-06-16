@@ -66,5 +66,15 @@ namespace PollPlus.Repositorio
         {
             return await this.RetornarTodos();
         }
+
+        /// <summary>
+        /// Insere um usuário e retornar o mesmo
+        /// </summary>
+        /// <param name="e">Usuário a ser inserido</param>
+        /// <returns></returns>
+        public async Task<Usuario> InserirRetornarUsuario(Usuario e)
+        {
+            return await this.InsertAndReturnEntity(e);
+        }
     }
 }

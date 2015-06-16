@@ -12,8 +12,9 @@ namespace PollPlus.Domain
         public string Logo { get; set; }
         public int QtdePush { get; set; }
 
+        public int DocumentoId { get; set; }
         public virtual Documento Documento { get; set; }
-        public virtual ICollection<Mensagem> Mensagens { get; set; }
-        public virtual ICollection<Enquete> Enquetes { get; set; }
+
+        public virtual ICollection<Mensagem> Mensagem { get; set; }
     }
 }

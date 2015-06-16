@@ -12,8 +12,6 @@ namespace PollPlus.Domain
     {
         public string TextoPergunta { get; set; }
 
-        public virtual ICollection<Resposta> Respostas { get; set; }
-
-        public virtual Enquete Enquete { get; set; }
+        public virtual ICollection<PerguntaResposta> PerguntaResposta { get; set; }
     }
 }

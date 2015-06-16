@@ -55,11 +55,18 @@
     <Compile Include="DocumentoRepositorio.cs" />
     <Compile Include="EFContext\PollPlusContext.cs" />
     <Compile Include="EmpresaRepositorio.cs" />
+    <Compile Include="UsuarioPlataformaRepositorio.cs" />
+    <Compile Include="PerguntaRespostaRepositorio.cs" />
+    <Compile Include="SubcategoriaCategoriaRepositorio.cs" />
+    <Compile Include="MensagemCategoriaRepositorio.cs" />
+    <Compile Include="EnqueteVoucherRepositorio.cs" />
+    <Compile Include="EnqueteCategoriaRepositorio.cs" />
     <Compile Include="EnqueteRepositorio.cs" />
     <Compile Include="GeolocalizacaoRepositorio.cs" />
     <Compile Include="MensagemRepositorio.cs" />
     <Compile Include="PlataformaRepositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioCategoriaRepositorio.cs" />
     <Compile Include="UsuarioRepositorio.cs" />
     <Compile Include="VoucherRepositorio.cs" />
   </ItemGroup>

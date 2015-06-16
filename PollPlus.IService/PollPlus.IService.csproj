@@ -43,12 +43,19 @@
     <Compile Include="ICategoriaService.cs" />
     <Compile Include="IDocumentoService.cs" />
     <Compile Include="IEmpresaService.cs" />
+    <Compile Include="IEnqueteCategoriaService.cs" />
     <Compile Include="IEnqueteService.cs" />
+    <Compile Include="IEnqueteVoucherService.cs" />
     <Compile Include="IGeolocalizacaoService.cs" />
+    <Compile Include="IMensagemCategoriaService.cs" />
     <Compile Include="IMensagemService.cs" />
     <Compile Include="IPlataformaService.cs" />
+    <Compile Include="ISubcategoriaCategoriaService.cs" />
+    <Compile Include="IUsuarioCategoriaService.cs" />
+    <Compile Include="IUsuarioPlataformaService.cs" />
     <Compile Include="IUsuarioService.cs" />
     <Compile Include="IVoucherService.cs" />
+    <Compile Include="PerguntaRespostaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

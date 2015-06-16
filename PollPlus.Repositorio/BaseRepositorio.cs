@@ -26,7 +26,14 @@ namespace PollPlus.Repositorio
         /// </summary>
         public void Inserir(T entity)
         {
-            _entidades.Set<T>().Add(entity);
+            try
+            {
+                _entidades.Set<T>().Add(entity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -72,7 +79,14 @@ namespace PollPlus.Repositorio
         /// <param name="entity"></param>
         public void Atualizar(T entidade)
         {
-            _entidades.Entry(entidade).State = EntityState.Modified;
+            try
+            {
+                _entidades.Entry(entidade).State = EntityState.Modified;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -81,7 +95,14 @@ namespace PollPlus.Repositorio
         /// <returns></returns>
         public async Task<bool> Salvar()
         {
-            return await Context.SaveChangesAsync() > 0;
+            try
+            {
+                return await Context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>

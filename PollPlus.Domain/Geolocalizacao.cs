@@ -11,6 +11,7 @@ namespace PollPlus.Domain
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public int UsuarioId { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }

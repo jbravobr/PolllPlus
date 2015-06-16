@@ -10,6 +10,7 @@ namespace PollPlus.IService
     public interface IUsuarioService
     {
         Task<bool> InserirUsuario(Usuario e);
+        Task<Usuario> InserirRetornarUsuario(Usuario e);
         Task<bool> AtualizarUsuario(Usuario e);
         Task<bool> DeletarUsuario(Usuario e);
         Task<Usuario> RetornarUsuarioPorId(int id);

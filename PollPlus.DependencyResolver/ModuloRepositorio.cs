@@ -16,6 +16,7 @@ namespace PollPlus.DependecyResolver
             Bind<IEnqueteRepositorio>().To<EnqueteRepositorio>();
             Bind<ICategoriaRepositorio>().To<CategoriaRepositorio>();
             Bind<IUsuarioRepositorio>().To<UsuarioRepositorio>();
+            Bind<IUsuarioCategoriaRepositorio>().To<UsuarioCategoriaRepositorio>();
         }
     }
 }

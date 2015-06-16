@@ -9,12 +9,9 @@ namespace PollPlus.Domain
 {
     public class Categoria : EntityBase
     {
-        public string Nome { get; protected set; }
+        public string Nome { get; set; }
         public EnumStatusCategoria Status { get; set; }
 
-        public virtual ICollection<Usuario> Usuarios { get; set; }
-        public virtual ICollection<Enquete> Enquetes { get; set; }
-        public virtual ICollection<Mensagem> Mensagens { get; set; }
-        public virtual ICollection<Subcategoria> Subcategorias { get; set; }
+        public virtual ICollection<SubcategoriaCategoria> SubcategoriaCategoria { get; set; }
     }
 }

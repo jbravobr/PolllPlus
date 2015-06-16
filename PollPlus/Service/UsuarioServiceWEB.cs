@@ -15,10 +15,13 @@ namespace PollPlus.Service
 
         readonly ICategoriaService _serviceCategoria;
 
-        public UsuarioServiceWEB(IUsuarioService Service, ICategoriaService ServiceCategoria)
+        readonly IUsuarioCategoriaService _serviceUsuarioCategoria;
+
+        public UsuarioServiceWEB(IUsuarioService Service, ICategoriaService ServiceCategoria, IUsuarioCategoriaService ServiceUsuarioCategoria)
         {
             this._service = Service;
             this._serviceCategoria = ServiceCategoria;
+            this._serviceUsuarioCategoria = ServiceUsuarioCategoria;
         }
 
         public async Task<bool> AtualizarUsuario(Usuario usuario)
@@ -31,9 +34,19 @@ namespace PollPlus.Service
             return await this._service.DeletarUsuario(usuario);
         }
 
+        public async Task<Usuario> InserirRetornarUsuario(Usuario usuario)
+        {
+            return await this._service.InserirRetornarUsuario(usuario);
+        }
+
         public async Task<bool> InserirUsuario(Usuario usuario)
         {
             return await this._service.InserirUsuario(usuario);
+        }
+
+        public async Task<bool> InserirUsuarioCategoria(UsuarioCategoria uc)
+        {
+            return await this._serviceUsuarioCategoria.InserirUsuarioCategoria(uc);
         }
 
         public async Task<bool> LogarUsuario(Usuario usuario)

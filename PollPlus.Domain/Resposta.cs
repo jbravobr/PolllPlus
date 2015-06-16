@@ -11,6 +11,7 @@ namespace PollPlus.Domain
         public string TextoResposta { get; set; }
         public DateTime? DataResposta { get; set; }
 
+        public int PerguntaId { get; set; }
         public virtual Pergunta Pergunta { get; set; }
     }
 }

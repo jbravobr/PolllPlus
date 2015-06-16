@@ -17,19 +17,35 @@ namespace PollPlus.Domain
         public string Telefone { get; set; }
         public DateTime DataNascimento { get; set; }
         public string Municipio { get; set; }
-        public EnumStatusUsuario Status { get; set; }
-        public EnumPerfil Perfil { get; set; }
+        public EnumStatusUsuario Status { get; protected set; }
+        public EnumPerfil Perfil { get; protected set; }
 
-        public virtual ICollection<Categoria> CategoriasInteresse { get; set; }
-        public virtual ICollection<Geolocalizacao> Localizacoes { get; set; }
-        public virtual ICollection<Plataforma> Plataformas { get; set; }
+        public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
+        public virtual ICollection<UsuarioGeolocalizacao> UsuarioGeolocalizacao { get; set; }
+        public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }
 
-        public void AdicionaCategoria(Categoria cat)
+        public void InativarUsuario()
         {
-            if (this.CategoriasInteresse == null)
-                this.CategoriasInteresse = new List<Categoria>();
+            this.Status = EnumStatusUsuario.Inativo;
+        }
 
-            this.CategoriasInteresse.Add(cat);
+        public Usuario()
+        {
+            this.Status = EnumStatusUsuario.Ativo;
+            this.Perfil = EnumPerfil.AdministradorEmpresa;
+        }
+
+        public void AdicionarCategoria(List<int> listaDeCategoriasId)
+        {
+            if (this.UsuarioCategoria != null)
+            {
+                this.UsuarioCategoria = new List<UsuarioCategoria>();
+            }
+
+            foreach (var cat in listaDeCategoriasId)
+            {
+                this.UsuarioCategoria.Add(new UsuarioCategoria { CategoriaId = cat, UsuarioId = this.Id });
+            }
         }
     }
 }

@@ -1,20 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
+using System.Data.Entity;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using PollPlus.Models;
 using PollPlus.Filter;
 using PollPlus.Service.Interfaces;
 using PollPlus.Domain;
 using PagedList;
-using PollPlus.Filters;
-using PollPlus.Domain.Enumeradores;
 using System.Collections.Generic;
 
 namespace PollPlus.Controllers
@@ -59,10 +51,20 @@ namespace PollPlus.Controllers
 
             if (!ModelState.IsValid)
                 return View(model);
-            else if (await this.service.InserirUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
-                return RedirectToAction("ListarUsuarios");
             else
-                return View(model);
+            {
+                var user = await this.service.InserirRetornarUsuario(AutoMapper.Mapper.Map<Usuario>(model));
+
+                if (user != null)
+                    user.AdicionarCategoria(model.CategoriasInteresse);
+
+                foreach (var uc in user.UsuarioCategoria)
+                {
+                    await service.InserirUsuarioCategoria(uc);
+                }
+
+                return RedirectToAction("ListarUsuarios");
+            }
         }
 
         [HttpGet]

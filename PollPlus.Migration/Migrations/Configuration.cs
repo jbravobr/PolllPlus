@@ -1,5 +1,6 @@
 namespace PollPlus.Migration.Migrations
 {
+    using PollPlus.Domain;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -19,13 +20,9 @@ namespace PollPlus.Migration.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data. E.g.
             //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Set<Categoria>().Add(new Categoria { Nome = "Esportes" });
+            context.Set<Categoria>().Add(new Categoria { Nome = "Política" });
+            context.Set<Categoria>().Add(new Categoria { Nome = "Ciência" });
         }
     }
 }

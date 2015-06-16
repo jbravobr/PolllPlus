@@ -14,7 +14,9 @@ namespace PollPlus.Domain
         public bool EhRascunho { get; set; }
         public EnumTipoMensagem Tipo { get; set; }
 
-        public virtual ICollection<Categoria> Categorias { get; set; }
+        public virtual ICollection<MensagemCategoria> MensagemCategoria { get; set; }
+
+        public int EmpresaId { get; set; }
         public virtual Empresa Empresa { get; set; }
     }
 }

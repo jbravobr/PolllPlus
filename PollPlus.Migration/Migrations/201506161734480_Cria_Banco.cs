@@ -3,7 +3,7 @@ namespace PollPlus.Migration.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CreateDatabase : DbMigration
+    public partial class Cria_Banco : DbMigration
     {
         public override void Up()
         {
@@ -133,6 +133,22 @@ namespace PollPlus.Migration.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.UsuarioCategoria",
+                c => new
+                    {
+                        UsuarioId = c.Int(nullable: false),
+                        CategoriaId = c.Int(nullable: false),
+                        Id = c.Int(nullable: false),
+                        DataCriacao = c.DateTime(nullable: false),
+                        DataAtualizacao = c.DateTime(),
+                    })
+                .PrimaryKey(t => new { t.UsuarioId, t.CategoriaId })
+                .ForeignKey("dbo.Categoria", t => t.CategoriaId, cascadeDelete: true)
+                .ForeignKey("dbo.Usuario", t => t.UsuarioId, cascadeDelete: true)
+                .Index(t => t.UsuarioId)
+                .Index(t => t.CategoriaId);
+            
+            CreateTable(
                 "dbo.Voucher",
                 c => new
                     {
@@ -211,19 +227,6 @@ namespace PollPlus.Migration.Migrations
                 .Index(t => t.Categoria_Id);
             
             CreateTable(
-                "dbo.UsuarioCategoria",
-                c => new
-                    {
-                        Usuario_Id = c.Int(nullable: false),
-                        Categoria_Id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Usuario_Id, t.Categoria_Id })
-                .ForeignKey("dbo.Usuario", t => t.Usuario_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Categoria", t => t.Categoria_Id, cascadeDelete: true)
-                .Index(t => t.Usuario_Id)
-                .Index(t => t.Categoria_Id);
-            
-            CreateTable(
                 "dbo.GeolocalizacaoUsuario",
                 c => new
                     {
@@ -286,12 +289,12 @@ namespace PollPlus.Migration.Migrations
             DropForeignKey("dbo.VoucherEnquete", "Enquete_Id", "dbo.Enquete");
             DropForeignKey("dbo.VoucherEnquete", "Voucher_Id", "dbo.Voucher");
             DropForeignKey("dbo.Enquete", "UsuarioCriador_Id", "dbo.Usuario");
+            DropForeignKey("dbo.UsuarioCategoria", "UsuarioId", "dbo.Usuario");
+            DropForeignKey("dbo.UsuarioCategoria", "CategoriaId", "dbo.Categoria");
             DropForeignKey("dbo.PlataformaUsuario", "Usuario_Id", "dbo.Usuario");
             DropForeignKey("dbo.PlataformaUsuario", "Plataforma_Id", "dbo.Plataforma");
             DropForeignKey("dbo.GeolocalizacaoUsuario", "Usuario_Id", "dbo.Usuario");
             DropForeignKey("dbo.GeolocalizacaoUsuario", "Geolocalizacao_Id", "dbo.Geolocalizacao");
-            DropForeignKey("dbo.UsuarioCategoria", "Categoria_Id", "dbo.Categoria");
-            DropForeignKey("dbo.UsuarioCategoria", "Usuario_Id", "dbo.Usuario");
             DropForeignKey("dbo.Mensagem", "Empresa_Id", "dbo.Empresa");
             DropForeignKey("dbo.MensagemCategoria", "Categoria_Id", "dbo.Categoria");
             DropForeignKey("dbo.MensagemCategoria", "Mensagem_Id", "dbo.Mensagem");
@@ -307,14 +310,14 @@ namespace PollPlus.Migration.Migrations
             DropIndex("dbo.PlataformaUsuario", new[] { "Plataforma_Id" });
             DropIndex("dbo.GeolocalizacaoUsuario", new[] { "Usuario_Id" });
             DropIndex("dbo.GeolocalizacaoUsuario", new[] { "Geolocalizacao_Id" });
-            DropIndex("dbo.UsuarioCategoria", new[] { "Categoria_Id" });
-            DropIndex("dbo.UsuarioCategoria", new[] { "Usuario_Id" });
             DropIndex("dbo.MensagemCategoria", new[] { "Categoria_Id" });
             DropIndex("dbo.MensagemCategoria", new[] { "Mensagem_Id" });
             DropIndex("dbo.EnqueteCategoria", new[] { "Categoria_Id" });
             DropIndex("dbo.EnqueteCategoria", new[] { "Enquete_Id" });
             DropIndex("dbo.Resposta", new[] { "Pergunta_Id" });
             DropIndex("dbo.Pergunta", new[] { "Enquete_Id" });
+            DropIndex("dbo.UsuarioCategoria", new[] { "CategoriaId" });
+            DropIndex("dbo.UsuarioCategoria", new[] { "UsuarioId" });
             DropIndex("dbo.Mensagem", new[] { "Empresa_Id" });
             DropIndex("dbo.Empresa", new[] { "Documento_Id" });
             DropIndex("dbo.Enquete", new[] { "UsuarioCriador_Id" });
@@ -323,13 +326,13 @@ namespace PollPlus.Migration.Migrations
             DropTable("dbo.VoucherEnquete");
             DropTable("dbo.PlataformaUsuario");
             DropTable("dbo.GeolocalizacaoUsuario");
-            DropTable("dbo.UsuarioCategoria");
             DropTable("dbo.MensagemCategoria");
             DropTable("dbo.EnqueteCategoria");
             DropTable("dbo.Resposta");
             DropTable("dbo.Pergunta");
             DropTable("dbo.Subcategoria");
             DropTable("dbo.Voucher");
+            DropTable("dbo.UsuarioCategoria");
             DropTable("dbo.Plataforma");
             DropTable("dbo.Geolocalizacao");
             DropTable("dbo.Usuario");

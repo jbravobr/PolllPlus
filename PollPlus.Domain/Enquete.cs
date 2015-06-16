@@ -17,9 +17,16 @@ namespace PollPlus.Domain
         public int ClientId { get; set; }
         public string UrlVideo { get; set; }
 
-        public virtual Usuario UsuarioCriador { get; set; }
-        public virtual Empresa EmpresaProprietaria { get; set; }
-        public virtual ICollection<Categoria> Categorias { get; set; }
-        public virtual ICollection<Voucher> Vouchers { get; set; }
+        public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
+
+        public int EmpresaId { get; set; }
+        public virtual Empresa Empresa { get; set; }
+
+        public int PerguntaId { get; set; }
+        public virtual Pergunta Pergunta { get; set; }
+
+        public virtual ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
+        public virtual ICollection<EnqueteVoucher> EnqueteVoucher { get; set; }
     }
 }

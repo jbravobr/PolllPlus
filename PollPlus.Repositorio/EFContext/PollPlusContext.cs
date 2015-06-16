@@ -19,6 +19,21 @@ namespace PollPlus.Repositorio.EFContext
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Entity<Usuario>()
+                .HasKey(u => u.Id)
+                .HasMany(u => u.UsuarioCategoria)
+                .WithRequired()
+                .HasForeignKey(fk => fk.UsuarioId);
+
+            modelBuilder.Entity<Categoria>()
+                .HasKey(c => c.Id)
+                .HasMany(c => c.UsuarioCategoria)
+                .WithRequired()
+                .HasForeignKey(fk => fk.CategoriaId);
+
+            modelBuilder.Entity<UsuarioCategoria>()
+                .HasKey(uc => new { uc.Id, uc.UsuarioId, uc.CategoriaId });
         }
     }
 }

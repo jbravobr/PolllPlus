@@ -44,12 +44,19 @@
     <Compile Include="ICategoriaRepositorio.cs" />
     <Compile Include="IDocumentoRepositorio.cs" />
     <Compile Include="IEmpresaRepositorio.cs" />
+    <Compile Include="IEnqueteCategoriaRepositorio.cs" />
     <Compile Include="IEnqueteRepositorio.cs" />
+    <Compile Include="IEnqueteVoucherRepositorio.cs" />
     <Compile Include="IGeolocalizacaoRepositorio.cs" />
+    <Compile Include="IMensagemCategoriaRepositorio.cs" />
     <Compile Include="IMensagemRepositorio.cs" />
     <Compile Include="IPlataformaRepositorio.cs" />
+    <Compile Include="ISubcategoriaCategoriaRepositorio.cs" />
+    <Compile Include="IUsuarioCategoriaRepositorio.cs" />
+    <Compile Include="IUsuarioPlataformaRepositorio.cs" />
     <Compile Include="IUsuarioRepositorio.cs" />
     <Compile Include="IVoucherRepositorio.cs" />
+    <Compile Include="IPerguntaRespostaRepositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

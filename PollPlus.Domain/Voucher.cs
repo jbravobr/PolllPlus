@@ -11,7 +11,5 @@ namespace PollPlus.Domain
     {
         public Guid Identificador { get; set; }
         public EnumStatusVoucher Status { get; set; }
-
-        public virtual ICollection<Enquete> Enquetes { get; set; }
     }
 }

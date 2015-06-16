@@ -48,6 +48,7 @@
     <Compile Include="MensagemService.cs" />
     <Compile Include="PlataformaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioCategoriaService.cs" />
     <Compile Include="UsuarioService.cs" />
     <Compile Include="VoucherService.cs" />
   </ItemGroup>
