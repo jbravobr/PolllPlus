@@ -20,6 +20,6 @@ namespace PollPlus.Service.Interfaces
 
         Task<bool> InserirUsuarioCategoria(UsuarioCategoria uc);
 
-        Task<bool> LogarUsuario(Usuario usuario);
+        Task<bool> LogarUsuario(string usuario, string senha);
     }
 }

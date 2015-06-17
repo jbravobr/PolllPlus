@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Página Inicial";
+}
+
+<div class="jumbotron">
+    <h1>Mais - Administração</h1>
+
+    <div class="destaque-lojista">
+        <img alt="lojista" src="@Url.Content("/Content/Theme/images/lojista-destaque.jpg")" />
+        <div class="wrap">
+            @{
+                var _usuarioNome = PollPlus.Helpers.UsuarioLogado.UsuarioAutenticado().Nome.ToUpper();
+            }
+            <h2>@(string.Format("Olá, {0}", _usuarioNome))</h2>
+            <p>
+                Este sistema é de uso exclusivo de usuários do Mais.
+            </p>
+        </div> <!-- .wrap -->
+    </div> <!-- .destaque-lojista -->
+</div>
+

@@ -1,0 +1,92 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Usuario>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Listar Usuários";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    @if (ViewBag.Mensagem != null)
+    {
+        //Html.RenderPartial("~/Views/Shared/_BootstrapAlert.cshtml", (BootstrapAlertsUIViewModel)ViewBag.Mensagem);
+    }
+
+    <div class="col-md-12">
+        <div class="">
+
+            @Html.ActionLink("Novo Usuário", "NovoUsuario", "Usuario", null, new { @class = "btn btn-info" })
+
+            <br />
+            <div class="header">
+                <h3>Listagem dos Usuários Cadastrados</h3>
+            </div>
+
+            <div class="content">
+                <div class="table-responsive">
+                    <div role="grid" class="dataTables_wrapper form-inline" id="datatable_wrapper">
+
+                        <table id="datatable" class="table table-bordered dataTable" aria-describedby="datatable_info">
+                            <thead>
+                                <tr role="row">
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Nome</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>E-mail</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Ultimo Acesso</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Data do Cadastro</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+                                @foreach (var _usuario in Model)
+                                {
+                                    <tr class="gradeA odd">
+                                        <td class=" ">@_usuario.Nome</td>
+                                        <td class=" ">@_usuario.Email</td>
+                                        <td class=" ">@_usuario.DataAtualizacao.Value.ToShortDateString()</td>
+                                        <td class=" ">@_usuario.DataCriacao.ToShortDateString()</td>
+                                        <td class="center ">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("EditarUsuario", "Account", new { usuarioId = _usuario.Id })">Alterar</a></li>
+                                                    <li><a href="javascript: if(confirm('Deseja remover este usuário?')) {window.location.href='@Url.Action("RemoverUsuario", "Account", new { usuarioId = _usuario.Id })';}">Remover</a></li>>Remover</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @Html.PagedListPager(Model, page => Url.Action("ListarUsuarios", "Usuario", new { pagina = page }),
+            new PagedListRenderOptions
+            {
+                DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                Display = PagedListDisplayMode.IfNeeded,
+                LinkToNextPageFormat = "Próximo",
+                LinkToPreviousPageFormat = "Anterior"
+            })
+        </div>
+    </div>
+
+</div>

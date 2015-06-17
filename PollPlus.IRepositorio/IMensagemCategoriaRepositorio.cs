@@ -16,4 +16,3 @@ namespace PollPlus.IRepositorio
         Task<ICollection<MensagemCategoria>> RetornarMensagemCategoriaTodos();
     }
 }
-}

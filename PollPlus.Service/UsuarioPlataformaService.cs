@@ -5,44 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
-using PollPlus.Repositorio.EFContext;
 using System.Linq.Expressions;
 
 namespace PollPlus.Repositorio
 {
-    public class UsuarioPlataformaiaRepositorio : BaseRepositorio<UsuarioPlataforma, PollPlusContext<UsuarioPlataforma>>, IUsuarioPlataformaRepositorio
+    public class UsuarioPlataformaiaService : IUsuarioPlataformaService
     {
+        readonly IUsuarioPlataformaRepositorio _repositorio;
+
+        public UsuarioPlataformaiaService(IUsuarioPlataformaRepositorio repo)
+        {
+            this._repositorio = repo;
+        }
+
         public async Task<bool> InserirUsuarioPlataforma(UsuarioPlataforma ec)
         {
-            base.Inserir(ec);
-            return await base.Salvar();
+            return await this._repositorio.InserirUsuarioPlataforma(ec);
         }
 
         public async Task<bool> RemoverUsuarioPlataforma(int id)
         {
-            Expression<Func<UsuarioPlataforma, bool>> porId = (x) => x.Id == id;
-            var entity = await base.RetornarPorId(porId);
-
-            base.Deletar(entity);
-
-            return await Task.FromResult<bool>(true);
+            return await this._repositorio.RemoverUsuarioPlataforma(id);
         }
 
         public async Task<ICollection<UsuarioPlataforma>> RetornarUsuarioPlataformaPorUsuario(int usuarioId)
         {
-            Expression<Func<UsuarioPlataforma, bool>> porUsuario = (x) => x.UsuarioId == usuarioId;
-            return await base.ProcurarPorColecao(porUsuario);
+            return await this._repositorio.RetornarUsuarioPlataformaPorUsuario(usuarioId);
         }
 
         public async Task<ICollection<UsuarioPlataforma>> RetornarUsuarioPlataformaPorPlataforma(int plataformaId)
         {
-            Expression<Func<UsuarioPlataforma, bool>> porPlataforma = (x) => x.PlataformaId == plataformaId;
-            return await base.ProcurarPorColecao(porPlataforma);
+            return await this._repositorio.RetornarUsuarioPlataformaPorPlataforma(plataformaId);
         }
 
         public async Task<ICollection<UsuarioPlataforma>> RetornarUsuarioPlataformaTodos()
         {
-            return await base.RetornarTodos();
+            return await this._repositorio.RetornarUsuarioPlataformaTodos();
         }
     }
 }

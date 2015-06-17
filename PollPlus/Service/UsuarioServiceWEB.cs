@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
+using PollPlus.Helpers;
 
 namespace PollPlus.Service
 {
@@ -49,9 +50,18 @@ namespace PollPlus.Service
             return await this._serviceUsuarioCategoria.InserirUsuarioCategoria(uc);
         }
 
-        public async Task<bool> LogarUsuario(Usuario usuario)
+        public async Task<bool> LogarUsuario(string usuario, string senha)
         {
-            throw new NotImplementedException();
+            var _usuario = (await this._service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
+
+            var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
+
+            if (_usuario == null)
+                return await Task.FromResult(false);
+            else if (_usuario != null && senha == senhaDecrypt)
+                return await Task.FromResult(true);
+            else
+                return await Task.FromResult(false);
         }
 
         public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()

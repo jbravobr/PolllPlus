@@ -1,0 +1,19 @@
+﻿@*<Voucher>*@
+<li class="parent">
+    <a href="#">
+        <i class="fa fa-list-alt"></i>
+        <span>Vouchers</span>
+    </a>
+    <ul class="sub-menu" style="display: none;">
+        <li>
+            @Html.ActionLink("Criar Voucher", "NovoVoucher", "Voucher")
+        </li>
+        <li>
+            @Html.ActionLink("Associar Voucher a Enquete", "AssociarVoucherEnquete", "Voucher")
+        </li>
+        <li>
+            @Html.ActionLink("Listar Vouchers", "ListarVouchers", "Voucher")
+        </li>
+    </ul>
+</li>
+@*</Voucher>*@

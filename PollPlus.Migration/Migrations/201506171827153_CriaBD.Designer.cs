@@ -7,13 +7,13 @@ namespace PollPlus.Migration.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Cria_Banco : IMigrationMetadata
+    public sealed partial class CriaBD : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Cria_Banco));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CriaBD));
         
         string IMigrationMetadata.Id
         {
-            get { return "201506161734480_Cria_Banco"; }
+            get { return "201506171827153_CriaBD"; }
         }
         
         string IMigrationMetadata.Source

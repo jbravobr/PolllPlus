@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace PollPlus.Controllers
 {
-    public class HomeController : BaseController
+    public class EnqueteController : BaseController
     {
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult NovaEnquete()
         {
             return View();
         }

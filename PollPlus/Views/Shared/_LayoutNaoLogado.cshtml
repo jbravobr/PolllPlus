@@ -14,6 +14,8 @@
     <title>Mais</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+    <link href="~/Scripts/Theme/bootstrap.multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/Scripts/Theme/bootstrap.datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
     <!-- Bootstrap core CSS -->
     <link href="@Url.Content("~/Scripts/Theme/bootstrap/dist/css/bootstrap.css")" rel="stylesheet">
@@ -52,7 +54,9 @@
         </div>
 
     </div>
-    <script src="@Url.Content("~/Scripts/Theme/jquery.js")"></script>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
     <script type="text/javascript">
         $(function () {
             $("#cl-wrapper").css({ opacity: 1, 'margin-left': 0 });
@@ -61,7 +65,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="@Url.Content("~/Scripts/Theme/behaviour/voice-commands.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/Theme/behaviour/voice-commands.js")"></script>*@
     <script src="@Url.Content("~/Scripts/Theme/bootstrap/dist/js/bootstrap.min.js")"></script>
+    @*<script src="~/Scripts/Theme/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js"></script>*@
+    <script src="~/Scripts/Theme/bootstrap.multiselect/js/bootstrap-multiselect.js"></script>
+
 </body>
 </html>

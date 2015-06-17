@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IRepositorio;
+using PollPlus.Service.Helpers;
 
 namespace PollPlus.Service
 {
@@ -32,6 +33,8 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirUsuario(Usuario e)
         {
+            e.Senha = Util.EncriptarSenha(e.Senha);
+
             return await this._repositorio.InserirUsuario(e);
         }
 
@@ -82,6 +85,8 @@ namespace PollPlus.Service
         /// <returns></returns>
         public async Task<Usuario> InserirRetornarUsuario(Usuario e)
         {
+            e.Senha = Util.EncriptarSenha(e.Senha);
+
             return await this._repositorio.InserirRetornarUsuario(e);
         }
     }

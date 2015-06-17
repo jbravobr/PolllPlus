@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Data.Entity;
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using PollPlus.Models;
@@ -8,6 +9,9 @@ using PollPlus.Service.Interfaces;
 using PollPlus.Domain;
 using PagedList;
 using System.Collections.Generic;
+using System.Text;
+using PollPlus.Helpers;
+using System.Configuration;
 
 namespace PollPlus.Controllers
 {
@@ -23,19 +27,68 @@ namespace PollPlus.Controllers
 
         public AccountController() { }
 
-        [OnlyAuthorizedUser(true), HttpGet]
-        public async Task<ActionResult> Login()
+        //[OnlyAuthorizedUser(true), HttpGet]
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
 
-        [OnlyAuthorizedUser(true), HttpPost]
-        public async Task<ActionResult> Login(UsuarioViewModel model)
+        //[OnlyAuthorizedUser(true), HttpPost]
+        [HttpPost]
+        public async Task<ActionResult> Login(string usuario, string senha)
+        {
+            if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
+                return View();
+
+            if (await this.service.LogarUsuario(usuario, senha))
+            {
+                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
+                Session.Add("UsuarioLogado", _usuario);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        //[OnlyAuthorizedUser(true), HttpGet]
+        [HttpGet]
+        public ActionResult EsqueciMinhaSenha()
         {
             return View();
         }
 
-        [HttpGet, OnlyAuthorizedUser(true)]
+        //[OnlyAuthorizedUser(true), HttpPost]
+        [HttpPost]
+        public async Task<ActionResult> EsqueciMinhaSenha(string email)
+        {
+            if (!String.IsNullOrEmpty(email))
+            {
+                var usuario = await this.service.RetornarTodosUsuarios();
+
+                if (usuario.Any(u => u.Email == email))
+                {
+                    var _corpoMessage = new StringBuilder();
+
+                    _corpoMessage.Append("<p>Você solicitou a alteração por esquecimento da sua senha de acesso ao Sistema de Lojistas do Metrô Rio.</p>");
+                    _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", email));
+                    _corpoMessage.AppendLine(String.Format("<p><strong>Acesse {0}Usuario/AlteraSenha para alterar a sua senha (OBRIGATÓRIO).</strong></p>", ConfigurationManager.AppSettings["SiteUrl"].ToString()));
+                    _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
+
+                    var _message = Util.MontaMailMessage(email, _corpoMessage.ToString(), "Cadastro de usuário - Mais");
+
+                    Util.SendMail(_message);
+
+                    return View();
+                }
+            }
+
+            return View();
+        }
+
+        //[HttpGet, OnlyAuthorizedUser]
+        [HttpGet]
         public async Task<ActionResult> NovoUsuario()
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
@@ -43,6 +96,7 @@ namespace PollPlus.Controllers
             return View();
         }
 
+        //[HttpPost, OnlyAuthorizedUser]
         [HttpPost]
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
@@ -67,7 +121,32 @@ namespace PollPlus.Controllers
             }
         }
 
+        //[HttpGet, OnlyAuthorizedUser]
         [HttpGet]
+        public async Task<ActionResult> EditarUsuario(int usuarioId)
+        {
+            var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
+
+            if (usuario != null)
+                return View(AutoMapper.Mapper.Map<UsuarioViewModel>(usuario));
+
+            return View();
+        }
+
+        //[HttpPost, OnlyAuthorizedUser]
+        [HttpPost]
+        public async Task<ActionResult> EditarUsuario(UsuarioViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            else if (await this.service.AtualizarUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
+                return RedirectToAction("ListarUsuarios");
+            else
+                return View();
+        }
+
+        //[HttpGet, OnlyAuthorizedUser]
+        [HttpPost]
         public async Task<ActionResult> ListarUsuarios(int? pagina)
         {
             var listaUsuarios = await this.service.RetornarTodosUsuarios();

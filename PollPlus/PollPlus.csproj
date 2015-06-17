@@ -88,6 +88,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -212,7 +213,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\EnqueteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Filters\CustomActionFilter.cs" />
     <Compile Include="Filters\CustomMenuActionFilter.cs" />
     <Compile Include="Filters\OnlyAuthorizedUser.cs" />
@@ -221,10 +224,13 @@
     </Compile>
     <Compile Include="Helpers\GeraLista.cs" />
     <Compile Include="Helpers\UsuarioLogado.cs" />
+    <Compile Include="Helpers\Util.cs" />
     <Compile Include="Mappers\AutoMapperConfig.cs" />
     <Compile Include="Mappers\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappers\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\CategoriaViewModel.cs" />
+    <Compile Include="Models\EnqueteViewModel.cs" />
+    <Compile Include="Models\PerguntaViewModel.cs" />
     <Compile Include="Models\UsuarioLogado.cs" />
     <Compile Include="Models\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -3512,6 +3518,20 @@
     <Content Include="Scripts\Theme\jquery.vectormaps\README.md" />
     <Content Include="Scripts\Theme\skycons\README.md" />
     <Content Include="Views\Account\_MultiSelectCategorias.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\EsqueciMinhaSenha.cshtml" />
+    <Content Include="Views\Account\ListarUsuarios.cshtml" />
+    <Content Include="Views\Account\EditarUsuario.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Menu\_MenuMensagens.cshtml" />
+    <Content Include="Views\Menu\_MenuEnquetes.cshtml" />
+    <Content Include="Views\Menu\_MenuUsuarios.cshtml" />
+    <Content Include="Views\Menu\_MenuBanners.cshtml" />
+    <Content Include="Views\Menu\_MenuVouchers.cshtml" />
+    <Content Include="Views\Menu\_MenuRelatorios.cshtml" />
+    <Content Include="Views\Enquete\NovaEnquete.cshtml" />
+    <Content Include="Views\Menu\_MenuEmpresas.cshtml" />
+    <Content Include="Views\Enquete\_EnqueteRespostas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3520,7 +3540,6 @@
     <Folder Include="Scripts\Theme\bootstrap\examples\navbar-fixed-top\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\public\files\thumbnail\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\tmp\" />
-    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

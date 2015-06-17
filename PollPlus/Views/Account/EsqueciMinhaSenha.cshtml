@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Esqueci Minha Senha";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="@Url.Content("~/Areas/Administrador/Content/Theme/images/icon.png")">
+
+    <title>Mais</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+
+    @Styles.Render("~/Content/CssTheme0")
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="@Url.Content("../../assets/js/html5shiv.js")"></script>
+      <script src="@Url.Content("../../assets/js/respond.min.js")"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    @if (ViewBag.Mensagem != null)
+    {
+        //Html.RenderPartial("~/Views/Shared/_BootstrapAlert.cshtml", (BootstrapAlertsUIViewModel)ViewBag.Mensagem);
+    }
+
+    @using (Html.BeginForm("EsqueciMinhaSenha", "Account", FormMethod.Post))
+    {
+        <div id="cl-wrapper" class="login-container">
+            <div class="middle-login">
+                <div class="block-flat">
+                    <div class="header">
+                        <h3 class="text-center">
+                            <!--<img class="logo-img" src="@Url.Content("~/Content/Theme/images/logo-metro.png")" />-->
+                        </h3>
+                    </div>
+                    <div>
+                        <div class="content">
+                            <h4 class="title">Acesso Restrito - Esqueci Minha Senha</h4>
+                            <div class="form-group">
+                                <p>Digite seu e-mail e confirme, após isto um e-mail será enviado para você.</p>
+                                <div class="">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input type="text" placeholder="Insira aqui o seu E-mail" id="Email" name="email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="foot">
+                            <a class="btn btn-primary" style="margin-right:220px" href="~/Usuario/Login">Voltar</a>
+                            <button class="btn btn-primary" data-dismiss="modal" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jsTheme0")
+    @Scripts.Render("~/bundles/jsTheme1")
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/jsTheme2")
+</body>

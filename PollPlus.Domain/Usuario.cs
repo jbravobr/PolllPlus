@@ -21,7 +21,6 @@ namespace PollPlus.Domain
         public EnumPerfil Perfil { get; protected set; }
 
         public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
-        public virtual ICollection<UsuarioGeolocalizacao> UsuarioGeolocalizacao { get; set; }
         public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }
 
         public void InativarUsuario()

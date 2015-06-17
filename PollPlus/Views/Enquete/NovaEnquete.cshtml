@@ -1,0 +1,58 @@
+﻿@model PollPlus.Models.EnqueteViewModel
+
+@{
+    ViewBag.Title = "Nova Enquete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="header">
+    <h2>Cadastro de Nova Enquete</h2>
+</div>
+
+<div class="content tamanho-reduzido">
+
+    @if (ViewBag.Mesagem != null)
+    {
+        // Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);
+    }
+
+    @using (Html.BeginForm("NovaEnquete", "Enquete", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(x => x.Pergunta.TextoPergunta, "Título", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Pergunta.TextoPergunta, new { placeholder = "Título", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" type="submit">Criar Respostas</button>
+            </div>
+        </div>
+
+        <br />
+
+        @if (Model != null && Model.Id > 0)
+        {
+            Html.RenderPartial("_EnqueteRespostas");
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+
+    $("#btnNovaResposta").click(function () {
+
+        var html = $("#form-respostas").clone();
+
+        $("#form-respostas").append(html);
+    });
+
+</script>

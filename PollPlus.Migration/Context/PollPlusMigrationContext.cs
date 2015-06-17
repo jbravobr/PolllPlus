@@ -34,14 +34,14 @@ namespace PollPlus.Migration.Context
                   .WithRequired()
                   .HasForeignKey(fk => fk.UsuarioId);
 
-            modelBuilder.Entity<Categoria>()
-                .HasKey(c => c.Id)
-                .HasMany(c => c.UsuarioCategoria)
-                .WithRequired()
-                .HasForeignKey(fk => fk.CategoriaId);
+            //modelBuilder.Entity<Categoria>()
+            //    .HasKey(c => c.Id)
+            //    .HasMany(c => c.UsuarioCategoria)
+            //    .WithRequired()
+            //    .HasForeignKey(fk => fk.CategoriaId);
 
             modelBuilder.Entity<UsuarioCategoria>()
-                .HasKey(uc => new { uc.UsuarioId, uc.CategoriaId });
+                .HasKey(uc => new { uc.Id, uc.UsuarioId, uc.CategoriaId });
         }
 
         public PollPlusMigrationContext()

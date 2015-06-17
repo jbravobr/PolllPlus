@@ -3,7 +3,7 @@
 @using PollPlus.Helpers;
 
 @{
-    ViewBag.Title = "Novo Usuario";
+    ViewBag.Title = "Editar Usuario";
     Layout = "~/Views/Shared/_LayoutNaoLogado.cshtml";
 }
 
@@ -18,8 +18,11 @@
         @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
     }
 
-    @using (Html.BeginForm("NovoUsuario", "Account", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("EditarUsuario", "Account", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
+
+        @Html.HiddenFor(x => x.Id)
+
         <div class="form-group">
             @Html.LabelFor(x => x.Nome, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
@@ -48,7 +51,7 @@
             @Html.Label("Categorias", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.Partial("_MultiSelectCategorias", (ICollection<PollPlus.Models.CategoriaViewModel>)ViewBag.CategoriasInteresse)
-                @Html.ValidationMessageFor(x => x.CategoriasInteresse)
+                @Html.ValidationMessageFor(x => x.DataNascimento)
             </div>
         </div>
 
@@ -87,7 +90,7 @@
         <div class="form-group">
             @Html.LabelFor(x => x.Municipio, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
-                @Html.TextBoxFor(x => x.Municipio, new { placeholder = "Informe o seu Município", @class = "form-control" })
+                @Html.TextBoxFor(x => x.Municipio, new { placeholder = "Informe o seu Município", @class = "form-control datepicker" })
                 @Html.ValidationMessageFor(x => x.DataNascimento)
             </div>
         </div>
@@ -100,14 +103,3 @@
     }
 
 </div>
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/Theme/bootstrap.datetimepicker/js/bootstrap-datetimepicker.js"></script>
-
-<script type="text/javascript">
-
-    $(function () {
-        $("#example2").multiselect();
-        $('.datepicker').datepicker();
-    });
-
-</script>

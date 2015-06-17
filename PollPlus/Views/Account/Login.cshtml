@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="@Url.Content("~/Areas/Administrador/Content/Theme/images/icon.png")">
+
+    <title>Mais</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,200,100' rel='stylesheet' type='text/css'>
+
+    @Styles.Render("~/Content/CssTheme0")
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="@Url.Content("../../assets/js/html5shiv.js")"></script>
+      <script src="@Url.Content("../../assets/js/respond.min.js")"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    @if (ViewBag.Mensagem != null)
+    {
+        //Html.RenderPartial("~/Views/Shared/_BootstrapAlert.cshtml", (BootstrapAlertsUIViewModel)ViewBag.Mensagem);
+    }
+
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        <div id="cl-wrapper" class="login-container">
+            <div class="middle-login">
+                <div class="block-flat">
+                    <div class="header">
+                        <h3 class="text-center">
+                            <!--<img class="logo-img" src="@Url.Content("~/Content/Theme/images/logo-metro.png")" />-->
+                        </h3>
+                    </div>
+                    <div>
+                        <div class="content">
+                            <h4 class="title">Acesso Restrito</h4>
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input type="text" placeholder="Login" id="Login" name="usuario" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                        <input type="password" placeholder="Senha" id="Senha" name="senha" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="foot">
+                            <a href="@Url.Action("EsqueciMinhaSenha","Account")" target="_self">Esqueci minha senha</a>
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            <button class="btn btn-primary" data-dismiss="modal" type="submit">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jsTheme0")
+    @Scripts.Render("~/bundles/jsTheme1")
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/jsTheme2")
+</body>
