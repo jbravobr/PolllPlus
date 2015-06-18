@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PollPlus.Domain.Enumeradores;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace PollPlus.Models
 {
-    public class EnqueteViewModel
+    public class DocumentoViewModel
     {
         public int Id { get; set; }
-        public bool TemVoucher { get; set; }
-
-        public PerguntaViewModel Pergunta { get; set; }
+        public int Numero { get; set; }
+        public EnumTipoDocumento Tipo { get; set; }
     }
 }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PollPlus.Domain
+namespace PollPlus.Models
 {
-    public class Resposta : EntityBase
+    public class RespostaViewModel
     {
+        public int Id { get; set; }
         public string TextoResposta { get; set; }
-
-        public virtual Pergunta Pergunta { get; set; }
     }
 }

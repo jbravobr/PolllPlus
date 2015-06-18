@@ -1,8 +1,8 @@
-﻿@model PagedList.IPagedList<PollPlus.Domain.Usuario>
+﻿@model PagedList.IPagedList<PollPlus.Domain.Empresa>
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Listar Usuários";
+    ViewBag.Title = "Listar Empresas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,11 +10,11 @@
     <div class="col-md-12">
         <div class="">
 
-            @Html.ActionLink("Novo Usuário", "NovoUsuario", "Usuario", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Nova Empresa", "NovaEmpresa", "Empresa", null, new { @class = "btn btn-info" })
 
             <br />
             <div class="header">
-                <h3>Listagem dos Usuários Cadastrados</h3>
+                <h3>Listagem das Empresas Cadastradas</h3>
             </div>
 
             <div class="content">
@@ -27,13 +27,16 @@
                                         <strong>Nome</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
-                                        <strong>E-mail</strong>
+                                        <strong>Documento</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
-                                        <strong>Ultimo Acesso</strong>
+                                        <strong>Data da Criação</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
-                                        <strong>Data do Cadastro</strong>
+                                        <strong>Qtde Push</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>SubDominio</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
                                     </th>
@@ -41,13 +44,15 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _usuario in Model)
+                                @foreach (var _empresa in Model)
                                 {
                                     <tr class="gradeA odd">
-                                        <td class=" ">@_usuario.Nome</td>
-                                        <td class=" ">@_usuario.Email</td>
+                                        <td class=" ">@_empresa.Nome</td>
+                                        <td class=" ">@_empresa.Documento.Numero</td>
                                         @*<td class=" ">@_usuario.DataAtualizacao.Value.ToShortDateString()</td>*@
-                                        <td class=" ">@_usuario.DataCriacao.ToShortDateString()</td>
+                                        <td class=" ">@_empresa.DataCriacao.ToShortDateString()</td>
+                                        <td class=" ">@_empresa.QtdePush</td>
+                                        <td class=" ">@_empresa.SubDominio</td>
                                         <td class="center ">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default btn-xs">Ações</button>
@@ -56,8 +61,8 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("EditarUsuario", "Account", new { usuarioId = _usuario.Id })">Alterar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja remover este usuário?')) {window.location.href='@Url.Action("RemoverUsuario", "Account", new { usuarioId = _usuario.Id })';}">Remover</a></li>
+                                                    <li><a href="@Url.Action("EditarEmpresa", "Empresa", new { empresaId = _empresa.Id })">Alterar</a></li>
+                                                    <li><a href="javascript: if(confirm('Deseja remover esta empresa?')) {window.location.href='@Url.Action("RemoverEmpresa", "Empresa", new { empresaId = _empresa.Id })';}">Remover</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -70,7 +75,7 @@
                 </div>
             </div>
 
-            @Html.PagedListPager(Model, page => Url.Action("ListarUsuarios", "Usuario", new { pagina = page }),
+            @Html.PagedListPager(Model, page => Url.Action("ListarEmpresas", "Empresa", new { pagina = page }),
             new PagedListRenderOptions
             {
                 DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,

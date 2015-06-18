@@ -17,6 +17,7 @@ namespace Aldeia.Tamis.DependecyResolver
             Bind<ICategoriaService>().To<CategoriaService>();
             Bind<IUsuarioService>().To<UsuarioService>();
             Bind<IUsuarioCategoriaService>().To<UsuarioCategoriaService>();
+            Bind<IEmpresaService>().To<EmpresaService>();
         }
     }
 }

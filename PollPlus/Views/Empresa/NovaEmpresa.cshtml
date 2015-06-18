@@ -1,0 +1,86 @@
+﻿@model PollPlus.Models.EmpresaViewModel
+
+@using PollPlus.Helpers;
+
+@{
+    ViewBag.Title = "Nova Empresa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="header">
+    <h3>Cadastro de Empresa</h3>
+</div>
+
+<div class="content tamanho-reduzido">
+
+    @if (ViewBag.Mesagem != null)
+    {
+        @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
+    }
+
+    @using (Html.BeginForm("NovaEmpresa", "Empresa", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(x => x.Nome, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Nome, new { placeholder = "Insira o Nome da empresa", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Nome)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.QtdePush, "Quantidade de Pushes", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.QtdePush, new { placeholder = "Insira a quantidade de Pushes liberado", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.QtdePush)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.SubDominio, "SubDomínio", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.SubDominio, new { placeholder = "Insira o SubDomínio", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.SubDominio)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Css, "Css", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Css, new { placeholder = "Insira o Css da empresa", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Css)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.file, "Logo", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.file, new { type = "file" })
+                @Html.ValidationMessageFor(x => x.file)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Plataforma.AppID, "App ID", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Plataforma.AppID, new { placeholder = "App ID", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Plataforma.AppID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Documento.Numero, "CNPJ", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Documento.Numero, new { placeholder = "Insira o CNPJ", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Documento.Numero)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+        </div>
+    }
+
+</div>

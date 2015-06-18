@@ -16,6 +16,7 @@ namespace PollPlus.Domain
         public string Imagem { get; set; }
         public int ClientId { get; set; }
         public string UrlVideo { get; set; }
+        public bool TemVoucher { get; set; }
 
         public int UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }

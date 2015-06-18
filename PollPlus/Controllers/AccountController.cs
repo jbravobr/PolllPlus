@@ -15,7 +15,7 @@ using System.Configuration;
 
 namespace PollPlus.Controllers
 {
-    //[OnlyAuthorizedUser]
+    [OnlyAuthorizedUser]
     public class AccountController : BaseController
     {
         readonly IUsuarioServiceWEB service;
@@ -27,15 +27,13 @@ namespace PollPlus.Controllers
 
         public AccountController() { }
 
-        //[OnlyAuthorizedUser(true), HttpGet]
-        [HttpGet]
+        [OnlyAuthorizedUser(true), HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
-        //[OnlyAuthorizedUser(true), HttpPost]
-        [HttpPost]
+        [OnlyAuthorizedUser(true), HttpPost]
         public async Task<ActionResult> Login(string usuario, string senha)
         {
             if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
@@ -52,15 +50,13 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        //[OnlyAuthorizedUser(true), HttpGet]
-        [HttpGet]
+        [OnlyAuthorizedUser(true), HttpGet]
         public ActionResult EsqueciMinhaSenha()
         {
             return View();
         }
 
-        //[OnlyAuthorizedUser(true), HttpPost]
-        [HttpPost]
+        [OnlyAuthorizedUser(true), HttpPost]
         public async Task<ActionResult> EsqueciMinhaSenha(string email)
         {
             if (!String.IsNullOrEmpty(email))
@@ -87,8 +83,7 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        //[HttpGet, OnlyAuthorizedUser]
-        [HttpGet]
+        [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> NovoUsuario()
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
@@ -96,8 +91,7 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        //[HttpPost, OnlyAuthorizedUser]
-        [HttpPost]
+        [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
@@ -121,10 +115,12 @@ namespace PollPlus.Controllers
             }
         }
 
-        //[HttpGet, OnlyAuthorizedUser]
-        [HttpGet]
+        [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> EditarUsuario(int usuarioId)
         {
+            var categorias = await this.service.RetornarCategoriasDisponniveis();
+            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+
             var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
 
             if (usuario != null)
@@ -133,10 +129,12 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        //[HttpPost, OnlyAuthorizedUser]
-        [HttpPost]
+        [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> EditarUsuario(UsuarioViewModel model)
         {
+            var categorias = await this.service.RetornarCategoriasDisponniveis();
+            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+
             if (!ModelState.IsValid)
                 return View(model);
             else if (await this.service.AtualizarUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
@@ -145,8 +143,7 @@ namespace PollPlus.Controllers
                 return View();
         }
 
-        //[HttpGet, OnlyAuthorizedUser]
-        [HttpPost]
+        [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> ListarUsuarios(int? pagina)
         {
             var listaUsuarios = await this.service.RetornarTodosUsuarios();

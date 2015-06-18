@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PollPlus.Models
 {
-    public class EnqueteViewModel
+    public class PlataformaViewModel
     {
         public int Id { get; set; }
-        public bool TemVoucher { get; set; }
-
-        public PerguntaViewModel Pergunta { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public Guid AppID { get; set; }
     }
 }

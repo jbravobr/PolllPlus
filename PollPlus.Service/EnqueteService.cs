@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
+using PollPlus.IRepositorio;
 
 namespace PollPlus.Service
 {
@@ -13,15 +14,15 @@ namespace PollPlus.Service
         /// <summary>
         /// Propriedade de exposição para a injeção de dependência
         /// </summary>
-        readonly IEnqueteService _servico;
+        readonly IEnqueteRepositorio _repositorio;
 
         /// <summary>
         /// Construtor parametrizado com a injeção de dependência
         /// </summary>
-        /// <param name="servico">IEnqueteService</param>
-        public EnqueteService(IEnqueteService servico)
+        /// <param name="repo">IEnqueteService</param>
+        public EnqueteService(IEnqueteRepositorio repo)
         {
-            this._servico = servico;
+            this._repositorio = repo;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirEnquete(Enquete e)
         {
-            return await this._servico.InserirEnquete(e);
+            return await this._repositorio.InserirEnquete(e);
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> AtualizarEnquete(Enquete e)
         {
-            return await this._servico.AtualizarEnquete(e);
+            return await this._repositorio.AtualizarEnquete(e);
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> DeletarEnquete(Enquete e)
         {
-            return await this._servico.DeletarEnquete(e);
+            return await this._repositorio.DeletarEnquete(e);
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Enquete</returns>
         public async Task<Enquete> RetornarEnquetePorId(int id)
         {
-            return await this._servico.RetornarEnquetePorId(id);
+            return await this._repositorio.RetornarEnquetePorId(id);
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Enquete</returns>
         public async Task<ICollection<Enquete>> RetornarTodasEnquetes()
         {
-            return await this._servico.RetornarTodasEnquetes();
+            return await this._repositorio.RetornarTodasEnquetes();
         }
     }
 }

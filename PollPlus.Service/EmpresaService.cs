@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
+using PollPlus.IRepositorio;
 
 namespace PollPlus.Service
 {
@@ -14,15 +15,15 @@ namespace PollPlus.Service
         /// <summary>
         /// Propriedade de exposição para a injeção de dependência
         /// </summary>
-        readonly IEmpresaService _servico;
+        readonly IEmpresaRepositorio _repositorio;
 
         /// <summary>
         /// Construtor parametrizado com a injeção de dependência
         /// </summary>
-        /// <param name="servico">IEmpresaService</param>
-        public EmpresaService(IEmpresaService servico)
+        /// <param name="repo">IEmpresaService</param>
+        public EmpresaService(IEmpresaRepositorio repo)
         {
-            this._servico = servico;
+            this._repositorio = repo;
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirEmpresa(Empresa e)
         {
-            return await this._servico.InserirEmpresa(e);
+            return await this._repositorio.InserirEmpresa(e);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> AtualizarEmpresa(Empresa e)
         {
-            return await this._servico.AtualizarEmpresa(e);
+            return await this._repositorio.AtualizarEmpresa(e);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> DeletarEmpresa(Empresa e)
         {
-            return await this._servico.DeletarEmpresa(e);
+            return await this._repositorio.DeletarEmpresa(e);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Empresa</returns>
         public async Task<Empresa> RetornarEmpresaPorId(int id)
         {
-            return await this._servico.RetornarEmpresaPorId(id);
+            return await this._repositorio.RetornarEmpresaPorId(id);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Empresa</returns>
         public async Task<ICollection<Empresa>> RetornarTodasEmpresas()
         {
-            return await this._servico.RetornarTodasEmpresas();
+            return await this._repositorio.RetornarTodasEmpresas();
         }
     }
 }

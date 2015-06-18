@@ -22,8 +22,14 @@ namespace PollPlus.Mappers
         protected override void Configure()
         {
             Mapper.CreateMap<UsuarioViewModel, Usuario>();
-
             Mapper.CreateMap<CategoriaViewModel, Categoria>();
+            Mapper.CreateMap<EmpresaViewModel, Empresa>()
+                .BeforeMap((vm, d) =>
+                {
+                    d.Documento = new Documento { Numero = vm.Documento.Numero, Tipo = Domain.Enumeradores.EnumTipoDocumento.Cnpj };
+
+                    d.Plataforma = new Plataforma { App = vm.Plataforma.AppID };
+                });
         }
     }
 }

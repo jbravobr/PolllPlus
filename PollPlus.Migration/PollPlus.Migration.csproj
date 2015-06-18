@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201506171827153_CriaBD.Designer.cs">
       <DependentUpon>201506171827153_CriaBD.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.cs" />
+    <Compile Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.Designer.cs">
+      <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -70,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201506171827153_CriaBD.resx">
       <DependentUpon>201506171827153_CriaBD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.resx">
+      <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
