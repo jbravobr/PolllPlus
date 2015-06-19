@@ -20,9 +20,12 @@ namespace PollPlus.Controllers
     {
         readonly IUsuarioServiceWEB service;
 
-        public AccountController(IUsuarioServiceWEB Service)
+        readonly IEmpresaServiceWEB serviceEmpresas;
+
+        public AccountController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas)
         {
             this.service = Service;
+            this.serviceEmpresas = ServiceEmpresas;
         }
 
         public AccountController() { }
@@ -87,7 +90,11 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> NovoUsuario()
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+            ViewBag.CategoriasInteresse = this.PreparaParaListaDeCategorias(categorias, null);
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewBag.Empresas = this.PreparaParaListaDeEmpresas(empresas, null);
+
             return View();
         }
 
@@ -95,7 +102,10 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+            ViewBag.CategoriasInteresse = this.PreparaParaListaDeCategorias(categorias, null);
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewBag.Empresas = this.PreparaParaListaDeEmpresas(empresas, null);
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -121,6 +131,9 @@ namespace PollPlus.Controllers
             var categorias = await this.service.RetornarCategoriasDisponniveis();
             ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
 
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewBag.Empresas = AutoMapper.Mapper.Map<ICollection<EmpresaViewModel>>(empresas);
+
             var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
 
             if (usuario != null)
@@ -134,6 +147,9 @@ namespace PollPlus.Controllers
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
             ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewBag.Empresas = AutoMapper.Mapper.Map<ICollection<EmpresaViewModel>>(empresas);
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -149,6 +165,52 @@ namespace PollPlus.Controllers
             var listaUsuarios = await this.service.RetornarTodosUsuarios();
 
             return View(listaUsuarios.ToPagedList(pagina ?? 1, 10));
+        }
+
+        [NonAction]
+        private IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
+        {
+            foreach (var empresa in empresas)
+            {
+                if (empresaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = empresa.Nome,
+                        Value = empresa.Id.ToString(),
+                        Selected = empresa.Id == empresaSelecionada
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = empresa.Nome,
+                    Value = empresa.Id.ToString()
+                };
+            }
+        }
+
+        [NonAction]
+        private IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, int? categoriaSelecionada = null)
+        {
+            foreach (var categoria in categorias)
+            {
+                if (categoriaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString(),
+                        Selected = categoria.Id == categoriaSelecionada
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = categoria.Nome,
+                    Value = categoria.Id.ToString()
+                };
+            }
         }
     }
 }

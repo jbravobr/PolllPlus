@@ -215,6 +215,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EnqueteController.cs" />
+    <Compile Include="Controllers\ErroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Filters\CustomActionFilter.cs" />
@@ -3544,6 +3545,10 @@
     <Content Include="Views\Empresa\EditarEmpresa.cshtml" />
     <Content Include="Views\Empresa\ListarEmpresas.cshtml" />
     <Content Include="Views\Empresa\NovaEmpresa.cshtml" />
+    <Content Include="Views\Enquete\ListarEnquetes.cshtml" />
+    <Content Include="Views\Enquete\EditarEnquete.cshtml" />
+    <Content Include="Views\Erro\Index.cshtml" />
+    <Content Include="Views\Account\_DropDownlistForEmpresas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

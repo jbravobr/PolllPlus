@@ -1,0 +1,23 @@
+﻿@model ICollection<PollPlus.Models.EmpresaViewModel>
+
+@{
+
+    List<SelectListItem> itens = new List<SelectListItem>();
+
+    if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            itens.Add(new SelectListItem { Text = item.Nome, Value = item.Nome.ToString() });
+        }
+    }
+}
+
+@if (itens.Any())
+{
+    @Html.DropDownList("EmpresaId", itens, "Selecione uma empresa");
+}
+else
+{
+    <p>Erro ao carregar lista de Empresas.</p>
+}

@@ -10,7 +10,7 @@ namespace PollPlus.Models
     public class DocumentoViewModel
     {
         public int Id { get; set; }
-        public int Numero { get; set; }
+        public long Numero { get; set; }
         public EnumTipoDocumento Tipo { get; set; }
     }
 }

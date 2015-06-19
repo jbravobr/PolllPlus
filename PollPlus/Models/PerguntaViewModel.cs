@@ -15,7 +15,7 @@ namespace PollPlus.Models
         [StringLength(240)]
         public string TextoPergunta { get; set; }
 
-        [Required(ErrorMessage = "Campo obrigatório.")]
+        //[Required(ErrorMessage = "Campo obrigatório.")]
         [MaxLength(30)]
         public ICollection<RespostaViewModel> Respostas { get; set; }
     }

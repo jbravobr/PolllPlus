@@ -23,6 +23,9 @@ namespace PollPlus.Domain
         public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
         public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }
 
+        public int? EmpresaId { get; set; }
+        public virtual Empresa Empresa { get; set; }
+
         public void InativarUsuario()
         {
             this.Status = EnumStatusUsuario.Inativo;

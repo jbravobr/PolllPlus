@@ -30,7 +30,7 @@ namespace PollPlus.Service
 
         public async Task<bool> InserirEmpresa(Empresa e)
         {
-            return await this.InserirEmpresa(e);
+            return await this.service.InserirEmpresa(e);
         }
 
         public async Task<Empresa> RetornarEmpresaPorId(int id)

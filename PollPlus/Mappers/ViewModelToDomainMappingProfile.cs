@@ -28,8 +28,13 @@ namespace PollPlus.Mappers
                 {
                     d.Documento = new Documento { Numero = vm.Documento.Numero, Tipo = Domain.Enumeradores.EnumTipoDocumento.Cnpj };
 
-                    d.Plataforma = new Plataforma { App = vm.Plataforma.AppID };
+                    d.Plataforma = new Plataforma { App = vm.Plataforma.App };
                 });
+            Mapper.CreateMap<EnqueteViewModel, Enquete>();
+            Mapper.CreateMap<PerguntaViewModel, Pergunta>();
+            Mapper.CreateMap<RespostaViewModel, Resposta>();
+            Mapper.CreateMap<DocumentoViewModel, Documento>();
+            Mapper.CreateMap<PlataformaViewModel, Plataforma>();
         }
     }
 }

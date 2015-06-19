@@ -35,7 +35,7 @@ namespace PollPlus.Controllers
                 return View(model);
 
             if (await this.service.InserirEnquete(AutoMapper.Mapper.Map<Enquete>(model)))
-                return RedirectToAction("ListarEmpresas");
+                return View(model);
 
             return View();
         }
@@ -61,7 +61,7 @@ namespace PollPlus.Controllers
         }
 
         [OnlyAuthorizedUser, HttpGet]
-        public async Task<ActionResult> ListarEmpresas(int? pagina)
+        public async Task<ActionResult> ListarEnquetes(int? pagina)
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 

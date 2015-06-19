@@ -11,6 +11,6 @@ namespace PollPlus.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public Guid AppID { get; set; }
+        public Guid App { get; set; }
     }
 }

@@ -57,6 +57,18 @@
     <Compile Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.Designer.cs">
       <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506190459557_Novos_Campos.cs" />
+    <Compile Include="Migrations\201506190459557_Novos_Campos.Designer.cs">
+      <DependentUpon>201506190459557_Novos_Campos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506190516034_Novos_Campos_Usuario.cs" />
+    <Compile Include="Migrations\201506190516034_Novos_Campos_Usuario.Designer.cs">
+      <DependentUpon>201506190516034_Novos_Campos_Usuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506190556599_Novos_Campos1.cs" />
+    <Compile Include="Migrations\201506190556599_Novos_Campos1.Designer.cs">
+      <DependentUpon>201506190556599_Novos_Campos1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -77,6 +89,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.resx">
       <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506190459557_Novos_Campos.resx">
+      <DependentUpon>201506190459557_Novos_Campos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506190516034_Novos_Campos_Usuario.resx">
+      <DependentUpon>201506190516034_Novos_Campos_Usuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506190556599_Novos_Campos1.resx">
+      <DependentUpon>201506190556599_Novos_Campos1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
