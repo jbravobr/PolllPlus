@@ -244,7 +244,11 @@
     <Compile Include="Service\EnqueteServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IEmpresaServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IEnqueteServiceWEB.cs" />
+    <Compile Include="Service\Interfaces\IPerguntaRespostaServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IUsuarioServiceWEB.cs" />
+    <Compile Include="Service\Interfaces\RespostaServiceWEB.cs" />
+    <Compile Include="Service\PerguntaRespostaServiceWEB.cs" />
+    <Compile Include="Service\RespostaServiceWEB.cs" />
     <Compile Include="Service\UsuarioServiceWEB.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -261,6 +265,7 @@
     <Content Include="Content\fonts\Theme\font-awesome-4\css\font-awesome.min.css" />
     <Content Include="Content\fonts\Theme\font-awesome-4\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Gridmvc.css" />
+    <Content Include="Content\images\excluir.png" />
     <Content Include="Content\images\loader-autocomplete.gif" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\jquery-ui.css" />

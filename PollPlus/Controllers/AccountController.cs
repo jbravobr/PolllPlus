@@ -108,7 +108,11 @@ namespace PollPlus.Controllers
             ViewBag.Empresas = this.PreparaParaListaDeEmpresas(empresas, null);
 
             if (!ModelState.IsValid)
+            {
+                ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, model.CategoriasInteresse);
+                ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, model.EmpresaId);
                 return View(model);
+            }
             else
             {
                 var user = await this.service.InserirRetornarUsuario(AutoMapper.Mapper.Map<Usuario>(model));
@@ -128,13 +132,13 @@ namespace PollPlus.Controllers
         [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> EditarUsuario(int usuarioId)
         {
+            var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
+
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+            ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, usuario.UsuarioCategoria.Select(c => c.CategoriaId).ToList());
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = AutoMapper.Mapper.Map<ICollection<EmpresaViewModel>>(empresas);
-
-            var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
+            ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, usuario.EmpresaId);
 
             if (usuario != null)
                 return View(AutoMapper.Mapper.Map<UsuarioViewModel>(usuario));
@@ -149,10 +153,14 @@ namespace PollPlus.Controllers
             ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = AutoMapper.Mapper.Map<ICollection<EmpresaViewModel>>(empresas);
+            ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, null);
 
             if (!ModelState.IsValid)
+            {
+                ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, model.EmpresaId);
+                ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, model.CategoriasInteresse);
                 return View(model);
+            }
             else if (await this.service.AtualizarUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
                 return RedirectToAction("ListarUsuarios");
             else
@@ -191,7 +199,7 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, int? categoriaSelecionada = null)
+        private IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)
         {
             foreach (var categoria in categorias)
             {
@@ -201,7 +209,7 @@ namespace PollPlus.Controllers
                     {
                         Text = categoria.Nome,
                         Value = categoria.Id.ToString(),
-                        Selected = categoria.Id == categoriaSelecionada
+                        Selected = categoriaSelecionada.Contains((int)categoria.Id)
                     };
                 }
 

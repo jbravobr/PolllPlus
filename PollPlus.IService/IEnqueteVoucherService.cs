@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PollPlus.IRepositorio
+namespace PollPlus.IService
 {
     public interface IEnqueteVoucherService
     {

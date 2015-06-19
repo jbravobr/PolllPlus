@@ -4,17 +4,12 @@
     ViewBag.Title = "Nova Enquete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="header">
-    <h2>Cadastro de Nova Enquete</h2>
+    <h3>Cadastro de Nova Enquete</h3>
 </div>
 
-<div class="content tamanho-reduzido">
-
-    @if (ViewBag.Mesagem != null)
-    {
-        // Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);
-    }
-
+<div class="content">
     @using (Html.BeginForm("NovaEnquete", "Enquete", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
         <div class="form-group">
@@ -30,29 +25,50 @@
                 <button class="btn btn-primary" type="submit">Criar Respostas</button>
             </div>
         </div>
-
-        <br />
-
-        if (Model != null && Model.Id > 0)
-        {
-            Html.RenderPartial("_EnqueteRespostas");
-
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-primary" type="submit">Salvar</button>
-                </div>
-            </div>
-        }
     }
 </div>
+<br />
 
-<script type="text/javascript">
+@if (Model != null && Model.Id > 0)
+{
+    <div class="header">
+        <h3>Respostas</h3>
+    </div>
 
-    $("#btnNovaResposta").click(function () {
+    using (Html.BeginForm("SalvaRespostas", "Enquete", FormMethod.Post, new { role = "form" }))
+    {
+        <div class="row">
+            <div id="respostas" class="content">
+                @{Html.RenderPartial("_EnqueteRespostas");}
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Gravar Respostas</button>
+                </div>
+            </div>
+        </div>
+                        }
+                    }
+@section Scripts{
+    <script type="text/javascript">
 
-        var html = $("#form-respostas").clone();
+        $("#btnNovaResposta").click(function () {
 
-        $("#form-respostas").append(html);
-    });
+            var html = $("#novaRespostas").clone();
+            $('input[id="resposta"]', html).val("");
 
-</script>
+            $("#respostas").append(html);
+        });
+
+        function Remover(obj) {
+            $(obj).parent().parent().remove();
+        }
+
+    </script>
+}

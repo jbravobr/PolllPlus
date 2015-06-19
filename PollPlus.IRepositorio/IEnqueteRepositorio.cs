@@ -14,5 +14,7 @@ namespace PollPlus.IRepositorio
         Task<bool> DeletarEnquete(Enquete e);
         Task<Enquete> RetornarEnquetePorId(int id);
         Task<ICollection<Enquete>> RetornarTodasEnquetes();
+
+        Task<Enquete> InserirRetornarEnquete(Enquete e);
     }
 }

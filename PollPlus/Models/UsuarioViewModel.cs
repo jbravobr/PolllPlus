@@ -40,6 +40,9 @@ namespace PollPlus.Models
         public EnumStatusUsuario Status { get; set; }
         public EnumPerfil Perfil { get; set; }
 
+        [Required(ErrorMessage = "Campo obrigatório.")]
+        public int EmpresaId { get; set; }
+
         public ICollection<UsuarioCategoria> UsuarioCategoria { get; set; }
 
         [Required(ErrorMessage = "Campo obrigatório.")]

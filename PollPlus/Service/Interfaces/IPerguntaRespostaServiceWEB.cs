@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PollPlus.IService
+namespace PollPlus.Service.Interfaces
 {
-    public interface IPerguntaRespostaService
+    public interface IPerguntaRespostaServiceWEB
     {
         Task<bool> InserirPerguntaResposta(PerguntaResposta pr);
         Task<bool> RemoverPerguntaResposta(int id);

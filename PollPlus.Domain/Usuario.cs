@@ -34,7 +34,11 @@ namespace PollPlus.Domain
         public Usuario()
         {
             this.Status = EnumStatusUsuario.Ativo;
-            this.Perfil = EnumPerfil.AdministradorEmpresa;
+        }
+
+        public void ConfiguraPerfil(EnumPerfil perfil)
+        {
+            this.Perfil = perfil;
         }
 
         public void AdicionarCategoria(List<int> listaDeCategoriasId)

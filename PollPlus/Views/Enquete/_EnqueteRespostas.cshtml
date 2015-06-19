@@ -1,6 +1,4 @@
-﻿@model PollPlus.Models.RespostaViewModel
-
-@{
+﻿@{
     List<PollPlus.Models.RespostaViewModel> respostas = null;
 
     if (ViewData.ContainsKey("Respostas"))
@@ -21,15 +19,13 @@
     }
 }
 
-<div id="form-respostas" class="form-group">
-    <div class="col-sm-10">
-        @Html.TextBoxFor(x => x, new { placeholder = "Insira o texto da resposta", @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.TextoResposta)
+<div id="novaRespostas" style="display:block">
+    <div id="form-respostas" class="form-group">
+        <div class="col-sm-10">
+            <input type="text" id="resposta" class="form-control" name="resposta" />
+        </div>
+        <a id="excluir" class="excluir" href="javascript:void(0);" onclick="Remover($(this));"><img src="~/Content/images/excluir.png" /></a>
     </div>
-</div>
-
-<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-        <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>
-    </div>
+    <br />
+    <br />
 </div>

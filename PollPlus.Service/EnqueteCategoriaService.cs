@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using System.Linq.Expressions;
+using PollPlus.IService;
 
-namespace PollPlus.Repositorio
+namespace PollPlus.Service
 {
     public class EnqueteCategoriaService : IEnqueteCategoriaService
     {

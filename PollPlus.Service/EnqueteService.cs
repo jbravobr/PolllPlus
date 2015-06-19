@@ -25,6 +25,11 @@ namespace PollPlus.Service
             this._repositorio = repo;
         }
 
+        public async Task<Enquete> InserirRetornarEnquete(Enquete e)
+        {
+            return await this._repositorio.InserirRetornarEnquete(e);
+        }
+
         /// <summary>
         /// Realiza a chamada ao repositório para inserção da Enquete
         /// </summary>

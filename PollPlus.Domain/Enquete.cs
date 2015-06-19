@@ -11,7 +11,7 @@ namespace PollPlus.Domain
     {
         public string Titulo { get; set; }
         public EnumStatusEnquete Status { get; set; }
-        public EnumTipoEnquete Tipo { get; set; }
+        public EnumTipoEnquete Tipo { get; protected set; }
         public EnumTipoImagem TipoImagem { get; set; }
         public string Imagem { get; set; }
         public int ClientId { get; set; }
@@ -29,5 +29,10 @@ namespace PollPlus.Domain
 
         public virtual ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
         public virtual ICollection<EnqueteVoucher> EnqueteVoucher { get; set; }
+
+        public void ConfiguraTipo(EnumTipoEnquete tipo)
+        {
+            this.Tipo = tipo;
+        }
     }
 }

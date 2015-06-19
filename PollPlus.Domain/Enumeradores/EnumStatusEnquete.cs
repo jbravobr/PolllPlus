@@ -13,6 +13,12 @@ namespace PollPlus.Domain.Enumeradores
         Ativa = 0,
 
         [Description("Inativa")]
-        Inativa = 1
+        Inativa = 1,
+
+        [Description("Publicada")]
+        Publicada = 2,
+
+        [Description("Despublicada")]
+        Despublicada = 3
     }
 }
