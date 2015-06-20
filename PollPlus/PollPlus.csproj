@@ -218,6 +218,7 @@
     <Compile Include="Controllers\ErroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\VoucherController.cs" />
     <Compile Include="Filters\CustomActionFilter.cs" />
     <Compile Include="Filters\CustomMenuActionFilter.cs" />
     <Compile Include="Filters\OnlyAuthorizedUser.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Models\RespostaViewModel.cs" />
     <Compile Include="Models\UsuarioLogado.cs" />
     <Compile Include="Models\UsuarioViewModel.cs" />
+    <Compile Include="Models\VoucherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\EmpresaServiceWEB.cs" />
     <Compile Include="Service\EnqueteServiceWEB.cs" />
@@ -246,10 +248,14 @@
     <Compile Include="Service\Interfaces\IEnqueteServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IPerguntaRespostaServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IUsuarioServiceWEB.cs" />
+    <Compile Include="Service\Interfaces\IVoucherServiceWEB.cs" />
+    <Compile Include="Service\Interfaces\PerguntaServiceWEB.cs" />
     <Compile Include="Service\Interfaces\RespostaServiceWEB.cs" />
     <Compile Include="Service\PerguntaRespostaServiceWEB.cs" />
+    <Compile Include="Service\PerguntaServiceWEB.cs" />
     <Compile Include="Service\RespostaServiceWEB.cs" />
     <Compile Include="Service\UsuarioServiceWEB.cs" />
+    <Compile Include="Service\VoucherServiceWEB.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -824,6 +830,7 @@
     <Content Include="Content\themes\flat-dream\css\less\sign-up.less" />
     <Content Include="Content\themes\flat-dream\css\less\typography.less" />
     <Content Include="Content\themes\flat-dream\css\style.less" />
+    <None Include="Properties\PublishProfiles\Mais - Temporário.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
@@ -3554,6 +3561,8 @@
     <Content Include="Views\Enquete\EditarEnquete.cshtml" />
     <Content Include="Views\Erro\Index.cshtml" />
     <Content Include="Views\Account\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Voucher\ListarVouchers.cshtml" />
+    <Content Include="Views\Voucher\NovoVoucher.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

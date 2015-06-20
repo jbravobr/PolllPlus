@@ -18,6 +18,11 @@ namespace PollPlus.Service
             this._service = service;
         }
 
+        public async Task<Resposta> InserirRetornarResposta(Resposta r)
+        {
+            return await this._service.InserirRetornarResposta(r);
+        }
+
         public async Task<bool> AtualizarResposta(Resposta e)
         {
             return await this._service.AtualizarResposta(e);

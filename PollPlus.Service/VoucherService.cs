@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
-
+using PollPlus.IRepositorio;
 
 namespace PollPlus.Service
 {
@@ -15,15 +15,15 @@ namespace PollPlus.Service
         /// <summary>
         /// Propriedade de exposição para a injeção de dependência
         /// </summary>
-        readonly IVoucherService _servico;
+        readonly IVoucherRepositorio _repositorio;
 
         /// <summary>
         /// Construtor parametrizado com a injeção de dependência
         /// </summary>
-        /// <param name="servico">IVoucherService</param>
-        public VoucherService(IVoucherService servico)
+        /// <param name="repo">IVoucherService</param>
+        public VoucherService(IVoucherRepositorio repo)
         {
-            this._servico = servico;
+            this._repositorio = repo;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirVoucher(Voucher e)
         {
-            return await this._servico.InserirVoucher(e);
+            return await this._repositorio.InserirVoucher(e);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> AtualizarVoucher(Voucher e)
         {
-            return await this._servico.AtualizarVoucher(e);
+            return await this._repositorio.AtualizarVoucher(e);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> DeletarVoucher(Voucher e)
         {
-            return await this._servico.DeletarVoucher(e);
+            return await this._repositorio.DeletarVoucher(e);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Voucher</returns>
         public async Task<Voucher> RetornarVoucherPorId(int id)
         {
-            return await this._servico.RetornarVoucherPorId(id);
+            return await this._repositorio.RetornarVoucherPorId(id);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace PollPlus.Service
         /// <returns>Objeto Voucher</returns>
         public async Task<ICollection<Voucher>> RetornarTodosVouchers()
         {
-            return await this._servico.RetornarTodosVouchers();
+            return await this._repositorio.RetornarTodosVouchers();
         }
     }
 }

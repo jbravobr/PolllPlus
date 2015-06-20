@@ -12,22 +12,21 @@
 <div class="content">
     @using (Html.BeginForm("NovaEnquete", "Enquete", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
-        <div class="form-group">
-            @Html.LabelFor(x => x.Pergunta.TextoPergunta, "Título", new { @class = "col-sm-2 control-label" })
-            <div class="col-sm-10">
-                @Html.TextBoxFor(x => x.Pergunta.TextoPergunta, new { placeholder = "Título", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Pergunta.TextoPergunta, "Título", new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Pergunta.TextoPergunta, new { placeholder = "Título", @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
         </div>
+    </div>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-primary" type="submit">Criar Respostas</button>
-            </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button class="btn btn-primary" type="submit">Criar Respostas</button>
         </div>
+    </div>
     }
 </div>
-<br />
 
 @if (Model != null && Model.Id > 0)
 {
@@ -37,11 +36,13 @@
 
     using (Html.BeginForm("SalvaRespostas", "Enquete", FormMethod.Post, new { role = "form" }))
     {
+        @Html.HiddenFor(x => x.Pergunta.Id, new { name = "Pergunta" });
+        @Html.HiddenFor(x => x.Pergunta.TextoPergunta, new { name = "Pergunta" });
+
         <div class="row">
             <div id="respostas" class="content">
                 @{Html.RenderPartial("_EnqueteRespostas");}
             </div>
-            <br />
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>

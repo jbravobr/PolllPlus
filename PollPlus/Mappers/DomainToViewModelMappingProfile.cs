@@ -28,6 +28,7 @@ namespace PollPlus.Mappers
             Mapper.CreateMap<Resposta, RespostaViewModel>();
             Mapper.CreateMap<Documento, DocumentoViewModel>();
             Mapper.CreateMap<Plataforma, PlataformaViewModel>();
+            Mapper.CreateMap<Voucher, VoucherViewModel>();
         }
     }
 }

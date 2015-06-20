@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IBaseRepositorio.cs" />
     <Compile Include="ICategoriaRepositorio.cs" />
+    <Compile Include="IPerguntaRepositorio.cs" />
     <Compile Include="IRespostaRepositorio.cs" />
     <Compile Include="IDocumentoRepositorio.cs" />
     <Compile Include="IEmpresaRepositorio.cs" />

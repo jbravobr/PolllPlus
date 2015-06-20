@@ -17,15 +17,15 @@ namespace PollPlus.Controllers
     {
         readonly IEnqueteServiceWEB service;
 
-        readonly IPerguntaRespostaServiceWEB servicePerguntaResposta;
+        readonly IPerguntaServiceWEB servicePergunta;
 
         readonly IRespostaServiceWEB serviceResposta;
 
-        public EnqueteController(IEnqueteServiceWEB _service, IPerguntaRespostaServiceWEB _servicePerguntaResposta,
+        public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
             IRespostaServiceWEB _serviceResposta)
         {
             this.service = _service;
-            this.servicePerguntaResposta = _servicePerguntaResposta;
+            this.servicePergunta = _servicePergunta;
             this.serviceResposta = _serviceResposta;
         }
 
@@ -35,20 +35,25 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        public async Task<ActionResult> SalvaRespostas(EnqueteViewModel model, List<string> resposta)
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> SalvaRespostas(PerguntaViewModel Pergunta, List<string> resposta)
         {
             if (!ModelState.IsValid || !resposta.Any())
-                return View(model);
+                return View(Pergunta);
 
-            var respostas = MapeiaListaDeRespostas(resposta);
+            var respostas = MapeiaListaDeRespostas(resposta, Pergunta.Id);
 
             foreach (var r in respostas)
             {
                 await this.serviceResposta.InserirResposta(r);
             }
 
-            if (this.servicePerguntaResposta.InserirPerguntaResposta(MapeiaParaPerguntaResposta(model.Pergunta.Id,respsota)))
+            Pergunta.Resposta = AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas.ToList());
 
+            if (await this.servicePergunta.AtualizarPergunta(AutoMapper.Mapper.Map<Pergunta>(Pergunta)))
+                return RedirectToAction("ListarEnquetes");
+            else
+                return View("NovaEnquete");
         }
 
         [OnlyAuthorizedUser, HttpPost]
@@ -59,7 +64,10 @@ namespace PollPlus.Controllers
 
             model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
             model.UsuarioId = UsuarioLogado.UsuarioAutenticado().Id;
-            model.file = file.FileName;
+
+            if (file != null && file.ContentLength > 0)
+                model.file = file.FileName;
+
             model.Tipo = UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa
                 ? Domain.Enumeradores.EnumTipoEnquete.Interesse
                 : Domain.Enumeradores.EnumTipoEnquete.Publica;
@@ -77,12 +85,22 @@ namespace PollPlus.Controllers
         {
             var enquete = await this.service.RetornarEnquetePorId(enqueteId);
 
-            return View(AutoMapper.Mapper.Map<Enquete>(enquete));
+            var respostas = enquete.Pergunta.Resposta;
+
+            if (respostas != null && respostas.Any())
+                ViewData.Add("Respostas", AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas));
+
+            return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
         }
 
         [OnlyAuthorizedUser, HttpPost]
         public async Task<ActionResult> EditarEnquete(EnqueteViewModel model, HttpPostedFileBase file)
         {
+            var respostas = model.Pergunta.Resposta;
+
+            if (respostas != null && respostas.Any())
+                ViewData.Add("Respostas", AutoMapper.Mapper.Map<RespostaViewModel>(respostas));
+
             model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
             model.UsuarioId = UsuarioLogado.UsuarioAutenticado().Id;
             model.file = file.FileName;
@@ -107,19 +125,51 @@ namespace PollPlus.Controllers
             return View(listaEnquetes.ToPagedList(pagina ?? 1, 10));
         }
 
-        private static IEnumerable<Resposta> MapeiaListaDeRespostas(List<string> respostas)
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> PublicarEnquete(int enqueteId)
         {
-            foreach (var resposta in respostas)
-            {
-                yield return new Resposta { TextoResposta = resposta };
-            }
+            var enquete = await this.service.RetornarEnquetePorId(enqueteId);
+            enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
+
+            await this.service.AtualizarEnquete(enquete);
+            return View("ListarEnquetes");
         }
 
-        private static IEnumerable<PerguntaResposta> MapeiaParaPerguntaResposta(int perguntaId, IEnumerable<Resposta> respostas)
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> DespublicarEnquete(int enqueteId)
+        {
+            var enquete = await this.service.RetornarEnquetePorId(enqueteId);
+            enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Despublicada;
+
+            await this.service.AtualizarEnquete(enquete);
+            return View("ListarEnquetes");
+        }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> AtivarEnquete(int enqueteId)
+        {
+            var enquete = await this.service.RetornarEnquetePorId(enqueteId);
+            enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
+
+            await this.service.AtualizarEnquete(enquete);
+            return View("ListarEnquetes");
+        }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> DesativarEnquete(int enqueteId)
+        {
+            var enquete = await this.service.RetornarEnquetePorId(enqueteId);
+            enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Inativa;
+
+            await this.service.AtualizarEnquete(enquete);
+            return View("ListarEnquetes");
+        }
+
+        private static IEnumerable<Resposta> MapeiaListaDeRespostas(List<string> respostas, int perguntaId)
         {
             foreach (var resposta in respostas)
             {
-                yield return new PerguntaResposta { PerguntaId = perguntaId, RespostaId = resposta.Id };
+                yield return new Resposta { TextoResposta = resposta, PerguntaId = perguntaId };
             }
         }
     }

@@ -22,6 +22,11 @@ namespace PollPlus.Repositorio
             return await this.Salvar();
         }
 
+        public async Task<Resposta> InserirRetornarResposta(Resposta e)
+        {
+            return await this.InsertAndReturnEntity(e);
+        }
+
         /// <summary>
         /// Método para Atualizar um Resposta
         /// </summary>

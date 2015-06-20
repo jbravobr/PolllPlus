@@ -1,0 +1,51 @@
+﻿@model PollPlus.Models.VoucherViewModel
+
+@{
+    ViewBag.Title = "Novo Vocher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="header">
+    <h3>Cadastro de Voucher</h3>
+</div>
+
+<div class="content tamanho-reduzido">
+
+    @if (ViewBag.Mesagem != null)
+    {
+        @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
+    }
+
+    @using (Html.BeginForm("NovoVoucher", "Voucher", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(x => x.Identificador, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Identificador, new { @class = "form-control app" })
+                @Html.ValidationMessageFor(x => x.Identificador)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $(function () {
+
+            @{ var guid = Guid.NewGuid().ToString();}
+
+            var _guid = "@guid";
+            $('.app').val(_guid);
+        });
+
+    </script>
+}

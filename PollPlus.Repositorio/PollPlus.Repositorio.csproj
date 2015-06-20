@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BaseRepositorio.cs" />
     <Compile Include="CategoriaRepositorio.cs" />
+    <Compile Include="PerguntaRepositorio.cs" />
     <Compile Include="RespostaRepositorio.cs" />
     <Compile Include="DocumentoRepositorio.cs" />
     <Compile Include="EFContext\PollPlusContext.cs" />

@@ -22,6 +22,7 @@ namespace PollPlus.Migration.Context
         DbSet<Voucher> Voucher { get; set; }
         DbSet<Pergunta> Pergunta { get; set; }
         DbSet<Resposta> Resposta { get; set; }
+        DbSet<PerguntaResposta> PerguntaResposta { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

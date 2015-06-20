@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PollPlus.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace PollPlus.Models
         [Required(ErrorMessage = "Campo obrigatório.")]
         [MaxLength(150)]
         public string TextoResposta { get; set; }
+
+        public int PerguntaId { get; set; }
     }
 }

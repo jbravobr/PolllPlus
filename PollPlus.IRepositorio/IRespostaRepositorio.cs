@@ -14,6 +14,8 @@ namespace PollPlus.IRepositorio
         Task<bool> DeletarResposta(Resposta r);
         Task<Resposta> RetornarRespostaPorId(int id);
         Task<ICollection<Resposta>> RetornarTodasRespostas();
+
+        Task<Resposta> InserirRetornarResposta(Resposta e);
     }
 }
 

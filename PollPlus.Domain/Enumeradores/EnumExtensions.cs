@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PollPlus.Domain
+namespace PollPlus.Domain.Enumeradores
 {
     public static class EnumExtensions
     {

@@ -1,9 +1,8 @@
-﻿@model PagedList.IPagedList<PollPlus.Domain.Enquete>
+﻿@model PagedList.IPagedList<PollPlus.Domain.Voucher>
 @using PagedList.Mvc;
-@using PollPlus.Domain.Enumeradores;
 
 @{
-    ViewBag.Title = "Listar Enquetes";
+    ViewBag.Title = "Listar Vouchers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,11 +10,11 @@
     <div class="col-md-12">
         <div class="">
 
-            @Html.ActionLink("Nova Enquete", "NovaEnquete", "Enquete", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Novo Voucher", "NovoVoucher", "Voucher", null, new { @class = "btn btn-info" })
 
             <br />
             <div class="header">
-                <h3>Listagem das Enquetes Cadastradas</h3>
+                <h3>Listagem dos Vouchers Cadastrados</h3>
             </div>
 
             <div class="content">
@@ -25,13 +24,13 @@
                             <thead>
                                 <tr role="row">
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
-                                        <strong>Pegunta</strong>
-                                    </th>
-                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
-                                        <strong>Data da Criação</strong>
+                                        <strong>Número</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                         <strong>Status</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Data da Criação</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
                                     </th>
@@ -39,12 +38,12 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _enquete in Model)
+                                @foreach (var _voucher in Model)
                                 {
                                     <tr class="gradeA odd">
-                                        <td class=" ">@_enquete.Pergunta.TextoPergunta</td>
-                                        <td class=" ">@_enquete.DataCriacao</td>
-                                        <td class=" ">@_enquete.Status.GetDescription()</td>
+                                        <td class=" ">@_voucher.Identificador</td>
+                                        <td class=" ">@_voucher.Status</td>
+                                        <td class=" ">@_voucher.DataCriacao.ToShortDateString()</td>
                                         <td class="center ">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default btn-xs">Ações</button>
@@ -53,10 +52,7 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("EditarEnquete", "Enquete", new { enqueteId = _enquete.Id })">Alterar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja Desabilitar esta Enquete?')) {window.location.href='@Url.Action("DespublicarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Desabilitar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja Publicar esta Enquete?')) {window.location.href='@Url.Action("PublicarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Publicar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja Encerrar esta Enquete?')) {window.location.href='@Url.Action("DesativarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Encerrar</a></li>
+                                                    <li><a href="javascript: if(confirm('Deseja associar este vocuher?')) {window.location.href='@Url.Action("AssociarVoucherEnquete", "Voucher", new { voucherId = _voucher.Id })">Associar</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -69,7 +65,7 @@
                 </div>
             </div>
 
-            @Html.PagedListPager(Model, page => Url.Action("ListarEnquetes", "Enquete", new { pagina = page }),
+            @Html.PagedListPager(Model, page => Url.Action("ListarVouchers", "Voucher", new { pagina = page }),
             new PagedListRenderOptions
             {
                 DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,

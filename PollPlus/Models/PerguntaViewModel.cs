@@ -15,6 +15,6 @@ namespace PollPlus.Models
         [StringLength(240)]
         public string TextoPergunta { get; set; }
 
-        public ICollection<RespostaViewModel> Respostas { get; set; }
+        public ICollection<RespostaViewModel> Resposta { get; set; }
     }
 }

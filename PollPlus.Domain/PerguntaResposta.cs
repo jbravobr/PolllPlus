@@ -15,5 +15,8 @@ namespace PollPlus.Domain
         public Resposta Resposta { get; set; }
 
         public bool Respondida { get; set; }
+
+        public int UsuarioId { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }

@@ -49,25 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201506171827153_CriaBD.cs" />
-    <Compile Include="Migrations\201506171827153_CriaBD.Designer.cs">
-      <DependentUpon>201506171827153_CriaBD.cs</DependentUpon>
+    <Compile Include="Migrations\201506201429020_Relacao_Pergunta_Resposta.cs" />
+    <Compile Include="Migrations\201506201429020_Relacao_Pergunta_Resposta.Designer.cs">
+      <DependentUpon>201506201429020_Relacao_Pergunta_Resposta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.cs" />
-    <Compile Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.Designer.cs">
-      <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506190459557_Novos_Campos.cs" />
-    <Compile Include="Migrations\201506190459557_Novos_Campos.Designer.cs">
-      <DependentUpon>201506190459557_Novos_Campos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506190516034_Novos_Campos_Usuario.cs" />
-    <Compile Include="Migrations\201506190516034_Novos_Campos_Usuario.Designer.cs">
-      <DependentUpon>201506190516034_Novos_Campos_Usuario.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506190556599_Novos_Campos1.cs" />
-    <Compile Include="Migrations\201506190556599_Novos_Campos1.Designer.cs">
-      <DependentUpon>201506190556599_Novos_Campos1.cs</DependentUpon>
+    <Compile Include="Migrations\201506201635042_Key_Voucher.cs" />
+    <Compile Include="Migrations\201506201635042_Key_Voucher.Designer.cs">
+      <DependentUpon>201506201635042_Key_Voucher.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,20 +72,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201506171827153_CriaBD.resx">
-      <DependentUpon>201506171827153_CriaBD.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201506201429020_Relacao_Pergunta_Resposta.resx">
+      <DependentUpon>201506201429020_Relacao_Pergunta_Resposta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506181204475_Mudancas_Plataforma_Empresa.resx">
-      <DependentUpon>201506181204475_Mudancas_Plataforma_Empresa.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506190459557_Novos_Campos.resx">
-      <DependentUpon>201506190459557_Novos_Campos.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506190516034_Novos_Campos_Usuario.resx">
-      <DependentUpon>201506190516034_Novos_Campos_Usuario.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506190556599_Novos_Campos1.resx">
-      <DependentUpon>201506190556599_Novos_Campos1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201506201635042_Key_Voucher.resx">
+      <DependentUpon>201506201635042_Key_Voucher.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
