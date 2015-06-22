@@ -3,12 +3,12 @@
 @using PollPlus.Helpers;
 
 @{
-    ViewBag.Title = "Novo Usuario";
+    ViewBag.Title = "Novo Usuario - Acesso Master";
     Layout = "~/Views/Shared/_LayoutNaoLogado.cshtml";
 }
 
 <div class="header">
-    <h3>Cadastro de Usuario</h3>
+    <h3>Cadastro de Usuario - Master</h3>
 </div>
 
 <div class="content tamanho-reduzido">
@@ -18,7 +18,7 @@
         @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
     }
 
-    @using (Html.BeginForm("NovoUsuario", "Account", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("MasterCriaUsuario", "Master", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
         <div class="form-group">
             @Html.LabelFor(x => x.Nome, new { @class = "col-sm-2 control-label" })

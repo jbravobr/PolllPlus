@@ -16,7 +16,7 @@ namespace PollPlus
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "maisapi/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

@@ -90,10 +90,10 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> NovoUsuario()
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = this.PreparaParaListaDeCategorias(categorias, null);
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = this.PreparaParaListaDeEmpresas(empresas, null);
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
 
             return View();
         }
@@ -102,10 +102,10 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> NovoUsuario(UsuarioViewModel model)
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = this.PreparaParaListaDeCategorias(categorias, null);
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = this.PreparaParaListaDeEmpresas(empresas, null);
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
 
             if (!ModelState.IsValid)
             {
@@ -135,10 +135,10 @@ namespace PollPlus.Controllers
             var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
 
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, usuario.UsuarioCategoria.Select(c => c.CategoriaId).ToList());
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, usuario.UsuarioCategoria.Select(c => c.CategoriaId).ToList()));
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, usuario.EmpresaId);
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, usuario.EmpresaId));
 
             if (usuario != null)
                 return View(AutoMapper.Mapper.Map<UsuarioViewModel>(usuario));
@@ -150,10 +150,10 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> EditarUsuario(UsuarioViewModel model)
         {
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewBag.CategoriasInteresse = AutoMapper.Mapper.Map<ICollection<CategoriaViewModel>>(categorias);
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, model.UsuarioCategoria.Select(c => c.CategoriaId).ToList()));
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, null);
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, model.EmpresaId));
 
             if (!ModelState.IsValid)
             {
@@ -176,7 +176,7 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
+        private static IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
         {
             foreach (var empresa in empresas)
             {
@@ -199,7 +199,7 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)
+        private static IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)
         {
             foreach (var categoria in categorias)
             {

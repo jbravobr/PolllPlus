@@ -4,6 +4,7 @@ using PollPlus.Domain.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace PollPlus.Models
 {
@@ -47,5 +48,9 @@ namespace PollPlus.Models
 
         [Required(ErrorMessage = "Campo obrigatório.")]
         public List<int> CategoriasInteresse { get; set; }
+
+        public List<SelectListItem> CategoriasForSelectList { get; set; }
+
+        public List<SelectListItem> EmpresasForSelectList { get; set; }
     }
 }
