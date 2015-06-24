@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Net;
 using System.Text;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace PollPlus.Helpers
 {
@@ -210,5 +211,28 @@ namespace PollPlus.Helpers
 
         //    return _serviceToken.ValidaToken(token, out _msg);
         //}
+
+        public bool SalvarImagem(HttpPostedFileBase file)
+        {
+            var path = ConfigurationManager.AppSettings["CaminhoParaSalvarImagens"];
+
+            if (file.ContentLength > 0)
+            {
+                try
+                {
+                    var directory = Path.GetRandomFileName();
+                    var pathFinal = Path.Combine(path, directory, file.FileName);
+
+                    file.SaveAs(pathFinal);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
     }
 }

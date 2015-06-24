@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MapViewModel>
+
+@using System.Globalization;
+@using PollPlus.Models;
+@using Jmelosegui.Mvc.Googlemap;
+@using Jmelosegui.Mvc.Googlemap.Overlays
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content" style="padding-bottom: 2%;">
+
+    @{
+
+        Html.GoogleMap()
+            .Name("map")
+            .Culture(CultureInfo.CurrentCulture)
+            .Height(600)
+            .Center(c => c.Latitude(-14.2400732)
+                          .Longitude(-53.1805018))
+            .Zoom(5)
+            .BindTo<MapViewModel, Marker>
+            (Model, mappings => mappings.For<MapViewModel>
+                        (
+                            binding => binding.ItemDataBound
+                                (
+                                    (marker, markerModel) =>
+                                    {
+                                        marker.Latitude = markerModel.Latitude;
+                                        marker.Longitude = markerModel.Longitude;
+                                        marker.Title = "Coordenadas por Usuário";
+                                        marker.zIndex = 0;
+                                        marker.Icon = new MarkerImage(Url.Content(String.Format("{0}{1}", "/Content/images/", markerModel.Icon)),
+                                            new System.Drawing.Size(20, 32),
+                                            new System.Drawing.Point(0, 0),
+                                            new System.Drawing.Point(0, 32));
+                                        marker.Window = new InfoWindow(marker)
+                                        {
+                                            Template =
+                                                            {
+                                                                Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, markerModel.Endereco))
+                                                            }
+                                        };
+                                    }
+                                )
+                        )
+            ).Render();
+    }
+
+</div>
+@section Scripts
+{
+    @(Html.GoogleMap().ScriptRegistrar())
+}

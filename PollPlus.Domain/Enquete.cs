@@ -1,4 +1,5 @@
-﻿using PollPlus.Domain.Enumeradores;
+﻿using Newtonsoft.Json;
+using PollPlus.Domain.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace PollPlus.Domain
         public bool TemVoucher { get; set; }
 
         public int UsuarioId { get; set; }
+        [JsonIgnore]
         public virtual Usuario Usuario { get; set; }
 
         public int EmpresaId { get; set; }

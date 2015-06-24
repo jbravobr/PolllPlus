@@ -74,13 +74,14 @@ namespace PollPlus.App_Start
             };
             kernel.Load(modules);
 
-            kernel.Bind<IUsuarioServiceWEB>().To<UsuarioServiceWEB>();
-            kernel.Bind<IEmpresaServiceWEB>().To<EmpresaServiceWEB>();
-            kernel.Bind<IEnqueteServiceWEB>().To<EnqueteServiceWEB>();
-            kernel.Bind<IPerguntaRespostaServiceWEB>().To<PerguntaRespostaServiceWEB>();
-            kernel.Bind<IRespostaServiceWEB>().To<RespostaServiceWEB>();
-            kernel.Bind<IPerguntaServiceWEB>().To<PerguntaServiceWEB>();
-            kernel.Bind<IVoucherServiceWEB>().To<VoucherServiceWEB>();
+            kernel.Bind<IUsuarioServiceWEB>().To<UsuarioServiceWEB>().Named("IUsuarioServiceWEB");
+            kernel.Bind<IEmpresaServiceWEB>().To<EmpresaServiceWEB>().Named("IEmpresaServiceWEB");
+            kernel.Bind<IEnqueteServiceWEB>().To<EnqueteServiceWEB>().Named("IEnqueteServiceWEB");
+            kernel.Bind<IPerguntaRespostaServiceWEB>().To<PerguntaRespostaServiceWEB>().Named("IPerguntaRespostaServiceWEB");
+            kernel.Bind<IRespostaServiceWEB>().To<RespostaServiceWEB>().Named("IRespostaServiceWEB");
+            kernel.Bind<IPerguntaServiceWEB>().To<PerguntaServiceWEB>().Named("PerguntaServiceWEB");
+            kernel.Bind<IVoucherServiceWEB>().To<VoucherServiceWEB>().Named("VoucherServiceWEB");
+            kernel.Bind<IBannerServiceWEB>().To<BannerServiceWEB>().Named("BannerServiceWEB");
         }
     }
 }

@@ -62,6 +62,9 @@
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Jmelosegui.Mvc.Googlemap">
+      <HintPath>C:\Projetos\focus-sistema-de-rastreio\branches\packages\Jmelosegui.Mvc.Googlemap.0.4.0.0\lib\net45\Jmelosegui.Mvc.Googlemap.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -69,6 +72,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.ContextPreservation, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.ContextPreservation.3.2.0.0\lib\net45-full\Ninject.Extensions.ContextPreservation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.NamedScope, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.NamedScope.3.2.0.0\lib\net45-full\Ninject.Extensions.NamedScope.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -101,6 +112,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.SelfHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.SelfHost.5.0.0\lib\net45\System.Web.Http.SelfHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -219,11 +238,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountAPIController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EnqueteController.cs" />
     <Compile Include="Controllers\ErroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MapaController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\VoucherController.cs" />
@@ -243,6 +264,7 @@
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\EmpresaViewModel.cs" />
     <Compile Include="Models\EnqueteViewModel.cs" />
+    <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\PerguntaViewModel.cs" />
     <Compile Include="Models\PlataformaViewModel.cs" />
     <Compile Include="Models\RespostaViewModel.cs" />
@@ -250,8 +272,10 @@
     <Compile Include="Models\UsuarioViewModel.cs" />
     <Compile Include="Models\VoucherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\BannerService.cs" />
     <Compile Include="Service\EmpresaServiceWEB.cs" />
     <Compile Include="Service\EnqueteServiceWEB.cs" />
+    <Compile Include="Service\Interfaces\IBannerServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IEmpresaServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IEnqueteServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IPerguntaRespostaServiceWEB.cs" />
@@ -280,6 +304,8 @@
     <Content Include="Content\fonts\Theme\font-awesome-4\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\images\excluir.png" />
+    <Content Include="Content\images\IconMarkerMais.png" />
+    <Content Include="Content\images\IconMarkerOutrasEmpresas.png" />
     <Content Include="Content\images\loader-autocomplete.gif" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\jquery-ui.css" />
@@ -3576,6 +3602,7 @@
     <Content Include="Views\Master\MasterCriaUsuario.cshtml" />
     <Content Include="Views\Master\_MultiSelectCategorias.cshtml" />
     <Content Include="Views\Master\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Mapa\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3584,6 +3611,7 @@
     <Folder Include="Scripts\Theme\bootstrap\examples\navbar-fixed-top\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\public\files\thumbnail\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\tmp\" />
+    <Folder Include="Views\Banner\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -3604,6 +3632,10 @@
     <ProjectReference Include="..\PollPlus.IService\PollPlus.IService.csproj">
       <Project>{32757113-5da4-4ec0-806f-6f82bb02a636}</Project>
       <Name>PollPlus.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PollPlus.Repositorio\PollPlus.Repositorio.csproj">
+      <Project>{6b396292-1b6c-4b0e-9a7d-4d51b76af9b0}</Project>
+      <Name>PollPlus.Repositorio</Name>
     </ProjectReference>
     <ProjectReference Include="..\PollPlus.Service\PollPlus.Service.csproj">
       <Project>{5af66c72-b30d-4eef-8567-5c0fbecb870e}</Project>
