@@ -22,6 +22,7 @@ namespace Aldeia.Tamis.DependecyResolver
             Bind<IRespostaService>().To<RespostaService>();
             Bind<IPerguntaService>().To<PerguntaService>();
             Bind<IVoucherService>().To<VoucherService>();
+            Bind<IBannerService>().To<BannerService>();
         }
     }
 }

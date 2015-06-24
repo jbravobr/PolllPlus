@@ -81,6 +81,7 @@ namespace PollPlus.App_Start
             kernel.Bind<IRespostaServiceWEB>().To<RespostaServiceWEB>().Named("IRespostaServiceWEB");
             kernel.Bind<IPerguntaServiceWEB>().To<PerguntaServiceWEB>().Named("PerguntaServiceWEB");
             kernel.Bind<IVoucherServiceWEB>().To<VoucherServiceWEB>().Named("VoucherServiceWEB");
+            kernel.Bind<IBannerServiceWEB>().To<BannerServiceWEB>().Named("BannerServiceWEB");
         }
     }
 }

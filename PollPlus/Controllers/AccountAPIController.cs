@@ -2,6 +2,7 @@
 using Ninject;
 using PollPlus.Domain;
 using PollPlus.Helpers;
+using PollPlus.Models;
 using PollPlus.Repositorio;
 using PollPlus.Service.Interfaces;
 using System;
@@ -20,6 +21,8 @@ namespace PollPlus.Controllers
         private UsuarioRepositorio service = new UsuarioRepositorio();
 
         private EnqueteRepositorio enqueteRepo = new EnqueteRepositorio();
+
+        private RespostaRepositorio respostaRepo = new RespostaRepositorio();
 
         public AccountAPIController() { }
 
@@ -56,6 +59,8 @@ namespace PollPlus.Controllers
             try
             {
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
+                usuarioJson.Senha = Util.EncriptarSenha(usuarioJson.Senha);
+
                 var retornoInsertUsuario = await this.service.InserirUsuario(usuarioJson);
 
                 return Ok();
@@ -67,43 +72,61 @@ namespace PollPlus.Controllers
         }
 
         [HttpGet]
-        [Route("enquete/{id}")]
+        [Route("enquetepublica/{id}")]
         public async Task<IHttpActionResult> GetEnquetesPublicas(int id)
         {
             List<Enquete> enquetes = null;
 
             if (id > 0)
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica).ToList();
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica
+                && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
             else
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica).ToList();
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica
+                && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
 
-            if (enquetes != null)
+            try
             {
-                var enquetesJson = JsonConvert.SerializeObject(enquetes);
-                return Ok(enquetesJson);
+                if (enquetes != null)
+                {
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(enquetes));
+                    return Ok(enquetesJson);
+                }
+                else
+                    return BadRequest("Não há enquetes disponíveis");
             }
-            else
-                return BadRequest("Não há enquetes disponíveis");
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         [HttpGet]
-        [Route("enquete/{id}")]
-        public async Task<IHttpActionResult> GetEnquetesInteresse(int id)
+        [Route("enqueteinteresse/{id}/{empresaId}")]
+        public async Task<IHttpActionResult> GetEnquetesInteresse(int id, int empresaId)
         {
             List<Enquete> enquetes = null;
 
             if (id > 0)
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse).ToList();
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse
+                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
             else
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse).ToList();
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse
+                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
 
-            if (enquetes != null)
+            try
             {
-                var enquetesJson = JsonConvert.SerializeObject(enquetes);
-                return Ok(enquetesJson);
+                if (enquetes != null)
+                {
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(enquetes));
+                    return Ok(enquetesJson);
+                }
+                else
+                    return BadRequest("Não há enquetes disponíveis");
             }
-            else
-                return BadRequest("Não há enquetes disponíveis");
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         [HttpPost]
@@ -116,9 +139,9 @@ namespace PollPlus.Controllers
             try
             {
                 var enqueteJson = JsonConvert.DeserializeObject<Enquete>(enquete);
-                var retornoInsertEnquete = await this.enqueteRepo.InserirEnquete(enqueteJson);
+                var retornoInsertEnquete = await this.enqueteRepo.InserirRetornarEnquete(enqueteJson);
 
-                return Ok();
+                return Ok(retornoInsertEnquete.PerguntaId);
             }
             catch (Exception ex)
             {
@@ -127,24 +150,27 @@ namespace PollPlus.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> SalvaRespostas(PerguntaViewModel Pergunta, List<string> resposta)
+        [Route("gravaenqueterespostas")]
+        public async Task<IHttpActionResult> SalvaRespostas([FromBody]string resposta)
         {
-            if (!ModelState.IsValid || !resposta.Any())
-                return View(Pergunta);
+            if (String.IsNullOrEmpty(resposta))
+                return BadRequest("Respostas inválidas - dados vazios");
 
-            var respostas = MapeiaListaDeRespostas(resposta, Pergunta.Id);
-
-            foreach (var r in respostas)
+            try
             {
-                await this.serviceResposta.InserirResposta(r);
+                var respostasJson = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<ICollection<Resposta>>(resposta));
+
+                foreach (var r in respostasJson)
+                {
+                    await this.respostaRepo.InserirResposta(r);
+                }
+
+                return Ok();
             }
-
-            Pergunta.Resposta = AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas.ToList());
-
-            if (await this.servicePergunta.AtualizarPergunta(AutoMapper.Mapper.Map<Pergunta>(Pergunta)))
-                return RedirectToAction("ListarEnquetes");
-            else
-                return View("NovaEnquete");
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }
