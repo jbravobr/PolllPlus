@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
+using PollPlus.Models;
+using PollPlus.Domain.Enumeradores;
 
 namespace PollPlus.Service
 {
@@ -30,7 +32,14 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Banner>> RetornarBannerPorEmpresaId(int empresaId)
         {
-            return await this.service.RetornarBannerPorEmpresaId(empresaId);
+            var _banner = new List<Banner>();
+
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _banner = (await this.service.RetornarBannerPorEmpresaId(empresaId)).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _banner = (await this.service.RetornarBannerPorEmpresaId(empresaId)).ToList();
+
+            return _banner;
         }
 
         public async Task<Banner> RetornarBannerPorId(int id)
@@ -40,14 +49,14 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Banner>> RetornarTodosBanners()
         {
-            //IEnumerable _empresa = new List<Empresa>();
+            var _banner = new List<Banner>();
 
-            //if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
-            //    _empresa = (await this.service.RetornarTodosBanners()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId);
-            //else
-            //    _empresa = (await this.service.RetornarTodosBanners());
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _banner = (await this.service.RetornarTodosBanners()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _banner = (await this.service.RetornarTodosBanners()).ToList();
 
-            return await this.service.RetornarTodosBanners();
+            return _banner;
         }
     }
 }
