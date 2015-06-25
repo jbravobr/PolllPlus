@@ -23,6 +23,7 @@ namespace PollPlus.DependecyResolver
             Bind<IPerguntaRepositorio>().To<PerguntaRepositorio>();
             Bind<IVoucherRepositorio>().To<VoucherRepositorio>();
             Bind<IBannerRepositorio>().To<BannerRepositorio>();
+            Bind<IBlackListRepositorio>().To<BlackListRepositorio>();
         }
     }
 }

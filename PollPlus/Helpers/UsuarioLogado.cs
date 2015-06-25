@@ -1,11 +1,17 @@
 ﻿using PollPlus.Controllers;
 using PollPlus.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace PollPlus.Helpers
-{ 
+{
     /// <summary>
     /// Classe para controle da Sessão e Usuário logado
     /// </summary>
@@ -34,7 +40,7 @@ namespace PollPlus.Helpers
         }
 
         /// <summary>
-        /// Remove o registro do usuário da sessão logada
+        /// Desregisra o usuário da sessão logada
         /// </summary>
         public static void Logout()
         {

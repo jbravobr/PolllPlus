@@ -8,6 +8,7 @@ using PollPlus.Domain;
 using PollPlus.IService;
 using PollPlus.Models;
 using PollPlus.Domain.Enumeradores;
+using PollPlus.Helpers;
 
 namespace PollPlus.Service
 {

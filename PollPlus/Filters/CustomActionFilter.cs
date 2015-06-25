@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.ComponentModel;
 using PollPlus.Domain.Enumeradores;
 using PollPlus.Models;
+using PollPlus.Helpers;
 
 namespace PollPlus.Filters
 {

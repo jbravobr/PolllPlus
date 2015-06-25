@@ -8,6 +8,8 @@ using System.Net;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
+using PollPlus.Domain;
+using PollPlus.Domain.Enumeradores;
 
 namespace PollPlus.Helpers
 {
@@ -221,18 +223,77 @@ namespace PollPlus.Helpers
                 try
                 {
                     var directory = Path.GetRandomFileName();
+                    Directory.CreateDirectory(Path.Combine(path, directory));
                     var pathFinal = Path.Combine(path, directory, file.FileName);
 
                     file.SaveAs(pathFinal);
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     return false;
                 }
             }
 
             return false;
+        }
+
+        public static object ImportarCSV(EnumTipoImportacao tipo, HttpPostedFileBase file)
+        {
+            using (var stream = new StreamReader(file.InputStream, System.Text.Encoding.Default))
+            {
+                switch (tipo)
+                {
+                    case EnumTipoImportacao.Email:
+                        return ImportarParaEmail(stream);
+                    case EnumTipoImportacao.Voucher:
+                        return null;
+                    case EnumTipoImportacao.Blacklist:
+                        return ImportarParaBlackList(stream);
+                }
+
+                return null;
+            }
+        }
+
+        private static ICollection<Usuario> ImportarParaEmail(StreamReader stream)
+        {
+            List<Usuario> novosUsuario = new List<Usuario>();
+
+            while (stream.Peek() >= 0)
+            {
+                var linha = stream.ReadLine();
+                var valorLinha = linha.Split(';');
+
+                novosUsuario.Add(new Usuario
+                {
+                    Nome = valorLinha[0].ToString(),
+                    Email = valorLinha[1].ToString(),
+                    Sexo = (EnumSexo)Enum.Parse(typeof(EnumSexo), valorLinha[2].ToString()),
+                    Municipio = valorLinha[3].ToString(),
+                    DDD = Convert.ToInt32(valorLinha[4]),
+                    Telefone = valorLinha[5].ToString()
+                });
+            }
+
+            return novosUsuario;
+        }
+
+        private static ICollection<BlackList> ImportarParaBlackList(StreamReader stream)
+        {
+            List<BlackList> novosPalavras = new List<BlackList>();
+
+            while (stream.Peek() >= 0)
+            {
+                var linha = stream.ReadLine();
+
+                novosPalavras.Add(new BlackList
+                {
+                    Texto = linha
+                });
+            }
+
+            return novosPalavras;
         }
     }
 }

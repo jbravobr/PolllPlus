@@ -1,6 +1,7 @@
 ﻿using PagedList;
 using PollPlus.Domain;
 using PollPlus.Filter;
+using PollPlus.Helpers;
 using PollPlus.Models;
 using PollPlus.Service.Interfaces;
 using System;
@@ -21,12 +22,15 @@ namespace PollPlus.Controllers
 
         readonly IRespostaServiceWEB serviceResposta;
 
+        readonly IBlackListServiceWEB serviceBlackList;
+
         public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
-            IRespostaServiceWEB _serviceResposta)
+            IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList)
         {
             this.service = _service;
             this.servicePergunta = _servicePergunta;
             this.serviceResposta = _serviceResposta;
+            this.serviceBlackList = _serviceBlackList;
         }
 
         [HttpGet, OnlyAuthorizedUser]
@@ -54,6 +58,35 @@ namespace PollPlus.Controllers
                 return RedirectToAction("ListarEnquetes");
             else
                 return View("NovaEnquete");
+        }
+
+        [HttpGet, OnlyAuthorizedUser]
+        public ActionResult ImportarBlackList()
+        {
+            return View();
+        }
+
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> ImportarBlackList(HttpPostedFileBase file)
+        {
+            if (file.ContentLength <= 0)
+                return View(0);
+
+            try
+            {
+                var blacklist = (ICollection<BlackList>)Util.ImportarCSV(EnumTipoImportacao.Blacklist, file);
+
+                foreach (var item in blacklist)
+                {
+                    await this.serviceBlackList.InserirBlackList(item);
+                }
+
+                return View(1);
+            }
+            catch (Exception ex)
+            {
+                return View(0);
+            }
         }
 
         [OnlyAuthorizedUser, HttpPost]

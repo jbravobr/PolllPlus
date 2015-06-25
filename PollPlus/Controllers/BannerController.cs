@@ -9,11 +9,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace PollPlus.Controllers
 {
     [OnlyAuthorizedUser]
-    public class BannerController : Controller
+    public class BannerController : BaseController
     {
         readonly IBannerServiceWEB service;
 
@@ -34,6 +35,7 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
             if (await this.service.InserirBanner(AutoMapper.Mapper.Map<Banner>(model)))
             {
                 if (file.ContentLength > 0)
@@ -42,6 +44,14 @@ namespace PollPlus.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ListarBanners(int? pagina)
+        {
+            var lista = await this.service.RetornarTodosBanners();
+
+            return View(lista.ToPagedList(pagina ?? 1, 10));
         }
     }
 }

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Banner.cs" />
+    <Compile Include="BlackList.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Documento.cs" />
     <Compile Include="Empresa.cs" />

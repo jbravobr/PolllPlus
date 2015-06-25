@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using PollPlus.Helpers;
 using System.Configuration;
+using System.Web;
 
 namespace PollPlus.Controllers
 {
@@ -173,6 +174,29 @@ namespace PollPlus.Controllers
             var listaUsuarios = await this.service.RetornarTodosUsuarios();
 
             return View(listaUsuarios.ToPagedList(pagina ?? 1, 10));
+        }
+
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> ImportarEmail(HttpPostedFileBase file)
+        {
+            if (file.ContentLength <= 0)
+                return View(0);
+
+            try
+            {
+                var usuarios = (ICollection<Usuario>)Util.ImportarCSV(EnumTipoImportacao.Email, file);
+
+                foreach (var item in usuarios)
+                {
+                    await this.service.InserirUsuario(item);
+                }
+
+                return View(1);
+            }
+            catch (Exception ex)
+            {
+                return View(0);
+            }
         }
 
         [NonAction]

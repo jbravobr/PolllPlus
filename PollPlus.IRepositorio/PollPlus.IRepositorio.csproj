@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBlackListRepositorio.cs" />
     <Compile Include="IBaseRepositorio.cs" />
     <Compile Include="ICategoriaRepositorio.cs" />
     <Compile Include="IPerguntaRepositorio.cs" />
