@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
 using PollPlus.Helpers;
+using PollPlus.Domain.Enumeradores;
 
 namespace PollPlus.Service
 {
@@ -66,12 +67,22 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()
         {
-            return await this._serviceCategoria.RetornarTodasCategorias();
+            var _categoria = new List<Categoria>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).ToList();
+            return _categoria;
         }
 
         public async Task<ICollection<Usuario>> RetornarTodosUsuarios()
         {
-            return await this._service.RetornarTodosUsuarios();
+            var _usuario = new List<Usuario>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _usuario = (await this._service.RetornarTodosUsuarios()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _usuario = (await this._service.RetornarTodosUsuarios()).ToList();
+            return _usuario;             
         }
 
         public async Task<Usuario> RetornarUsuarioPorId(int id)

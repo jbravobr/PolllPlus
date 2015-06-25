@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
+using PollPlus.Helpers;
+using PollPlus.Domain.Enumeradores;
 
 namespace PollPlus.Service
 {
@@ -45,7 +47,12 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Pergunta>> RetornarTodosPerguntas()
         {
-            return await this._service.RetornarTodosPerguntas();
+            var _pergunta = new List<Pergunta>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _pergunta = (await this._service.RetornarTodosPerguntas()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _pergunta = (await this._service.RetornarTodosPerguntas()).ToList();
+            return _pergunta;
         }
     }
 }

@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
+using PollPlus.Models;
+using PollPlus.Domain.Enumeradores;
+using PollPlus.Helpers;
 
 namespace PollPlus.Service
 {
@@ -35,17 +38,33 @@ namespace PollPlus.Service
 
         public async Task<ICollection<PerguntaResposta>> RetornarPerguntaRespostaPorPergunta(int perguntaId)
         {
-            return await this.service.RetornarPerguntaRespostaPorPergunta(perguntaId);
+            var _resposta = new List<PerguntaResposta>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _resposta = (await this.service.RetornarPerguntaRespostaPorPergunta(perguntaId)).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _resposta = (await this.service.RetornarPerguntaRespostaPorPergunta(perguntaId)).ToList();
+            return _resposta; 
         }
 
         public async Task<ICollection<PerguntaResposta>> RetornarPerguntaRespostaPorResposta(int respostaId)
         {
-            return await this.service.RetornarPerguntaRespostaPorResposta(respostaId);
+            var _resposta = new List<PerguntaResposta>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _resposta = (await this.service.RetornarPerguntaRespostaPorResposta(respostaId)).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _resposta = (await this.service.RetornarPerguntaRespostaPorResposta(respostaId)).ToList();
+            return _resposta;
+             
         }
 
         public async Task<ICollection<PerguntaResposta>> RetornarPerguntaRespostaTodos()
         {
-            return await this.service.RetornarPerguntaRespostaTodos();
+            var _pr = new List<PerguntaResposta>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _pr = (await this.service.RetornarPerguntaRespostaTodos()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _pr = (await this.service.RetornarPerguntaRespostaTodos()).ToList();
+            return _pr; 
         }
     }
 }
