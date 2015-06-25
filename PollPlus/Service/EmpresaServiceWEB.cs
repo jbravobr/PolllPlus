@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PollPlus.Domain;
 using PollPlus.IService;
+using PollPlus.Models;
+using System.Collections;
+using PollPlus.Domain.Enumeradores;
 
 namespace PollPlus.Service
 {
@@ -40,6 +43,13 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Empresa>> RetornarTodasEmpresas()
         {
+            IEnumerable _empresa = new List<Empresa>();
+
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                 _empresa = (await this.service.RetornarTodasEmpresas()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId);
+            else
+                _empresa = (await this.service.RetornarTodasEmpresas());
+
             return await this.service.RetornarTodasEmpresas();
         }
     }
