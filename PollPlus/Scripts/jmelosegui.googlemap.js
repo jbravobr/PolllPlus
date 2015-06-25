@@ -141,18 +141,21 @@
     $jmelosegui.GoogleMarker = function (map, index, config) {
         // init
         this.gMarker = null;
-        this.Map = map;
+        this.Map = map.GMap;
+        this.parent = map;
         this.index = index;
         //properties
+        this.id = config.id;
         this.latitude = config.lat;
         this.longitude = config.lng;
         this.title = config.title;
         this.icon = config.icon;
-        this.clickable = config.clickable ? config.clickable : true;
+        this.clickable = (config.clickable !== undefined) ? config.clickable : true;
         this.draggable = config.draggable;
         this.window = config.window;
         this.zIndex = config.zIndex ? config.zIndex : 0;
         this.enableMarkersClustering = config.enableMarkersClustering ? config.enableMarkersClustering : false;
+        this.markerEvents = config.markerEvents;
     };
 
     var infowindow;
@@ -163,9 +166,29 @@
             return (this.gMarker !== null);
         },
         initialize: function () {
-            if (this.window) {
+            //Work around to the issue https://code.google.com/p/gmaps-api-issues/issues/detail?id=7925
+            if (this.window && this.clickable) {
                 google.maps.event.addListener(this.gMarker, 'click', $jmelosegui.delegate(this, this.openInfoWindow));
             }
+
+            if (this.markerEvents) {
+                this.attachMarkerEvents();
+            }
+        },
+        attachMarkerEvents: function () {
+            for (var i = 0; i < this.markerEvents.length; i++) {
+                var eventName = Object.getOwnPropertyNames(this.markerEvents[i])[0];
+                //Work around to the issue https://code.google.com/p/gmaps-api-issues/issues/detail?id=7925
+                if (eventName === 'click' && !this.clickable) continue;
+                this.markerEventsCallBack(this.id, this.gMarker, this.markerEvents[i][eventName], eventName);
+            }
+        },
+        markerEventsCallBack: function (id, marker, handler, eventName) {
+            google.maps.event.addListener(marker, eventName, function (e) {
+                var args = { 'id': id, 'marker': marker, 'eventName': eventName };
+                $.extend(args, e);
+                handler(args);
+            });
         },
         createImage: function (options) {
             var image = new google.maps.MarkerImage(options.path,
@@ -188,6 +211,9 @@
             };
             // create
             this.gMarker = new google.maps.Marker(markerOptions);
+            if (this.parent.fitToMarkersBounds) {
+                this.parent.bounds.extend(this.gMarker.position);
+            }
             this.initialize();
             if (this.enableMarkersClustering === true) {
                 markersCluster.push(this.gMarker);
@@ -199,8 +225,15 @@
                     infowindow.close();
                 }
                 var node = document.getElementById(this.window.content).cloneNode(true);
-                infowindow = new google.maps.InfoWindow();
+                infowindow = new google.maps.InfoWindow(this.window);
                 infowindow.setContent(node.innerHTML);
+                var windowsLoc;
+                if (this.window.lat && this.window.lng) {
+                    windowsLoc = new google.maps.LatLng(this.window.lat, this.window.lng);
+                } else {
+                    windowsLoc = this.gMarker.getPosition();
+                }
+                infowindow.setPosition(windowsLoc);
                 infowindow.open(this.Map, this.gMarker);
             }
         }
@@ -297,15 +330,17 @@
         $.extend(this, options);
 
         this.clientId = options.clientId;
-        this.address = options.address;
         this.disableDoubleClickZoom = options.disableDoubleClickZoom;
         this.enableMarkersClustering = options.enableMarkersClustering;
+        this.markersFromAddress = options.markersFromAddress;
+        this.fitToMarkersBounds = options.fitToMarkersBounds;
         this.markerClusteringOptions = options.markerClusteringOptions;
         this.height = options.height;
         this.width = options.width;
         this.latitude = options.center.latitude;
         this.longitude = options.center.longitude;
         this.useCurrentPosition = options.center.useCurrentPosition;
+        this.address = options.center.address;
         this.zoom = (options.zoom !== undefined) ? options.zoom : 6;
         this.maxZoom = (options.maxZoom !== undefined) ? options.maxZoom : null;
         this.minZoom = (options.minZoom !== undefined) ? options.minZoom : null;
@@ -341,6 +376,9 @@
         this.imageMapTypes = eval(options.imageMapTypes);
         this.styledMapTypes = eval(options.styledMapTypes);
 
+        this.bounds = new google.maps.LatLngBounds();
+
+        //Map Events
         this.events = [];
 
         if (options.bounds_changed !== undefined) {
@@ -403,14 +441,99 @@
         if (options.map_loaded !== undefined) {
             this.map_loaded = options.map_loaded;
         }
+        if (options.markers_geocoding_completed !== undefined) {
+            this.markers_geocoding_completed = options.markers_geocoding_completed;
+        }
+
+        //Marker Events
+        this.markerEvents = [];
+
+        if (options.markerEvents) {
+            if (options.markerEvents.animation_changed !== undefined) {
+                this.markerEvents.push({ 'animation_changed': options.markerEvents.animation_changed });
+            }
+
+            if (options.markerEvents.click !== undefined) {
+                this.markerEvents.push({ 'click': options.markerEvents.click });
+            }
+
+            if (options.markerEvents.clickable_changed !== undefined) {
+                this.markerEvents.push({ 'clickable_changed': options.markerEvents.clickable_changed });
+            }
+
+            if (options.markerEvents.cursor_changed !== undefined) {
+                this.markerEvents.push({ 'cursor_changed': options.markerEvents.cursor_changed });
+            }
+
+            if (options.markerEvents.dragstart !== undefined) {
+                this.markerEvents.push({ 'dragstart': options.markerEvents.dragstart });
+            }
+
+            if (options.markerEvents.drag !== undefined) {
+                this.markerEvents.push({ 'drag': options.markerEvents.drag });
+            }
+
+            if (options.markerEvents.dragend !== undefined) {
+                this.markerEvents.push({ 'dragend': options.markerEvents.dragend });
+            }
+
+            if (options.markerEvents.flat_changed !== undefined) {
+                this.markerEvents.push({ 'flat_changed': options.markerEvents.flat_changed });
+            }
+
+            if (options.markerEvents.icon_changed !== undefined) {
+                this.markerEvents.push({ 'icon_changed': options.markerEvents.icon_changed });
+            }
+
+            if (options.markerEvents.mousedown !== undefined) {
+                this.markerEvents.push({ 'mousedown': options.markerEvents.mousedown });
+            }
+
+            if (options.markerEvents.mouseout !== undefined) {
+                this.markerEvents.push({ 'mouseout': options.markerEvents.mouseout });
+            }
+
+            if (options.markerEvents.mouseover !== undefined) {
+                this.markerEvents.push({ 'mouseover': options.markerEvents.mouseover });
+            }
+
+            if (options.markerEvents.mouseup !== undefined) {
+                this.markerEvents.push({ 'mouseup': options.markerEvents.mouseup });
+            }
+
+            if (options.markerEvents.position_changed !== undefined) {
+                this.markerEvents.push({ 'position_changed': options.markerEvents.position_changed });
+            }
+
+            if (options.markerEvents.rightclick !== undefined) {
+                this.markerEvents.push({ 'rightclick': options.markerEvents.rightclick });
+            }
+
+            if (options.markerEvents.shape_changed !== undefined) {
+                this.markerEvents.push({ 'shape_changed': options.markerEvents.shape_changed });
+            }
+
+            if (options.markerEvents.title_changed !== undefined) {
+                this.markerEvents.push({ 'title_changed': options.markerEvents.title_changed });
+            }
+
+            if (options.markerEvents.visible_changed !== undefined) {
+                this.markerEvents.push({ 'visible_changed': options.markerEvents.visible_changed });
+            }
+
+            if (options.markerEvents.zindex_changed !== undefined) {
+                this.markerEvents.push({ 'zindex_changed': options.markerEvents.zindex_changed });
+            }
+        }
 
         $jmelosegui.bind(this, {
             load: this.onLoad
         });
     };
-
+    var delay = 100;
+    var markerIndex = 0;
     $jmelosegui.Googlemap.prototype = {
-        initialize: function () {
+        initialize: function() {
 
             var innerOptions = {
                 zoom: this.zoom,
@@ -463,70 +586,92 @@
 
             this.GMap = new google.maps.Map(this.getElement(), innerOptions);
         },
-        getZoomControlStyle: function () {
+        getZoomControlStyle: function() {
             switch (this.zoomControlStyle) {
-                case 'LARGE':
-                    return google.maps.ZoomControlStyle.LARGE;
-                case 'SMALL':
-                    return google.maps.ZoomControlStyle.SMALL;
-                default:
-                    return google.maps.ZoomControlStyle.DEFAULT;
+            case 'LARGE':
+                return google.maps.ZoomControlStyle.LARGE;
+            case 'SMALL':
+                return google.maps.ZoomControlStyle.SMALL;
+            default:
+                return google.maps.ZoomControlStyle.DEFAULT;
             }
         },
-        getMapTypeControlStyle: function () {
+        getMapTypeControlStyle: function() {
             switch (this.mapTypeControlStyle) {
-                case 'DROPDOWN_MENU':
-                    return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
-                case 'HORIZONTAL_BAR':
-                    return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
-                default:
-                    return google.maps.MapTypeControlStyle.DEFAULT;
+            case 'DROPDOWN_MENU':
+                return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+            case 'HORIZONTAL_BAR':
+                return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
+            default:
+                return google.maps.MapTypeControlStyle.DEFAULT;
             }
         },
-        getMapTypeId: function () {
+        getMapTypeId: function() {
             switch (this.mapTypeId) {
-                case 'HYBRID':
-                    return google.maps.MapTypeId.HYBRID;
-                case 'SATELLITE':
-                    return google.maps.MapTypeId.SATELLITE;
-                case 'TERRAIN':
-                    return google.maps.MapTypeId.TERRAIN;
-                case 'ROADMAP':
-                    return google.maps.MapTypeId.ROADMAP;
-                default:
-                    return this.mapTypeId;
+            case 'HYBRID':
+                return google.maps.MapTypeId.HYBRID;
+            case 'SATELLITE':
+                return google.maps.MapTypeId.SATELLITE;
+            case 'TERRAIN':
+                return google.maps.MapTypeId.TERRAIN;
+            case 'ROADMAP':
+                return google.maps.MapTypeId.ROADMAP;
+            default:
+                return this.mapTypeId;
             }
         },
-        getElement: function () {
+        getElement: function() {
             return document.getElementById(this.clientId);
         },
-        getControlPosition: function (position) {
+        getControlPosition: function(position) {
             switch (position) {
-                case 'TOP_CENTER':
-                    return google.maps.ControlPosition.TOP_CENTER;
-                case 'TOP_LEFT':
-                    return google.maps.ControlPosition.TOP_LEFT;
-                case 'LEFT_TOP':
-                    return google.maps.ControlPosition.LEFT_TOP;
-                case 'BOTTOM_CENTER':
-                    return google.maps.ControlPosition.BOTTOM_CENTER;
-                case 'BOTTOM_LEFT':
-                    return google.maps.ControlPosition.BOTTOM_LEFT;
-                case 'BOTTOM_RIGHT':
-                    return google.maps.ControlPosition.BOTTOM_RIGHT;
-                case 'LEFT_BOTTOM':
-                    return google.maps.ControlPosition.LEFT_BOTTOM;
-                case 'RIGHT_BOTTOM':
-                    return google.maps.ControlPosition.RIGHT_BOTTOM;
-                case 'LEFT_CENTER':
-                    return google.maps.ControlPosition.LEFT_CENTER;
-                case 'RIGHT_CENTER':
-                    return google.maps.ControlPosition.RIGHT_CENTER;
-                case 'TOP_RIGHT':
-                    return google.maps.ControlPosition.TOP_RIGHT;
-                case 'RIGHT_TOP':
-                    return google.maps.ControlPosition.RIGHT_TOP;
+            case 'TOP_CENTER':
+                return google.maps.ControlPosition.TOP_CENTER;
+            case 'TOP_LEFT':
+                return google.maps.ControlPosition.TOP_LEFT;
+            case 'LEFT_TOP':
+                return google.maps.ControlPosition.LEFT_TOP;
+            case 'BOTTOM_CENTER':
+                return google.maps.ControlPosition.BOTTOM_CENTER;
+            case 'BOTTOM_LEFT':
+                return google.maps.ControlPosition.BOTTOM_LEFT;
+            case 'BOTTOM_RIGHT':
+                return google.maps.ControlPosition.BOTTOM_RIGHT;
+            case 'LEFT_BOTTOM':
+                return google.maps.ControlPosition.LEFT_BOTTOM;
+            case 'RIGHT_BOTTOM':
+                return google.maps.ControlPosition.RIGHT_BOTTOM;
+            case 'LEFT_CENTER':
+                return google.maps.ControlPosition.LEFT_CENTER;
+            case 'RIGHT_CENTER':
+                return google.maps.ControlPosition.RIGHT_CENTER;
+            case 'TOP_RIGHT':
+                return google.maps.ControlPosition.TOP_RIGHT;
+            case 'RIGHT_TOP':
+                return google.maps.ControlPosition.RIGHT_TOP;
             }
+        },
+        getAddress: function (config, next) {
+            var geo = new google.maps.Geocoder();
+            var map = this;
+            geo.geocode({ address: config.address }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    var p = results[0].geometry.location;
+                    config.lat = p.lat();
+                    config.lng = p.lng();
+                    var marker = new $jmelosegui.GoogleMarker(map, markerIndex, config);
+                    map.renderMarker(marker);
+                }
+                else {
+                    if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                        markerIndex--;
+                        delay= delay + 10;
+                    } else {
+                        console.log('Error: Geocode was not successful for the following reason: ' + status);
+                    }
+                }
+                next(map);
+            });
         },
         refreshMap: function () {
             var options = {
@@ -543,13 +688,32 @@
             c.load();
         },
         renderMarker: function (m) {
-
-            if ((m.latitude != 0) && (m.longitude != 0)) {
-
-                try {
-                    m.load(new google.maps.LatLng(m.latitude, m.longitude), false);
+            var markerCenter;
+            if ((m.latitude) && (m.longitude)) {
+                markerCenter = new google.maps.LatLng(m.latitude, m.longitude);
+            }
+            try {
+                m.load(markerCenter, false);
+            }
+            catch (ex) { }
+        },
+        rendeMarkers: function(map) {
+            if (markerIndex < map.markers.length) {
+                var config = map.markers[markerIndex];
+                config.markerEvents = map.markerEvents;
+                setTimeout(function() {
+                    map.getAddress(config, map.rendeMarkers);
+                }, delay);
+                markerIndex++;
+            }
+            else {
+                if (map.fitToMarkersBounds) {
+                    map.GMap.fitBounds(map.bounds);
                 }
-                catch (ex) { }
+                if (map.markers_geocoding_completed !== undefined) {
+                    var args = { 'map': map };
+                    map.markers_geocoding_completed(args);
+                }
             }
         },
         renderPolygon: function (p) {
@@ -566,8 +730,10 @@
                 }
             }
             else {
+                var self = this;
+
                 if (this.useCurrentPosition && navigator.geolocation) {
-                    var self = this;
+
                     navigator.geolocation.getCurrentPosition(function (position) {
 
                         self.latitude = position.coords.latitude;
@@ -578,6 +744,20 @@
                         console.log("Error: The Geolocation service failed.");
                         self.load(new google.maps.LatLng(this.latitude, this.longitude));
                     });
+                } else if (this.address) {
+
+                    var geocoder = new google.maps.Geocoder();
+
+                    geocoder.geocode({ 'address': this.address }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            self.latitude = results[0].geometry.location.lat();
+                            self.longitude = results[0].geometry.location.lng();
+                            self.load(new google.maps.LatLng(self.latitude, self.longitude));
+                        } else {
+                            console.log('Error: Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+
                 } else {
                     this.load(new google.maps.LatLng(this.latitude, this.longitude));
                 }
@@ -589,7 +769,7 @@
                 this.mapEventsCallBack(this.GMap, this.events[i][eventName], eventName);
             }
         },
-        mapEventsCallBack: function (map, handler, eventName) {            
+        mapEventsCallBack: function (map, handler, eventName) {
             google.maps.event.addListener(map, eventName, function (e) {
                 var args = { 'map': map, 'eventName': eventName };
                 $.extend(args, e);
@@ -597,26 +777,34 @@
             });
         },
         render: function () {
-            // markers
+            // markers 
             var i;
             if (this.markers) {
-                for (i = 0; i < this.markers.length; i++) {
-                    var config = this.markers[i];
+                if (this.markersFromAddress) {
+                    this.rendeMarkers(this);
+                } else {
+                    for (i = 0; i < this.markers.length; i++) {
+                        var config = this.markers[i];
 
-                    if (!config.lat) {
-                        config.lat = this.GMap.center.lat();
+                        if (!config.lat) {
+                            config.lat = this.GMap.center.lat();
+                        }
+
+                        if (!config.lng) {
+                            config.lng = this.GMap.center.lng();
+                        }
+
+                        config.enableMarkersClustering = this.enableMarkersClustering;
+                        config.markerEvents = this.markerEvents;
+                        var marker = new $jmelosegui.GoogleMarker(this, i, config);
+                        this.renderMarker(marker);
+                    };
+                    if (this.enableMarkersClustering === true) {
+                        this.refreshMap();
                     }
-
-                    if (!config.lng) {
-                        config.lng = this.GMap.center.lng();
+                    if (this.fitToMarkersBounds) {
+                        this.GMap.fitBounds(this.bounds);
                     }
-
-                    config.enableMarkersClustering = this.enableMarkersClustering;
-                    var marker = new $jmelosegui.GoogleMarker(this.GMap, i, config);
-                    this.renderMarker(marker);
-                };
-                if (this.enableMarkersClustering === true) {
-                    this.refreshMap();
                 }
             }
             // polygons

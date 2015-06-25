@@ -212,7 +212,7 @@ namespace PollPlus.Helpers
         //    return _serviceToken.ValidaToken(token, out _msg);
         //}
 
-        public bool SalvarImagem(HttpPostedFileBase file)
+        public static bool SalvarImagem(HttpPostedFileBase file)
         {
             var path = ConfigurationManager.AppSettings["CaminhoParaSalvarImagens"];
 

@@ -1,4 +1,5 @@
-﻿using PollPlus.Models;
+﻿using PollPlus.Filter;
+using PollPlus.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Web.Mvc;
 
 namespace PollPlus.Controllers
 {
-    public class MapaController : Controller
+    [OnlyAuthorizedUser]
+    public class MapaController : BaseController
     {
         // GET: Mapa
         public ActionResult Index()
@@ -15,7 +17,7 @@ namespace PollPlus.Controllers
             return View(MontaIndicadoresNoMapa());
         }
 
-        private ICollection<MapViewModel> MontaIndicadoresNoMapa()
+        private IEnumerable<MapViewModel> MontaIndicadoresNoMapa()
         {
             var listaEndereco = new List<MapViewModel>();
 
@@ -55,7 +57,7 @@ namespace PollPlus.Controllers
                 Nome = "Alexandre"
             });
 
-            return listaEndereco;
+            return listaEndereco.AsEnumerable();
         }
     }
 }

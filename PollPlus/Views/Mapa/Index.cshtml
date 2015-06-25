@@ -14,43 +14,56 @@
 
     @{
 
-        Html.GoogleMap()
-            .Name("map")
-            .Culture(CultureInfo.CurrentCulture)
-            .Height(600)
-            .Center(c => c.Latitude(-14.2400732)
-                          .Longitude(-53.1805018))
-            .Zoom(5)
-            .BindTo<MapViewModel, Marker>
-            (Model, mappings => mappings.For<MapViewModel>
-                        (
-                            binding => binding.ItemDataBound
-                                (
-                                    (marker, markerModel) =>
-                                    {
-                                        marker.Latitude = markerModel.Latitude;
-                                        marker.Longitude = markerModel.Longitude;
-                                        marker.Title = "Coordenadas por Usuário";
-                                        marker.zIndex = 0;
-                                        marker.Icon = new MarkerImage(Url.Content(String.Format("{0}{1}", "/Content/images/", markerModel.Icon)),
-                                            new System.Drawing.Size(20, 32),
-                                            new System.Drawing.Point(0, 0),
-                                            new System.Drawing.Point(0, 32));
-                                        marker.Window = new InfoWindow(marker)
+        if (Model == null)
+        {
+            <p>Nenhum informação Encontrada.</p>
+        }
+        else
+        {
+
+            var latInicial = Model.First().Latitude;
+            var LongInicial = Model.First().Longitude;
+
+            Html.GoogleMap()
+                .Name("map")
+                .Culture(CultureInfo.CurrentCulture)
+                .Height(600)
+                .Center(c => c.Latitude(latInicial)
+                              .Longitude(LongInicial))
+                .Zoom(10)
+                .BindTo<MapViewModel, Marker>
+                (Model, mappings => mappings.For<MapViewModel>
+                            (
+                                binding => binding.ItemDataBound
+                                    (
+                                        (marker, markerModel) =>
                                         {
-                                            Template =
-                                                            {
+                                            marker.Latitude = markerModel.Latitude;
+                                            marker.Longitude = markerModel.Longitude;
+                                            marker.Title = "Coordenadas por Usuário";
+                                            marker.zIndex = 0;
+                                            marker.Icon = new MarkerImage(Url.Content(String.Format("{0}{1}", "~/Content/images/", markerModel.Icon)),
+                                                new System.Drawing.Size(32, 32),
+                                                new System.Drawing.Point(0, 0),
+                                                new System.Drawing.Point(0, 32));
+                                            marker.Window = new InfoWindow(marker)
+                                            {
+                                                Template =
+                                                                {
                                                                 Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, markerModel.Endereco))
-                                                            }
-                                        };
-                                    }
-                                )
-                        )
-            ).Render();
+                                                                }
+                                            };
+                                        }
+                                    )
+                            )
+                ).Render();
+        }
     }
 
 </div>
+<script src="~/Scripts/jquery-2.1.3.min.js"></script>
+
 @section Scripts
-{
+    {
     @(Html.GoogleMap().ScriptRegistrar())
 }

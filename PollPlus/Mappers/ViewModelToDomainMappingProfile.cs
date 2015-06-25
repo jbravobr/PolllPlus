@@ -36,6 +36,12 @@ namespace PollPlus.Mappers
             Mapper.CreateMap<DocumentoViewModel, Documento>();
             Mapper.CreateMap<PlataformaViewModel, Plataforma>();
             Mapper.CreateMap<VoucherViewModel, Voucher>();
+            Mapper.CreateMap<BannerViewModel, Banner>()
+                .BeforeMap((vm, d) =>
+                {
+                    d.FileName = vm.file.FileName;
+                    d.EmpresaId = UsuarioLogado.UsuarioAutenticado().EmpresaId;
+                });
         }
     }
 }

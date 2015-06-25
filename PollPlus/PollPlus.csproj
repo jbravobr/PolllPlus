@@ -62,14 +62,19 @@
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Jmelosegui.Mvc.Googlemap">
-      <HintPath>C:\Projetos\focus-sistema-de-rastreio\branches\packages\Jmelosegui.Mvc.Googlemap.0.4.0.0\lib\net45\Jmelosegui.Mvc.Googlemap.dll</HintPath>
+    <Reference Include="Jmelosegui.Mvc.Googlemap, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jmelosegui.Mvc.Googlemap.0.6.0.0\lib\net45\Jmelosegui.Mvc.Googlemap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -178,9 +183,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -260,6 +262,7 @@
     <Compile Include="Mappers\AutoMapperConfig.cs" />
     <Compile Include="Mappers\DomainToViewModelMappingProfile.cs" />
     <Compile Include="Mappers\ViewModelToDomainMappingProfile.cs" />
+    <Compile Include="Models\BannerViewModel.cs" />
     <Compile Include="Models\CategoriaViewModel.cs" />
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\EmpresaViewModel.cs" />
@@ -867,13 +870,10 @@
     <Content Include="PollPlus.wpp.targets" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <None Include="Properties\PublishProfiles\Mais - Temporário.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
     <Content Include="Scripts\jmelosegui.googlemap.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
@@ -3252,7 +3252,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Account\NovoUsuario.cshtml" />
@@ -3603,6 +3602,9 @@
     <Content Include="Views\Master\_MultiSelectCategorias.cshtml" />
     <Content Include="Views\Master\_DropDownlistForEmpresas.cshtml" />
     <Content Include="Views\Mapa\Index.cshtml" />
+    <Content Include="Views\Menu\_MenuMapas.cshtml" />
+    <Content Include="Views\Banner\NovoBanner.cshtml" />
+    <Content Include="Views\Banner\ListarBanners.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3611,7 +3613,6 @@
     <Folder Include="Scripts\Theme\bootstrap\examples\navbar-fixed-top\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\public\files\thumbnail\" />
     <Folder Include="Scripts\Theme\jquery.upload\server\node\tmp\" />
-    <Folder Include="Views\Banner\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

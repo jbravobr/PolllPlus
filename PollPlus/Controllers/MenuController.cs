@@ -37,5 +37,10 @@ namespace PollPlus.Controllers
         {
             return PartialView("_MenuVouchers");
         }
+
+        public PartialViewResult MontaMenuMapa()
+        {
+            return PartialView("_MenuMapas");
+        }
     }
 }
