@@ -40,6 +40,13 @@ namespace PollPlus.Service
 
         public async Task<ICollection<Banner>> RetornarTodosBanners()
         {
+            //IEnumerable _empresa = new List<Empresa>();
+
+            //if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+            //    _empresa = (await this.service.RetornarTodosBanners()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId);
+            //else
+            //    _empresa = (await this.service.RetornarTodosBanners());
+
             return await this.service.RetornarTodosBanners();
         }
     }
