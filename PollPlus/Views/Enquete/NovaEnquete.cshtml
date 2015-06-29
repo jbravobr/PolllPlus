@@ -19,6 +19,13 @@
             @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
         </div>
     </div>
+    <div class="form-group">
+        @Html.Label("Categorias", new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.Partial("~/Views/Master/_MultiSelectCategorias.cshtml")
+            @Html.ValidationMessageFor(x => x.CategoriasInteresse)
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
@@ -56,6 +63,9 @@
         </div>
                         }
                     }
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/Theme/bootstrap.multiselect/js/bootstrap-multiselect.js"></script>
+
 @section Scripts{
     <script type="text/javascript">
 
@@ -70,6 +80,11 @@
         function Remover(obj) {
             $(obj).parent().parent().remove();
         }
+
+        $(function () {
+
+            $("#example2").multiselect();
+        });
 
     </script>
 }

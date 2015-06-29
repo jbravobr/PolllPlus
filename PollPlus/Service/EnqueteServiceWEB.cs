@@ -14,12 +14,20 @@ namespace PollPlus.Service
 {
     public class EnqueteServiceWEB : IEnqueteServiceWEB
     {
-        readonly IEnqueteService service;
+        readonly IEnqueteService service; 
 
-        public EnqueteServiceWEB(IEnqueteService _service)
+        readonly ICategoriaService _serviceCategoria;
+
+        readonly IEnqueteCategoriaService _serviceEnqueteCategoria;
+
+
+        public EnqueteServiceWEB(IEnqueteService _service, ICategoriaService ServiceCategoria, IEnqueteCategoriaService ServiceEnqueteCategoria)
         {
             this.service = _service;
+            this._serviceCategoria = ServiceCategoria;
+            this._serviceEnqueteCategoria = ServiceEnqueteCategoria;
         }
+
 
         public async Task<Enquete> InserirRetornarEnquete(Enquete e)
         {
@@ -56,5 +64,20 @@ namespace PollPlus.Service
 
             return _enquetes;
         }
+        public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()
+        {
+            var _categoria = new List<Categoria>();
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
+                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+            else
+                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).ToList();
+            return _categoria;
+        }
+
+        public async Task<bool> InserirEnqueteCategoria(EnqueteCategoria uc)
+        {
+            return await this._serviceEnqueteCategoria.InserirEnqueteCategoria(uc);
+        }
+
     }
 }

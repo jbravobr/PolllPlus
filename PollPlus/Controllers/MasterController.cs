@@ -16,10 +16,13 @@ namespace PollPlus.Controllers
 
         readonly IEmpresaServiceWEB serviceEmpresas;
 
-        public MasterController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas)
+        readonly IEnqueteServiceWEB serviceEnquete;         
+
+        public MasterController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas, IEnqueteServiceWEB ServiceEnquete)
         {
             this.service = Service;
             this.serviceEmpresas = ServiceEmpresas;
+            this.serviceEnquete = ServiceEnquete;
         }
 
 
@@ -34,6 +37,8 @@ namespace PollPlus.Controllers
 
             return View();
         }
+
+       
 
         [HttpPost]
         public async Task<ActionResult> MasterCriaUsuario(UsuarioViewModel model)
@@ -65,6 +70,7 @@ namespace PollPlus.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
 
         [NonAction]
         private IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)

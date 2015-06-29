@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
+using PollPlus.Domain;
 
 namespace PollPlus.Models
 {
@@ -21,5 +23,12 @@ namespace PollPlus.Models
 
         [Required(ErrorMessage = "Campo obrigatório.")]
         public PerguntaViewModel Pergunta { get; set; }
+
+        [Required(ErrorMessage = "Campo obrigatório.")]
+        public List<int> CategoriasInteresse { get; set; }
+
+        public ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
+
+        public List<SelectListItem> CategoriasForSelectList { get; set; }
     }
 }

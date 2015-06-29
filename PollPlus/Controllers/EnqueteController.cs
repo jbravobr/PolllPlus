@@ -33,7 +33,9 @@ namespace PollPlus.Controllers
             this.serviceBlackList = _serviceBlackList;
         }
 
-        [HttpGet, OnlyAuthorizedUser]
+        public EnqueteController() { }
+
+        [OnlyAuthorizedUser(true), HttpGet]
         public ActionResult NovaEnquete()
         {
             return View();

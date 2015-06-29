@@ -36,5 +36,18 @@ namespace PollPlus.Domain
         {
             this.Tipo = tipo;
         }
+
+        public void AdicionarCategoria(List<int> listaDeCategoriasId)
+        {
+            if (this.EnqueteCategoria != null)
+            {
+                this.EnqueteCategoria = new List<EnqueteCategoria>();
+            }
+
+            foreach (var cat in listaDeCategoriasId)
+            {
+                this.EnqueteCategoria.Add(new EnqueteCategoria { CategoriaId = cat, EnqueteId = this.Id });
+            }
+        }
     }
 }

@@ -14,7 +14,9 @@ namespace PollPlus.Service.Interfaces
         Task<bool> DeletarEnquete(Enquete e);
         Task<Enquete> RetornarEnquetePorId(int id);
         Task<ICollection<Enquete>> RetornarTodasEnquetes();
+        Task<ICollection<Categoria>> RetornarCategoriasDisponniveis();
+        Task<Enquete> InserirRetornarEnquete(Enquete e);  
+        Task<bool> InserirEnqueteCategoria(EnqueteCategoria uc);
 
-        Task<Enquete> InserirRetornarEnquete(Enquete e);
     }
 }

@@ -23,10 +23,13 @@ namespace PollPlus.Controllers
 
         readonly IEmpresaServiceWEB serviceEmpresas;
 
-        public AccountController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas)
+        readonly IEnqueteServiceWEB serviceEnquete;
+
+        public AccountController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas, IEnqueteServiceWEB ServiceEnquete)
         {
             this.service = Service;
             this.serviceEmpresas = ServiceEmpresas;
+            this.serviceEnquete = ServiceEnquete;
         }
 
         public AccountController() { }
@@ -36,20 +39,29 @@ namespace PollPlus.Controllers
         {
             return View();
         }
-
         [OnlyAuthorizedUser(true), HttpPost]
         public async Task<ActionResult> Login(string usuario, string senha)
         {
-            if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
-                return View();
 
-            if (await this.service.LogarUsuario(usuario, senha))
-            {
-                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
-                Session.Add("UsuarioLogado", _usuario);
+#if DEBUG
 
-                return RedirectToAction("Index", "Home");
-            }
+            var _usuario = (await this.service.RetornarUsuarioPorId(2));
+            Session.Add("UsuarioLogado", _usuario);
+
+            return RedirectToAction("Index", "Home");
+
+#endif
+
+            //if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
+            //    return View();
+
+            //if (await this.service.LogarUsuario(usuario, senha))
+            //{
+            //    var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
+            //    Session.Add("UsuarioLogado", _usuario);
+
+            //    return RedirectToAction("Index", "Home");
+            //}
 
             return View();
         }
