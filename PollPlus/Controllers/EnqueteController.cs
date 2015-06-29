@@ -35,7 +35,7 @@ namespace PollPlus.Controllers
 
         public EnqueteController() { }
 
-        [OnlyAuthorizedUser(true), HttpGet]
+        [OnlyAuthorizedUser, HttpGet]
         public ActionResult NovaEnquete()
         {
             return View();

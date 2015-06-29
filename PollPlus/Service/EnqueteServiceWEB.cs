@@ -20,7 +20,6 @@ namespace PollPlus.Service
 
         readonly IEnqueteCategoriaService _serviceEnqueteCategoria;
 
-
         public EnqueteServiceWEB(IEnqueteService _service, ICategoriaService ServiceCategoria, IEnqueteCategoriaService ServiceEnqueteCategoria)
         {
             this.service = _service;

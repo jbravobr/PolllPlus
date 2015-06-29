@@ -24,9 +24,6 @@ namespace PollPlus.Models
         [Required(ErrorMessage = "Campo obrigatório.")]
         public PerguntaViewModel Pergunta { get; set; }
 
-        [Required(ErrorMessage = "Campo obrigatório.")]
-        public List<int> CategoriasInteresse { get; set; }
-
         public ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
 
         public List<SelectListItem> CategoriasForSelectList { get; set; }
