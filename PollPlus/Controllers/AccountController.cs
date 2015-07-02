@@ -50,18 +50,18 @@ namespace PollPlus.Controllers
 
             return RedirectToAction("Index", "Home");
 
-#endif
+#else
 
-            //if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
-            //    return View();
+            if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
+                return View();
 
-            //if (await this.service.LogarUsuario(usuario, senha))
-            //{
-            //    var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
-            //    Session.Add("UsuarioLogado", _usuario);
+            if (await this.service.LogarUsuario(usuario, senha))
+            {
+                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
+                Session.Add("UsuarioLogado", _usuario);
 
-            //    return RedirectToAction("Index", "Home");
-            //}
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
         }
@@ -70,6 +70,8 @@ namespace PollPlus.Controllers
         public ActionResult EsqueciMinhaSenha()
         {
             return View();
+
+#endif
         }
 
         [OnlyAuthorizedUser(true), HttpPost]
