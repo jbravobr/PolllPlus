@@ -52,5 +52,14 @@ namespace PollPlus.Service
 
             return _empresa;
         }
+
+        public async Task<ICollection<Empresa>> RetornarTodasEmpresasMaster()
+        {
+            var _empresa = new List<Empresa>();
+
+            _empresa = (await this.service.RetornarTodasEmpresas()).ToList();
+
+            return _empresa;
+        }
     }
 }

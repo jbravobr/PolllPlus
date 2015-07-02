@@ -55,11 +55,11 @@ namespace PollPlus.Service
         {
             var _usuario = (await this._service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
 
-           // var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
+            var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
 
             if (_usuario == null)
                 return await Task.FromResult(false);
-            else if (_usuario != null)//&& senha == senhaDecrypt)
+            else if (_usuario != null && senha == senhaDecrypt)
                 return await Task.FromResult(true);
             else
                 return await Task.FromResult(false);
@@ -68,10 +68,8 @@ namespace PollPlus.Service
         public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()
         {
             var _categoria = new List<Categoria>();
-            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
-                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
-            else
-                _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).ToList();
+
+            _categoria = (await this._serviceCategoria.RetornarTodasCategorias()).ToList();
             return _categoria;
         }
 
@@ -82,7 +80,7 @@ namespace PollPlus.Service
                 _usuario = (await this._service.RetornarTodosUsuarios()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
             else
                 _usuario = (await this._service.RetornarTodosUsuarios()).ToList();
-            return _usuario;             
+            return _usuario;
         }
 
         public async Task<Usuario> RetornarUsuarioPorId(int id)

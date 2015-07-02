@@ -26,15 +26,15 @@ namespace PollPlus
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            ILog _log4net = LogManager.GetLogger(typeof(MvcApplication));
-            _log4net.Error(Server.GetLastError());
+            //ILog _log4net = LogManager.GetLogger(typeof(MvcApplication));
+            //_log4net.Error(Server.GetLastError());
 
-            // Clear error from response stream
-            Response.Clear();
-            Server.ClearError();
+            //// Clear error from response stream
+            //Response.Clear();
+            //Server.ClearError();
 
-            // Redirect user
-            Context.Server.TransferRequest("~/Erro/Index");
+            //// Redirect user
+            //Context.Server.TransferRequest("~/Erro/Index");
         }
     }
 }

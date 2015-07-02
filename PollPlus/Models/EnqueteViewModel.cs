@@ -19,12 +19,15 @@ namespace PollPlus.Models
         public int EmpresaId { get; set; }
         public int UsuarioId { get; set; }
         public EnumTipoEnquete Tipo { get; set; }
-        public string file { get; set; }
+        public HttpPostedFileBase file { get; set; }
+        public string UrlVideo { get; set; }
 
         [Required(ErrorMessage = "Campo obrigatório.")]
         public PerguntaViewModel Pergunta { get; set; }
 
         public ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
+
+        public List<int> CategoriasInteresse { get; set; }
 
         public List<SelectListItem> CategoriasForSelectList { get; set; }
     }

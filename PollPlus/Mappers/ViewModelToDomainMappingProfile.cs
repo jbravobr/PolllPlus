@@ -31,12 +31,24 @@ namespace PollPlus.Mappers
 
                     d.Plataforma = new Plataforma { App = vm.Plataforma.App };
                 });
-            Mapper.CreateMap<EnqueteViewModel, Enquete>();
+
+            Mapper.CreateMap<EnqueteViewModel, Enquete>()
+                .BeforeMap((vm, d) =>
+                {
+                    vm.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
+                    vm.UsuarioId = UsuarioLogado.UsuarioAutenticado().Id;
+
+                    if (vm.file != null && vm.file.ContentLength > 0)
+                        d.Imagem = vm.file.FileName;
+                });
+
             Mapper.CreateMap<PerguntaViewModel, Pergunta>();
             Mapper.CreateMap<RespostaViewModel, Resposta>();
             Mapper.CreateMap<DocumentoViewModel, Documento>();
             Mapper.CreateMap<PlataformaViewModel, Plataforma>();
+
             Mapper.CreateMap<VoucherViewModel, Voucher>();
+
             Mapper.CreateMap<BannerViewModel, Banner>()
                 .BeforeMap((vm, d) =>
                 {

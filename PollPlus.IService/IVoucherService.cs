@@ -14,5 +14,6 @@ namespace PollPlus.IService
         Task<bool> DeletarVoucher(Voucher e);
         Task<Voucher> RetornarVoucherPorId(int id);
         Task<ICollection<Voucher>> RetornarTodosVouchers();
+        Task<Voucher> InserirRetornarVoucher(Voucher e);
     }
 }

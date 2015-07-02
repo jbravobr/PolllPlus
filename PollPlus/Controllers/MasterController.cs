@@ -32,7 +32,7 @@ namespace PollPlus.Controllers
             var categorias = await this.service.RetornarCategoriasDisponniveis();
             ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
 
-            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresasMaster();
             ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
 
             return View();
@@ -46,7 +46,7 @@ namespace PollPlus.Controllers
             var categorias = await this.service.RetornarCategoriasDisponniveis();
             ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
 
-            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresasMaster();
             ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
 
             if (!ModelState.IsValid)

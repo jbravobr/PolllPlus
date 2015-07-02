@@ -10,7 +10,13 @@ namespace PollPlus.Models
     public class VoucherViewModel
     {
         public int Id { get; set; }
-        public Guid Identificador { get; set; }
+        public int QtdeVoucherParaEmitir { get; set; }
         public EnumStatusVoucher Status { get; set; }
+        public string Descricao { get; set; }
+        public DateTime DataValidade { get; set; }
+        public int EmpresaId { get; set; }
+        public int EnqueteId { get; set; }
+
+        public List<string> NroVoucher { get; set; }
     }
 }

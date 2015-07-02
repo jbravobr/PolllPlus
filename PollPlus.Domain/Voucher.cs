@@ -10,8 +10,10 @@ namespace PollPlus.Domain
 {
     public class Voucher : EntityBase
     {
-        [Key]
-        public Guid Identificador { get; set; }
+        public string Identificador { get; set; }
         public EnumStatusVoucher Status { get; set; }
+        public DateTime DataValidade { get; set; }
+        public bool Usado { get; set; }
+        public string Descricao { get; set; }
     }
 }

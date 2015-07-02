@@ -10,6 +10,7 @@ namespace PollPlus.IRepositorio
     public interface IVoucherRepositorio
     {
         Task<bool> InserirVoucher(Voucher e);
+        Task<Voucher> InserirRetornarVoucher(Voucher e);
         Task<bool> AtualizarVoucher(Voucher e);
         Task<bool> DeletarVoucher(Voucher e);
         Task<Voucher> RetornarVoucherPorId(int id);

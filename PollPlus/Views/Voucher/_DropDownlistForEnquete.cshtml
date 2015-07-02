@@ -1,0 +1,10 @@
+﻿@{var enquetes = (IEnumerable<SelectListItem>)ViewData["EnqueteForSelectList"]; }
+
+@if (enquetes.Any())
+{
+    @Html.DropDownList("EnqueteId", enquetes, "Selecione uma enquete");
+}
+else
+{
+    <p>Erro ao carregar lista de Enquetes.</p>
+}

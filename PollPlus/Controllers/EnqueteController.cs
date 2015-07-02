@@ -18,6 +18,8 @@ namespace PollPlus.Controllers
     {
         readonly IEnqueteServiceWEB service;
 
+        readonly IUsuarioServiceWEB serviceUsuario;
+
         readonly IPerguntaServiceWEB servicePergunta;
 
         readonly IRespostaServiceWEB serviceResposta;
@@ -25,19 +27,23 @@ namespace PollPlus.Controllers
         readonly IBlackListServiceWEB serviceBlackList;
 
         public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
-            IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList)
+            IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList, IUsuarioServiceWEB _serviceUsuario)
         {
             this.service = _service;
             this.servicePergunta = _servicePergunta;
             this.serviceResposta = _serviceResposta;
             this.serviceBlackList = _serviceBlackList;
+            this.serviceUsuario = _serviceUsuario;
         }
 
         public EnqueteController() { }
 
         [OnlyAuthorizedUser, HttpGet]
-        public ActionResult NovaEnquete()
+        public async Task<ActionResult> NovaEnquete()
         {
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
             return View();
         }
 
@@ -94,23 +100,26 @@ namespace PollPlus.Controllers
         [OnlyAuthorizedUser, HttpPost]
         public async Task<ActionResult> NovaEnquete(EnqueteViewModel model, HttpPostedFileBase file)
         {
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
-            model.UsuarioId = UsuarioLogado.UsuarioAutenticado().Id;
-
-            if (file != null && file.ContentLength > 0)
-                model.file = file.FileName;
-
-            model.Tipo = UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa
-                ? Domain.Enumeradores.EnumTipoEnquete.Interesse
-                : Domain.Enumeradores.EnumTipoEnquete.Publica;
-
             var enquete = await this.service.InserirRetornarEnquete(AutoMapper.Mapper.Map<Enquete>(model));
 
-            if (enquete != null)
+            if (enquete != null && Util.SalvarImagem(file))
+            {
+                enquete.AdicionarCategoria(model.CategoriasInteresse);
+
+                foreach (var uc in enquete.EnqueteCategoria)
+                {
+                    await service.InserirEnqueteCategoria(uc);
+                }
+
                 return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
+
+            }
 
             return View();
         }
@@ -135,13 +144,6 @@ namespace PollPlus.Controllers
 
             if (respostas != null && respostas.Any())
                 ViewData.Add("Respostas", AutoMapper.Mapper.Map<RespostaViewModel>(respostas));
-
-            model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
-            model.UsuarioId = UsuarioLogado.UsuarioAutenticado().Id;
-            model.file = file.FileName;
-            model.Tipo = UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa
-                ? Domain.Enumeradores.EnumTipoEnquete.Interesse
-                : Domain.Enumeradores.EnumTipoEnquete.Publica;
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -205,6 +207,29 @@ namespace PollPlus.Controllers
             foreach (var resposta in respostas)
             {
                 yield return new Resposta { TextoResposta = resposta, PerguntaId = perguntaId };
+            }
+        }
+
+        [NonAction]
+        private static IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)
+        {
+            foreach (var categoria in categorias)
+            {
+                if (categoriaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString(),
+                        Selected = categoriaSelecionada.Contains((int)categoria.Id)
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = categoria.Nome,
+                    Value = categoria.Id.ToString()
+                };
             }
         }
     }

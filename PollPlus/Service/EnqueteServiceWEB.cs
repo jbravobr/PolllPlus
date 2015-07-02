@@ -63,6 +63,7 @@ namespace PollPlus.Service
 
             return _enquetes;
         }
+
         public async Task<ICollection<Categoria>> RetornarCategoriasDisponniveis()
         {
             var _categoria = new List<Categoria>();

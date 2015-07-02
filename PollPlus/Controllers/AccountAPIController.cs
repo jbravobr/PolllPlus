@@ -24,6 +24,10 @@ namespace PollPlus.Controllers
 
         private RespostaRepositorio respostaRepo = new RespostaRepositorio();
 
+        private PerguntaRespostaRepositorio perguntaRespostaRepo = new PerguntaRespostaRepositorio();
+
+        private CategoriaRepositorio catRepo = new CategoriaRepositorio();
+
         public AccountAPIController() { }
 
         [HttpGet]
@@ -158,9 +162,10 @@ namespace PollPlus.Controllers
 
             try
             {
-                var respostasJson = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<ICollection<Resposta>>(resposta));
+                var respostasJson = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<ICollection<RespostaMobile>>(resposta));
+                var respostasDomain = MapeiaRespostaMobileParaRespostaDomain(respostasJson);
 
-                foreach (var r in respostasJson)
+                foreach (var r in respostasDomain)
                 {
                     await this.respostaRepo.InserirResposta(r);
                 }
@@ -172,5 +177,39 @@ namespace PollPlus.Controllers
                 return InternalServerError(ex);
             }
         }
+
+        [HttpPost]
+        [Route("respondeenquete")]
+        public async Task<IHttpActionResult> RespondeEnquete([FromBody]string responde)
+        {
+            if (String.IsNullOrEmpty(responde))
+                return BadRequest("Objeto vazio");
+
+            var respondeJson = JsonConvert.DeserializeObject<PerguntaResposta>(responde);
+            var respondeu = await Task.Factory.StartNew(() => this.perguntaRespostaRepo.InserirPerguntaResposta(respondeJson));
+
+            return Ok(respondeu);
+        }
+
+        [HttpPost]
+        [Route("baixacategorais")]
+        public async Task<IHttpActionResult> GetCategorais()
+        {
+            var categorias = await this.catRepo.RetornarTodasCategorias();
+
+            return Ok(categorias);
+        }
+
+        private ICollection<Resposta> MapeiaRespostaMobileParaRespostaDomain(ICollection<RespostaMobile> respMobile)
+        {
+            return respMobile.Select(r => new Resposta {TextoResposta = r.TextoPergunta, PerguntaId = r.PerguntaServerId }).ToList();
+        }
+    }
+
+    public class RespostaMobile
+    {
+        public int Id { get; set; }
+        public string TextoPergunta { get; set; }
+        public int PerguntaServerId { get; set; }
     }
 }

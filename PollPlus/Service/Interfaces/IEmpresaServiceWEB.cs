@@ -14,5 +14,6 @@ namespace PollPlus.Service.Interfaces
         Task<bool> DeletarEmpresa(Empresa e);
         Task<Empresa> RetornarEmpresaPorId(int id);
         Task<ICollection<Empresa>> RetornarTodasEmpresas();
+        Task<ICollection<Empresa>> RetornarTodasEmpresasMaster();
     }
 }

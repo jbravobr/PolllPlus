@@ -12,7 +12,7 @@ namespace PollPlus.Domain
     {
         public string Titulo { get; set; }
         public EnumStatusEnquete Status { get; set; }
-        public EnumTipoEnquete Tipo { get; protected set; }
+        public EnumTipoEnquete Tipo { get; set; }
         public EnumTipoImagem TipoImagem { get; set; }
         public string Imagem { get; set; }
         public int ClientId { get; set; }
@@ -23,7 +23,7 @@ namespace PollPlus.Domain
         [JsonIgnore]
         public virtual Usuario Usuario { get; set; }
 
-        public int EmpresaId { get; set; }
+        public int? EmpresaId { get; set; }
         public virtual Empresa Empresa { get; set; }
 
         public int PerguntaId { get; set; }

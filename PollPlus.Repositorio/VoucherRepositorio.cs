@@ -20,7 +20,7 @@ namespace PollPlus.Repositorio
         public async Task<bool> InserirVoucher(Voucher e)
         {
             this.Inserir(e);
-            return await this.Salvar();
+            return await base.Salvar();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PollPlus.Repositorio
         public async Task<bool> AtualizarVoucher(Voucher e)
         {
             this.Atualizar(e);
-            return await this.Salvar();
+            return await base.Salvar();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PollPlus.Repositorio
         public async Task<bool> DeletarVoucher(Voucher e)
         {
             this.Deletar(e);
-            return await this.Salvar();
+            return await base.Salvar();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace PollPlus.Repositorio
         public async Task<Voucher> RetornarVoucherPorId(int id)
         {
             Expression<Func<Voucher, bool>> porId = (x) => x.Id == id;
-            return await this.RetornarPorId(porId);
+            return await base.RetornarPorId(porId);
         }
 
         /// <summary>
@@ -64,7 +64,12 @@ namespace PollPlus.Repositorio
         /// <returns>Objeto Voucher</returns>
         public async Task<ICollection<Voucher>> RetornarTodosVouchers()
         {
-            return await this.RetornarTodos();
+            return await base.RetornarTodos();
+        }
+
+        public async Task<Voucher> InserirRetornarVoucher(Voucher e)
+        {
+            return await base.InsertAndReturnEntity(e);
         }
     }
 }

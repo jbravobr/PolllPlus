@@ -49,6 +49,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201507010236151_Empresa_null_Enquete.cs" />
+    <Compile Include="Migrations\201507010236151_Empresa_null_Enquete.Designer.cs">
+      <DependentUpon>201507010236151_Empresa_null_Enquete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507011938532_Mudou_Voucher_Para_String.cs" />
+    <Compile Include="Migrations\201507011938532_Mudou_Voucher_Para_String.Designer.cs">
+      <DependentUpon>201507011938532_Mudou_Voucher_Para_String.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.cs" />
+    <Compile Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.Designer.cs">
+      <DependentUpon>201507012038130_Remove_Key_Guid_Voucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507020231062_Cria_Descricao_Voucher.cs" />
+    <Compile Include="Migrations\201507020231062_Cria_Descricao_Voucher.Designer.cs">
+      <DependentUpon>201507020231062_Cria_Descricao_Voucher.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -62,6 +78,20 @@
       <Project>{4453b321-0b2f-4b50-ad60-0fcb599234d5}</Project>
       <Name>PollPlus.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201507010236151_Empresa_null_Enquete.resx">
+      <DependentUpon>201507010236151_Empresa_null_Enquete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507011938532_Mudou_Voucher_Para_String.resx">
+      <DependentUpon>201507011938532_Mudou_Voucher_Para_String.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.resx">
+      <DependentUpon>201507012038130_Remove_Key_Guid_Voucher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507020231062_Cria_Descricao_Voucher.resx">
+      <DependentUpon>201507020231062_Cria_Descricao_Voucher.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

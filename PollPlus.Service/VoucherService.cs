@@ -75,5 +75,10 @@ namespace PollPlus.Service
         {
             return await this._repositorio.RetornarTodosVouchers();
         }
+
+        public async Task<Voucher> InserirRetornarVoucher(Voucher e)
+        {
+            return await this._repositorio.InserirRetornarVoucher(e);
+        }
     }
 }
