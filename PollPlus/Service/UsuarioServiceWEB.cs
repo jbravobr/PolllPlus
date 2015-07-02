@@ -76,10 +76,8 @@ namespace PollPlus.Service
         public async Task<ICollection<Usuario>> RetornarTodosUsuarios()
         {
             var _usuario = new List<Usuario>();
-            if (UsuarioLogado.UsuarioAutenticado().Perfil == EnumPerfil.AdministradorEmpresa)
-                _usuario = (await this._service.RetornarTodosUsuarios()).Where(u => u.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
-            else
-                _usuario = (await this._service.RetornarTodosUsuarios()).ToList();
+
+            _usuario = (await this._service.RetornarTodosUsuarios()).ToList();
             return _usuario;
         }
 

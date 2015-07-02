@@ -42,23 +42,13 @@ namespace PollPlus.Controllers
         [OnlyAuthorizedUser(true), HttpPost]
         public async Task<ActionResult> Login(string usuario, string senha)
         {
-
-#if DEBUG
-
-            var _usuario = (await this.service.RetornarUsuarioPorId(2));
-            Session.Add("UsuarioLogado", _usuario);
-
-            return RedirectToAction("Index", "Home");
-
-#else
-
             if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
                 return View();
 
             if (await this.service.LogarUsuario(usuario, senha))
             {
-                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
-                Session.Add("UsuarioLogado", _usuario);
+                var _usuario = await this.service.RetornarTodosUsuarios();
+                Session.Add("UsuarioLogado", _usuario.FirstOrDefault(u => u.Email == usuario));
 
                 return RedirectToAction("Index", "Home");
             }
@@ -70,8 +60,6 @@ namespace PollPlus.Controllers
         public ActionResult EsqueciMinhaSenha()
         {
             return View();
-
-#endif
         }
 
         [OnlyAuthorizedUser(true), HttpPost]
