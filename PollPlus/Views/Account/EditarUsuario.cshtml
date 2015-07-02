@@ -51,7 +51,7 @@
             @Html.Label("Categorias", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.Partial("_MultiSelectCategorias", (ICollection<PollPlus.Models.CategoriaViewModel>)ViewBag.CategoriasInteresse)
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.CategoriasInteresse)
             </div>
         </div>
 
@@ -59,7 +59,7 @@
             @Html.Label("Empresa", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.Partial("_DropDownListForEmpresas", (ICollection<PollPlus.Models.EmpresaViewModel>)ViewBag.Empresas)
-                @Html.ValidationMessageFor(x => x.CategoriasInteresse)
+                @Html.ValidationMessageFor(x => x.EmpresaId)
             </div>
         </div>
 
@@ -75,7 +75,7 @@
             @Html.LabelFor(x => x.DDD, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.DDD, new { placeholder = "DDD", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.DDD)
             </div>
         </div>
 
@@ -83,7 +83,7 @@
             @Html.LabelFor(x => x.Telefone, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Telefone, new { placeholder = "Telefone", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Telefone)
             </div>
         </div>
 
@@ -91,7 +91,7 @@
             @Html.LabelFor(x => x.Sexo, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @GeraLista.DeSexos(this.Html)
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Sexo)
             </div>
         </div>
 
@@ -99,7 +99,7 @@
             @Html.LabelFor(x => x.Municipio, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Municipio, new { placeholder = "Informe o seu Município", @class = "form-control datepicker" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Municipio)
             </div>
         </div>
 

@@ -72,7 +72,7 @@
             @Html.LabelFor(x => x.DDD, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.DDD, new { placeholder = "DDD", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.DDD)
             </div>
         </div>
 
@@ -80,7 +80,7 @@
             @Html.LabelFor(x => x.Telefone, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Telefone, new { placeholder = "Telefone", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Telefone)
             </div>
         </div>
 
@@ -88,7 +88,7 @@
             @Html.LabelFor(x => x.Sexo, new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @GeraLista.DeSexos(this.Html)
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Sexo)
             </div>
         </div>
 
@@ -96,7 +96,7 @@
             @Html.LabelFor(x => x.Municipio, "Município", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.Municipio, new { placeholder = "Informe o seu Município", @class = "form-control" })
-                @Html.ValidationMessageFor(x => x.DataNascimento)
+                @Html.ValidationMessageFor(x => x.Municipio)
             </div>
         </div>
 
