@@ -178,6 +178,12 @@ namespace PollPlus.Controllers
             return View(listaUsuarios.ToPagedList(pagina ?? 1, 10));
         }
 
+        [HttpGet, OnlyAuthorizedUser]
+        public ActionResult ImportarEmail()
+        {
+            return View();
+        }
+
         [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> ImportarEmail(HttpPostedFileBase file)
         {

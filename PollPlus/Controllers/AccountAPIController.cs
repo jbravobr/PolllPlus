@@ -29,6 +29,8 @@ namespace PollPlus.Controllers
 
         private CategoriaRepositorio catRepo = new CategoriaRepositorio();
 
+        private BannerRepositorio bannerRepo = new BannerRepositorio();
+
         public AccountAPIController() { }
 
         [HttpGet]
@@ -206,7 +208,21 @@ namespace PollPlus.Controllers
         {
             var categorias = await this.catRepo.RetornarTodasCategorias();
 
-            return Ok(categorias);
+            return Ok(JsonConvert.SerializeObject(categorias));
+        }
+
+        [HttpPost]
+        [Route("banners/{id}/{empresaId}")]
+        public async Task<IHttpActionResult> GetBanners(int id, int empresaId)
+        {
+            ICollection<Banner> banners;
+
+            if (id <= 0)
+                banners = (await this.bannerRepo.RetornarTodosBanners()).Where(b=>b.EmpresaId == empresaId).ToList();
+            else
+                banners = (await this.bannerRepo.RetornarTodosBanners()).Where(b => b.Id > id && b.EmpresaId == empresaId).ToList();
+
+            return Ok(JsonConvert.SerializeObject(banners));
         }
 
         private ICollection<Resposta> MapeiaRespostaMobileParaRespostaDomain(ICollection<RespostaMobile> respMobile)

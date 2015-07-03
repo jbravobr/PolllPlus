@@ -18,5 +18,8 @@ namespace PollPlus.Models
 
         public HttpPostedFileBase file { get; set; }
         public string fileName { get; set; }
+
+        [Required(ErrorMessage ="Campo obbrigatório.")]
+        public DateTime DataValidade { get; set; }
     }
 }

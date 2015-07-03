@@ -3644,6 +3644,7 @@
     <Content Include="Views\Enquete\ImportarBlackList.cshtml" />
     <Content Include="Views\Enquete\_MultiSelectCategorias.cshtml" />
     <Content Include="Views\Voucher\_DropDownlistForEnquete.cshtml" />
+    <Content Include="Views\Account\ImportarEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

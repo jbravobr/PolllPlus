@@ -222,9 +222,7 @@ namespace PollPlus.Helpers
             {
                 try
                 {
-                    var directory = Path.GetRandomFileName();
-                    Directory.CreateDirectory(Path.Combine(path, directory));
-                    var pathFinal = Path.Combine(path, directory, file.FileName);
+                    var pathFinal = Path.Combine(path, file.FileName);
 
                     file.SaveAs(pathFinal);
                     return true;

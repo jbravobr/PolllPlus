@@ -36,11 +36,12 @@ namespace PollPlus.Controllers
                 return View(model);
 
             model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
+            model.fileName = file.FileName;
             if (await this.service.InserirBanner(AutoMapper.Mapper.Map<Banner>(model)))
             {
                 if (file.ContentLength > 0)
                     if (Util.SalvarImagem(file))
-                        return View("ListarBanners");
+                        return RedirectToAction("ListarBanners");
             }
 
             return View(model);

@@ -11,6 +11,7 @@ namespace PollPlus.Domain
     {
         public string FileName { get; set; }
         public string Url { get; set; }
+        public DateTime DataValidade { get; set; }
 
         public int? EmpresaId { get; set; }
         public virtual Empresa Empresa { get; set; }
