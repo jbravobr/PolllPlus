@@ -255,7 +255,8 @@ namespace PollPlus.Controllers
                     Tipo = enquete.Tipo,
                     Titulo = enquete.Pergunta.TextoPergunta,
                     UrlVideo = enquete.UrlVideo,
-                    UsuarioId = enquete.UsuarioId
+                    UsuarioId = enquete.UsuarioId,
+                    Imagem = enquete.Imagem
                 };
             }
         }
@@ -279,6 +280,7 @@ namespace PollPlus.Controllers
         public EnumTipoEnquete Tipo { get; set; }
         public EnumStatusEnquete Status { get; set; }
         public int UsuarioId { get; set; }
+        public string Imagem { get; set; }
     }
 
     public class PerguntaMobile
