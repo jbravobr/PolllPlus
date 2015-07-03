@@ -70,5 +70,13 @@ namespace PollPlus.Repositorio
         {
             return await this.RetornarTodos();
         }
+
+        public async Task<ICollection<Resposta>> RetornarRespostasPorPergunta(int perguntaId)
+        {
+            Expression<Func<Resposta, bool>> porPerguntaId = (x) => x.PerguntaId == perguntaId;
+            var r = await this.ProcurarPorColecao(porPerguntaId);
+
+            return r;
+        }
     }
 }

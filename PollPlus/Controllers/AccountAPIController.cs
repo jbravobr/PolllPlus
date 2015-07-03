@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Ninject;
 using PollPlus.Domain;
+using PollPlus.Domain.Enumeradores;
 using PollPlus.Helpers;
 using PollPlus.Models;
 using PollPlus.Repositorio;
@@ -92,7 +93,8 @@ namespace PollPlus.Controllers
             {
                 if (enquetes != null)
                 {
-                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(enquetes));
+                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes);
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(e));
                     return Ok(enquetesJson);
                 }
                 else
@@ -121,7 +123,14 @@ namespace PollPlus.Controllers
             {
                 if (enquetes != null)
                 {
-                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(enquetes));
+
+                    foreach (var enquete in enquetes)
+                    {
+                        var respostas = (await this.respostaRepo.RetornarTodasRespostas()).Where(r => r.PerguntaId == enquete.Pergunta.Id);
+                        enquete.Pergunta.Resposta = respostas.ToList();
+                    }
+
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaEnqueteDomainParaEnqueteMobile(enquetes)));
                     return Ok(enquetesJson);
                 }
                 else
@@ -202,14 +211,65 @@ namespace PollPlus.Controllers
 
         private ICollection<Resposta> MapeiaRespostaMobileParaRespostaDomain(ICollection<RespostaMobile> respMobile)
         {
-            return respMobile.Select(r => new Resposta {TextoResposta = r.TextoPergunta, PerguntaId = r.PerguntaServerId }).ToList();
+            return respMobile.Select(r => new Resposta { TextoResposta = r.TextoResposta, PerguntaId = r.PerguntaServerId }).ToList();
+        }
+
+        private IEnumerable<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes)
+        {
+            foreach (var enquete in enquetes)
+            {
+                yield return new EnqueteMobile
+                {
+                    Id = 0,
+                    Pergunta = new PerguntaMobile
+                    {
+                        Id = 0,
+                        PerguntaServerId = enquete.Pergunta.Id,
+                        TextoPergunta = enquete.Pergunta.TextoPergunta,
+                        Respostas = enquete.Pergunta.Resposta.Select(r => new RespostaMobile
+                        {
+                            Id = 0,
+                            PerguntaServerId = r.PerguntaId,
+                            TextoResposta = r.TextoResposta
+                        }).ToList()
+                    },
+                    PerguntaServerId = enquete.Pergunta.Id,
+                    ServerEnqueteId = enquete.Id,
+                    Status = enquete.Status,
+                    Tipo = enquete.Tipo,
+                    Titulo = enquete.Pergunta.TextoPergunta,
+                    UrlVideo = enquete.UrlVideo,
+                    UsuarioId = enquete.UsuarioId
+                };
+            }
         }
     }
 
     public class RespostaMobile
     {
         public int Id { get; set; }
+        public string TextoResposta { get; set; }
+        public int PerguntaServerId { get; set; }
+    }
+
+    public class EnqueteMobile
+    {
+        public int Id { get; set; }
+        public int ServerEnqueteId { get; set; }
+        public string Titulo { get; set; }
+        public string UrlVideo { get; set; }
+        public PerguntaMobile Pergunta { get; set; }
+        public int PerguntaServerId { get; set; }
+        public EnumTipoEnquete Tipo { get; set; }
+        public EnumStatusEnquete Status { get; set; }
+        public int UsuarioId { get; set; }
+    }
+
+    public class PerguntaMobile
+    {
+        public int Id { get; set; }
         public string TextoPergunta { get; set; }
         public int PerguntaServerId { get; set; }
+        public List<RespostaMobile> Respostas { get; set; }
     }
 }

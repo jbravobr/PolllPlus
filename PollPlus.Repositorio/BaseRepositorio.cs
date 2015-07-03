@@ -118,7 +118,7 @@ namespace PollPlus.Repositorio
 
                 return entity;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new ArgumentException("Erro ao inserir entidade ao contexto.");
             }
