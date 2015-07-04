@@ -202,8 +202,8 @@ namespace PollPlus.Controllers
             return Ok(respondeu);
         }
 
-        [HttpPost]
-        [Route("baixacategorais")]
+        [HttpGet]
+        [Route("baixacategorais/{categoriaId}")]
         public async Task<IHttpActionResult> GetCategorais()
         {
             var categorias = await this.catRepo.RetornarTodasCategorias();
@@ -211,7 +211,7 @@ namespace PollPlus.Controllers
             return Ok(JsonConvert.SerializeObject(categorias));
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("banners/{id}/{empresaId}")]
         public async Task<IHttpActionResult> GetBanners(int id, int empresaId)
         {
