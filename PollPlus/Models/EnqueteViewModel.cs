@@ -21,6 +21,7 @@ namespace PollPlus.Models
         public EnumTipoEnquete Tipo { get; set; }
         public HttpPostedFileBase file { get; set; }
         public string UrlVideo { get; set; }
+        public EnumStatusEnquete Status { get; set; }
 
         [Required(ErrorMessage = "Campo obrigatório.")]
         public PerguntaViewModel Pergunta { get; set; }

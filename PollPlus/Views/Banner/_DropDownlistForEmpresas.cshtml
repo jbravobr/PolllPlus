@@ -1,0 +1,8 @@
+﻿@{var empresas = (IEnumerable<SelectListItem>)ViewData["EmpresasForSelectList"]; }
+
+<select id="example3" multiple="multiple" name="Empresas" style="display: none;">
+    @foreach (var cat in empresas)
+    {
+        <option value="@cat.Value">@cat.Text</option>
+    }
+</select>

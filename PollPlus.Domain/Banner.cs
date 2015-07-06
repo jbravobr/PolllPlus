@@ -13,9 +13,9 @@ namespace PollPlus.Domain
         public string Url { get; set; }
         public DateTime DataValidade { get; set; }
 
-        public int? EmpresaId { get; set; }
-        public virtual Empresa Empresa { get; set; }
-
         public EnumStatusUsuario Status { get; set; }
+
+        public virtual ICollection<CategoriaBanner> CategoriaBanner { get; set; }
+        public virtual ICollection<EmpresaBanner> EmpresaBanner { get; set; }
     }
 }

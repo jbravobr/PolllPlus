@@ -21,5 +21,6 @@ namespace PollPlus.Domain
         public virtual Plataforma Plataforma { get; set; }
 
         public virtual ICollection<Mensagem> Mensagem { get; set; }
+        public virtual ICollection<EmpresaBanner> EmpresaBanner { get; set; }
     }
 }

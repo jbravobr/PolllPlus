@@ -1,0 +1,15 @@
+﻿@using PollPlus.Domain.Enumeradores
+@model PollPlus.Models.UsuarioViewModel
+
+@{
+    List<SelectListItem> itens = new List<SelectListItem>();
+
+    var _perfil = Model == null ? -1 : (int)Model.Perfil;
+
+    foreach (EnumPerfil item in Enum.GetValues(typeof(EnumPerfil)))
+    {
+        itens.Add(new SelectListItem { Value = item.ToString(), Text = item.GetDescription(), Selected = (int)item == _perfil });
+    }
+}
+
+@Html.DropDownList("Perfil", itens, "Selecione um perfil");

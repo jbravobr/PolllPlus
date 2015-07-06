@@ -60,12 +60,7 @@ namespace PollPlus.Controllers
                 await this.serviceResposta.InserirResposta(r);
             }
 
-            Pergunta.Resposta = AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas.ToList());
-
-            if (await this.servicePergunta.AtualizarPergunta(AutoMapper.Mapper.Map<Pergunta>(Pergunta)))
-                return RedirectToAction("ListarEnquetes");
-            else
-                return View("NovaEnquete");
+            return RedirectToAction("ListarEnquetes");
         }
 
         [HttpGet, OnlyAuthorizedUser]
@@ -106,10 +101,14 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            model.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
             var enquete = await this.service.InserirRetornarEnquete(AutoMapper.Mapper.Map<Enquete>(model));
 
-            if (enquete != null && Util.SalvarImagem(file))
+            if (enquete != null)
             {
+                if (file !=null && file.ContentLength > 0)
+                    Util.SalvarImagem(file);
+
                 enquete.AdicionarCategoria(model.CategoriasInteresse);
 
                 foreach (var uc in enquete.EnqueteCategoria)
@@ -169,7 +168,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return View("ListarEnquetes");
+            return Redirect("ListarEnquetes");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -179,7 +178,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Despublicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return View("ListarEnquetes");
+            return Redirect("ListarEnquetes");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -189,7 +188,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return View("ListarEnquetes");
+            return Redirect("ListarEnquetes");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -199,7 +198,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Inativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return View("ListarEnquetes");
+            return Redirect("ListarEnquetes");
         }
 
         private static IEnumerable<Resposta> MapeiaListaDeRespostas(List<string> respostas, int perguntaId)

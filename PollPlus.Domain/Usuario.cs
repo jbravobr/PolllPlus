@@ -53,5 +53,10 @@ namespace PollPlus.Domain
                 this.UsuarioCategoria.Add(new UsuarioCategoria { CategoriaId = cat, UsuarioId = this.Id });
             }
         }
+
+        public void ConfiguraStatus(EnumStatusUsuario status)
+        {
+            this.Status = status;
+        }
     }
 }

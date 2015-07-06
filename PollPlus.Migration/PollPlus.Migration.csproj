@@ -49,21 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201507010236151_Empresa_null_Enquete.cs" />
-    <Compile Include="Migrations\201507010236151_Empresa_null_Enquete.Designer.cs">
-      <DependentUpon>201507010236151_Empresa_null_Enquete.cs</DependentUpon>
+    <Compile Include="Migrations\201507060210072_cria_bd.cs" />
+    <Compile Include="Migrations\201507060210072_cria_bd.Designer.cs">
+      <DependentUpon>201507060210072_cria_bd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201507011938532_Mudou_Voucher_Para_String.cs" />
-    <Compile Include="Migrations\201507011938532_Mudou_Voucher_Para_String.Designer.cs">
-      <DependentUpon>201507011938532_Mudou_Voucher_Para_String.cs</DependentUpon>
+    <Compile Include="Migrations\201507060549267_Adiciona_Percentual_PerguntaResposta.cs" />
+    <Compile Include="Migrations\201507060549267_Adiciona_Percentual_PerguntaResposta.Designer.cs">
+      <DependentUpon>201507060549267_Adiciona_Percentual_PerguntaResposta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.cs" />
-    <Compile Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.Designer.cs">
-      <DependentUpon>201507012038130_Remove_Key_Guid_Voucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201507020231062_Cria_Descricao_Voucher.cs" />
-    <Compile Include="Migrations\201507020231062_Cria_Descricao_Voucher.Designer.cs">
-      <DependentUpon>201507020231062_Cria_Descricao_Voucher.cs</DependentUpon>
+    <Compile Include="Migrations\201507060751593_Adiciona_Banner_Empresa.cs" />
+    <Compile Include="Migrations\201507060751593_Adiciona_Banner_Empresa.Designer.cs">
+      <DependentUpon>201507060751593_Adiciona_Banner_Empresa.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,17 +76,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201507010236151_Empresa_null_Enquete.resx">
-      <DependentUpon>201507010236151_Empresa_null_Enquete.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507060210072_cria_bd.resx">
+      <DependentUpon>201507060210072_cria_bd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507011938532_Mudou_Voucher_Para_String.resx">
-      <DependentUpon>201507011938532_Mudou_Voucher_Para_String.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507060549267_Adiciona_Percentual_PerguntaResposta.resx">
+      <DependentUpon>201507060549267_Adiciona_Percentual_PerguntaResposta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507012038130_Remove_Key_Guid_Voucher.resx">
-      <DependentUpon>201507012038130_Remove_Key_Guid_Voucher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507020231062_Cria_Descricao_Voucher.resx">
-      <DependentUpon>201507020231062_Cria_Descricao_Voucher.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507060751593_Adiciona_Banner_Empresa.resx">
+      <DependentUpon>201507060751593_Adiciona_Banner_Empresa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

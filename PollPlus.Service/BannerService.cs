@@ -36,6 +36,11 @@ namespace PollPlus.Service
             return await this._repositorio.InserirBanner(e);
         }
 
+        public async Task<Banner> InserirRetornarBanner(Banner e)
+        {
+            return await this._repositorio.InserirRetornarBanner(e);
+        }
+
         /// <summary>
         /// Método para Deletar uma Banner
         /// </summary>

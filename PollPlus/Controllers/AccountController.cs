@@ -118,6 +118,12 @@ namespace PollPlus.Controllers
             }
             else
             {
+                if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
+                {
+                    model.Perfil = Domain.Enumeradores.EnumPerfil.AdministradorEmpresa;
+                    model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
+                }
+
                 var user = await this.service.InserirRetornarUsuario(AutoMapper.Mapper.Map<Usuario>(model));
 
                 if (user != null)
@@ -128,8 +134,24 @@ namespace PollPlus.Controllers
                     await service.InserirUsuarioCategoria(uc);
                 }
 
+                EnviarEmailConfirmacaoCadastro(user);
+
                 return RedirectToAction("ListarUsuarios");
             }
+        }
+
+        [NonAction]
+        private bool EnviarEmailConfirmacaoCadastro(Usuario usuario)
+        {
+            var _corpoMessage = new StringBuilder();
+
+            _corpoMessage.Append("<p>Está é a confirmação da criação do seu usuário para acesso ao Sistema de Mais.</p>");
+            _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", usuario.Email));
+            _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
+
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
+
+            return Util.SendMail(_message);
         }
 
         [HttpGet, OnlyAuthorizedUser]
@@ -175,7 +197,10 @@ namespace PollPlus.Controllers
         {
             var listaUsuarios = await this.service.RetornarTodosUsuarios();
 
-            return View(listaUsuarios.ToPagedList(pagina ?? 1, 10));
+            ViewBag.ContUsuariosTotal = listaUsuarios.Count;
+            ViewBag.ContUsuariosAtivosTotal = listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).Count();
+
+            return View(listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).ToPagedList(pagina ?? 1, 10));
         }
 
         [HttpGet, OnlyAuthorizedUser]
@@ -205,6 +230,16 @@ namespace PollPlus.Controllers
             {
                 return View(0);
             }
+        }
+
+        [HttpGet, OnlyAuthorizedUser]
+        public async Task<ActionResult> RemoverUsuario(int usuarioId)
+        {
+            var user = await this.service.RetornarUsuarioPorId(usuarioId);
+            user.ConfiguraStatus(Domain.Enumeradores.EnumStatusUsuario.Inativo);
+            await this.service.AtualizarUsuario(user);
+
+            return RedirectToAction("ListarUsuarios");
         }
 
         [NonAction]

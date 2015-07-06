@@ -34,8 +34,17 @@
                                             <strong>Data da Criação</strong>
                                         </th>
                                         <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                            <strong>Data da Validade</strong>
+                                        </th>
+                                        <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                             <strong>Enquete</strong>
                                         </th>
+                                        <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                            <strong>Empresa</strong>
+                                        </th>
+                                        @*<th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                            <strong>Criado por</strong>
+                                        </th>*@
                                         <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
                                         </th>
                                     </tr>
@@ -43,26 +52,29 @@
                                 <tbody role="alert" aria-live="polite" aria-relevant="all">
 
                                     @foreach (var _voucher in Model)
-                                {
-                                <tr class="gradeA odd">
-                                    <td class=" ">@_voucher.Identificador</td>
-                                    <td class=" ">@_voucher.Status</td>
-                                    <td class=" ">@_voucher.DataCriacao.ToShortDateString()</td>
-                                    <td class=" ">@_voucher.Descricao</td>
-                                    <td class="center ">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-xs">Ações</button>
-                                            <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                                <span class="sr-only">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="javascript: if(confirm('Deseja associar este vocuher?')) {window.location.href='@Url.Action("AssociarVoucherEnquete", "Voucher", new { voucherId = _voucher.Id })">Associar</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                }
+                                    {
+                                        <tr class="gradeA odd">
+                                            <td class=" ">@_voucher.Identificador</td>
+                                            <td class=" ">@_voucher.Status</td>
+                                            <td class=" ">@_voucher.DataCriacao.ToShortDateString()</td>
+                                            <td class=" ">@_voucher.DataValidade</td>
+                                            <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Pergunta.TextoPergunta)</td>
+                                            <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Empresa.Nome)</td>
+                                            @*<td class=" ">@(String.Format("{0} / {1}", _voucher.Usuario.Nome, _voucher.Usuario.Email))</td>*@
+                                            @*<td class="center ">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a href="javascript: if(confirm('Deseja marcar como utilizado este vocuher?')) {window.location.href='@Url.Action("MarcarComoUtilizado", "Voucher", new { voucherId = _voucher.Id })">Associar</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>*@
+                                        </tr>
+                                    }
 
                                 </tbody>
                             </table>

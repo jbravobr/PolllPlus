@@ -270,7 +270,8 @@ namespace PollPlus.Helpers
                     Sexo = (EnumSexo)Enum.Parse(typeof(EnumSexo), valorLinha[2].ToString()),
                     Municipio = valorLinha[3].ToString(),
                     DDD = Convert.ToInt32(valorLinha[4]),
-                    Telefone = valorLinha[5].ToString()
+                    Telefone = valorLinha[5].ToString(),
+                    DataNascimento = Convert.ToDateTime(valorLinha[6].ToString())
                 });
             }
 

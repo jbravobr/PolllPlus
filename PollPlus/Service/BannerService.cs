@@ -26,6 +26,11 @@ namespace PollPlus.Service
             return await this.service.DeletarBanner(e);
         }
 
+        public async Task<Banner> InserirRetornarBanner(Banner e)
+        {
+            return await this.service.InserirRetornarBanner(e);
+        }
+
         public async Task<bool> InserirBanner(Banner e)
         {
             return await this.service.InserirBanner(e);

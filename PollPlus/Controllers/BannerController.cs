@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using PollPlus.Repositorio;
 
 namespace PollPlus.Controllers
 {
@@ -17,28 +18,58 @@ namespace PollPlus.Controllers
     public class BannerController : BaseController
     {
         readonly IBannerServiceWEB service;
+        readonly IEmpresaServiceWEB serviceEmpresas;
+        readonly IEnqueteServiceWEB serviceEnquete;
 
-        public BannerController(IBannerServiceWEB srv)
+        private CategoriaBannerRepositorio catBanner = new CategoriaBannerRepositorio();
+        private EmpresaBannerRepositorio empBanner = new EmpresaBannerRepositorio();
+
+        public BannerController(IBannerServiceWEB srv, IEmpresaServiceWEB serviceEmpresa, IEnqueteServiceWEB srvEnquete)
         {
             this.service = srv;
+            this.serviceEmpresas = serviceEmpresa;
+            this.serviceEnquete = srvEnquete;
         }
 
-        [HttpGet]
-        public ActionResult NovoBanner()
+        [HttpGet, OnlyAuthorizedUser]
+        public async Task<ActionResult> NovoBanner()
         {
+            var categorias = await this.serviceEnquete.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> NovoBanner(BannerViewModel model, HttpPostedFileBase file)
         {
+            var categorias = await this.serviceEnquete.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
+                model.EmpresaId = (int)UsuarioLogado.UsuarioAutenticado().EmpresaId;
+
             model.fileName = file.FileName;
-            if (await this.service.InserirBanner(AutoMapper.Mapper.Map<Banner>(model)))
+            var ban = await this.service.InserirRetornarBanner(AutoMapper.Mapper.Map<Banner>(model));
+            if (ban != null)
             {
+                foreach (var item in model.Empresas)
+                {
+                    await this.empBanner.InserirCB(new EmpresaBanner { EmpresaId = item, BannerId = ban.Id });
+                }
+
+                foreach (var item in model.Categorias)
+                {
+                    await this.catBanner.InserirCB(new CategoriaBanner { CategoriaId = item, BannerId = ban.Id });
+                }
+
                 if (file.ContentLength > 0)
                     if (Util.SalvarImagem(file))
                         return RedirectToAction("ListarBanners");
@@ -47,12 +78,67 @@ namespace PollPlus.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> ListarBanners(int? pagina)
         {
             var lista = await this.service.RetornarTodosBanners();
 
             return View(lista.ToPagedList(pagina ?? 1, 10));
+        }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> DesativarBanner(int bannerId)
+        {
+            var banner = await this.service.RetornarBannerPorId(bannerId);
+            banner.Status = Domain.Enumeradores.EnumStatusUsuario.Inativo;
+
+            return RedirectToAction("ListarBanners");
+        }
+
+        [NonAction]
+        private static IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
+        {
+            foreach (var empresa in empresas)
+            {
+                if (empresaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = empresa.Nome,
+                        Value = empresa.Id.ToString(),
+                        Selected = empresa.Id == empresaSelecionada
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = empresa.Nome,
+                    Value = empresa.Id.ToString()
+                };
+            }
+        }
+
+        [NonAction]
+        private static IEnumerable<SelectListItem> PreparaParaListaDeCategorias(ICollection<Categoria> categorias, List<int> categoriaSelecionada = null)
+        {
+            foreach (var categoria in categorias)
+            {
+                if (categoriaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString(),
+                        Selected = categoriaSelecionada.Contains((int)categoria.Id)
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = categoria.Nome,
+                    Value = categoria.Id.ToString()
+                };
+            }
         }
     }
 }

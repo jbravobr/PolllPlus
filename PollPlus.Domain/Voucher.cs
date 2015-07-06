@@ -15,5 +15,11 @@ namespace PollPlus.Domain
         public DateTime DataValidade { get; set; }
         public bool Usado { get; set; }
         public string Descricao { get; set; }
+
+
+        public int? UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
+
+        public virtual ICollection<EnqueteVoucher> EnqueteVoucher { get; set; }
     }
 }

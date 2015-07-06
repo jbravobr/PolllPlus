@@ -33,7 +33,8 @@ namespace PollPlus.Service
         /// <returns>Verdadeiro ou falso para a inserção</returns>
         public async Task<bool> InserirUsuario(Usuario e)
         {
-            e.Senha = Util.EncriptarSenha(e.Senha);
+            if (!String.IsNullOrEmpty(e.Senha))
+                e.Senha = Util.EncriptarSenha(e.Senha);
 
             return await this._repositorio.InserirUsuario(e);
         }

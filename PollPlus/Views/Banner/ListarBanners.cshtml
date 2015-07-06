@@ -29,6 +29,9 @@
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                         <strong>Data do Cadastro</strong>
                                     </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Data do Expiração</strong>
+                                    </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
                                     </th>
                                 </tr>
@@ -40,6 +43,7 @@
                                     <tr class="gradeA odd">
                                         <td class=" ">@_banner.Url</td>
                                         <td class=" ">@_banner.DataCriacao.ToShortDateString()</td>
+                                        <td class=" ">@_banner.DataValidade.ToShortDateString()</td>
                                         <td class="center ">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default btn-xs">Ações</button>

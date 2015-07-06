@@ -90,7 +90,7 @@ namespace PollPlus.Controllers
                 return View(model);
 
             if (await this._service.AtualizarVoucher(AutoMapper.Mapper.Map<Voucher>(model)))
-                return View("ListarVouchers");
+                return RedirectToAction("ListarVouchers");
 
             return View(model);
         }
@@ -99,8 +99,36 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> ListarVouchers(int? pagina)
         {
             var lista = await this._service.RetornarTodosVouchers();
+            var listaEnquete = new List<Enquete>();
+
+            foreach (var item in lista)
+            {
+                foreach (var e in item.EnqueteVoucher)
+                {
+                    listaEnquete.Add(await this.serviceEnquete.RetornarEnquetePorId(e.EnqueteId));
+                }
+            }
+
+            foreach (var item in lista.SelectMany(x => x.EnqueteVoucher))
+            {
+                item.Enquete = listaEnquete.First(x => x.Id == item.EnqueteId);
+            }
+
+            if (listaEnquete.Any())
+                ViewBag.Enquetes = listaEnquete;
 
             return View(lista.ToPagedList(pagina ?? 1, 10));
+        }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> MarcarComoUtilizado(int voucherId)
+        {
+            var voucher = await this._service.RetornarVoucherPorId(voucherId);
+            voucher.Usado = true;
+
+            await this._service.AtualizarVoucher(voucher);
+
+            return RedirectToAction("ListarVouchres");
         }
 
         [NonAction]

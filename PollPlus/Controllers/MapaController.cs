@@ -1,8 +1,13 @@
-﻿using PollPlus.Filter;
+﻿using Geocoding;
+using Geocoding.Google;
+using PollPlus.Domain;
+using PollPlus.Filter;
 using PollPlus.Models;
+using PollPlus.Repositorio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,53 +16,45 @@ namespace PollPlus.Controllers
     [OnlyAuthorizedUser]
     public class MapaController : BaseController
     {
+        private GeolocalizacaoRepositorio geoRepo = new GeolocalizacaoRepositorio();
+
         // GET: Mapa
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(MontaIndicadoresNoMapa());
+            var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
+            return View(MontaIndicadoresNoMapa(localizacoes));
         }
 
-        private IEnumerable<MapViewModel> MontaIndicadoresNoMapa()
+        [NonAction]
+        private string RetornaEndereco(double latitude, double longitude)
         {
-            var listaEndereco = new List<MapViewModel>();
+            IGeocoder geocoder = new GoogleGeocoder();
 
-            listaEndereco.Add(new MapViewModel
+            try
             {
-                Endereco = "Rua Maia de Lacerda, 186",
-                Latitude = -22.9159494,
-                Longitude = -43.2056834,
-                Icon = "IconMarkerMais.png",
-                Nome = "Rodrigo"
-            });
-
-            listaEndereco.Add(new MapViewModel
+                return geocoder.ReverseGeocode(latitude, longitude).First().FormattedAddress;
+            }
+            catch (Exception ex)
             {
-                Endereco = "Praça 22 de Abril, 36",
-                Latitude = -22.9101457,
-                Longitude = -43.1685112,
-                Icon = "IconMarkerMais.png",
-                Nome = "Rodrigo"
-            });
+                throw ex;
+            }
+        }
 
-            listaEndereco.Add(new MapViewModel
+        [NonAction]
+        private IEnumerable<MapViewModel> MontaIndicadoresNoMapa(ICollection<Geolocalizacao> posicoes)
+        {
+            foreach (var posicao in posicoes)
             {
-                Endereco = "Praça 22 de Abril, 36",
-                Latitude = -22.9101457,
-                Longitude = -43.1685112,
-                Icon = "IconMarkerMais.png",
-                Nome = "Nathalia"
-            });
-
-            listaEndereco.Add(new MapViewModel
-            {
-                Endereco = "Avenida das Américas, 500",
-                Latitude = -23.0035499,
-                Longitude = -43.3175759,
-                Icon = "IconMarkerOutrasEmpresas.png",
-                Nome = "Alexandre"
-            });
-
-            return listaEndereco.AsEnumerable();
+                yield return new MapViewModel
+                {
+                    Latitude = posicao.Latitude,
+                    Longitude = posicao.Longitude,
+                    Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
+                    Nome = posicao.Usuario.Nome,
+                    Icon = posicao.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
+                    "IconMarkerOutrasEmpresas.png" : "IcoMarkerMais.png"
+                };
+            }
         }
     }
 }

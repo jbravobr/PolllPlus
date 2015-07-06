@@ -1,0 +1,69 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Categoria>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Listar Categorias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="">
+
+            @Html.ActionLink("Nova Categoria", "NovaCategoria", "Categoria", null, new { @class = "btn btn-info" })
+
+            <br />
+            <div class="header">
+                <h3>Listagem das Categorias Cadastradas</h3>
+            </div>
+
+            <div class="content">
+                <div class="table-responsive">
+                    <div role="grid" class="dataTables_wrapper form-inline" id="datatable_wrapper">
+                        <table id="datatable" class="table table-bordered dataTable" aria-describedby="datatable_info">
+                            <thead>
+                                <tr role="row">
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Nome</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+                                @foreach (var _categoria in Model)
+                                {
+                                    <tr class="gradeA odd">
+                                        <td class=" ">@_categoria.Nome</td>
+                                        @*<td class="center ">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a href="@Url.Action("DesativarBanner", "Banner", new { bannerId = _banner.Id })">Desativar</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @Html.PagedListPager(Model, page => Url.Action("ListarCategorias", "Categoria", new { pagina = page }),
+            new PagedListRenderOptions
+            {
+                DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                Display = PagedListDisplayMode.IfNeeded,
+                LinkToNextPageFormat = "Próximo",
+                LinkToPreviousPageFormat = "Anterior"
+            })
+        </div>
+    </div>
+</div>

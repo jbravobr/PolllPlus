@@ -66,6 +66,10 @@
       <HintPath>..\packages\ExcelAbstraction.NPOI.0.0.5\lib\ExcelAbstraction.NPOI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Geocoding, Version=3.3.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocoding.net.3.3.0\lib\net40\Geocoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GridMvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
       <Private>True</Private>
@@ -274,6 +278,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EnqueteController.cs" />
     <Compile Include="Controllers\ErroController.cs" />
@@ -3645,6 +3650,12 @@
     <Content Include="Views\Enquete\_MultiSelectCategorias.cshtml" />
     <Content Include="Views\Voucher\_DropDownlistForEnquete.cshtml" />
     <Content Include="Views\Account\ImportarEmail.cshtml" />
+    <Content Include="Views\Account\_DropDownlistForPerfil.cshtml" />
+    <Content Include="Views\Banner\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Categoria\ListarCategorias.cshtml" />
+    <Content Include="Views\Categoria\NovaCategoria.cshtml" />
+    <Content Include="Views\Menu\_MenuCategoria.cshtml" />
+    <Content Include="Views\Banner\_MultiSelectCategorias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

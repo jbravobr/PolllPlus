@@ -23,6 +23,11 @@ namespace PollPlus.Repositorio
             return await base.Salvar();
         }
 
+        public async Task<Banner> InserirRetornarBanner(Banner e)
+        {
+            return await base.InsertAndReturnEntity(e);
+        }
+
         /// <summary>
         /// Método para Deletar uma Banner
         /// </summary>
@@ -57,7 +62,7 @@ namespace PollPlus.Repositorio
 
         public async Task<ICollection<Banner>> RetornarBannerPorEmpresaId(int empresaId)
         {
-            Expression<Func<Banner, bool>> porEmpresaId = (x) => x.EmpresaId == empresaId;
+            Expression<Func<Banner, bool>> porEmpresaId = (x) => x.EmpresaBanner.Any(e=>e.EmpresaId == empresaId);
             return (await base.RetornarTodos());
         }
     }

@@ -24,6 +24,9 @@ namespace PollPlus.Migration.Context
         DbSet<Resposta> Resposta { get; set; }
         DbSet<PerguntaResposta> PerguntaResposta { get; set; }
         DbSet<Banner> Banner { get; set; }
+        DbSet<BlackList> BlackList { get; set; }
+        DbSet<CategoriaBanner> CategoriaBanner { get; set; }
+        DbSet<EmpresaBanner> EmpresaBanner { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

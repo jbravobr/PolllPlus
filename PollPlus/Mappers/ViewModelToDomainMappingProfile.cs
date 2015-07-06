@@ -53,7 +53,6 @@ namespace PollPlus.Mappers
                 .BeforeMap((vm, d) =>
                 {
                     d.FileName = vm.file.FileName;
-                    d.EmpresaId = UsuarioLogado.UsuarioAutenticado().EmpresaId;
                 });
         }
     }

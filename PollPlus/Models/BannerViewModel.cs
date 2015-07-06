@@ -21,5 +21,9 @@ namespace PollPlus.Models
 
         [Required(ErrorMessage ="Campo obbrigatório.")]
         public DateTime DataValidade { get; set; }
+
+        public List<int> Empresas { get; set; }
+
+        public List<int> Categorias { get; set; }
     }
 }

@@ -20,9 +20,9 @@ namespace PollPlus.Migration.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data. E.g.
             //
-            context.Set<Categoria>().Add(new Categoria { Nome = "Esportes" });
-            context.Set<Categoria>().Add(new Categoria { Nome = "Política" });
-            context.Set<Categoria>().Add(new Categoria { Nome = "Ciência" });
+            //context.Set<Categoria>().Add(new Categoria { Nome = "Esportes" });
+            //context.Set<Categoria>().Add(new Categoria { Nome = "Política" });
+            //context.Set<Categoria>().Add(new Categoria { Nome = "Ciência" });
         }
     }
 }

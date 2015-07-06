@@ -46,8 +46,10 @@
     <Compile Include="Banner.cs" />
     <Compile Include="BlackList.cs" />
     <Compile Include="Categoria.cs" />
+    <Compile Include="CategoriaBanner.cs" />
     <Compile Include="Documento.cs" />
     <Compile Include="Empresa.cs" />
+    <Compile Include="EmpresaBanner.cs" />
     <Compile Include="Enquete.cs" />
     <Compile Include="EnqueteCategoria.cs" />
     <Compile Include="EnqueteVoucher.cs" />
