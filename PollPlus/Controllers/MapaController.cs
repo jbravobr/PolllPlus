@@ -18,11 +18,15 @@ namespace PollPlus.Controllers
     {
         private GeolocalizacaoRepositorio geoRepo = new GeolocalizacaoRepositorio();
 
+        private UsuarioRepositorio user = new UsuarioRepositorio();
+
         // GET: Mapa
         public async Task<ActionResult> Index()
         {
             var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
-            return View(MontaIndicadoresNoMapa(localizacoes));
+            var dados =  MontaIndicadoresNoMapa(localizacoes);
+
+            return View(dados);
         }
 
         [NonAction]
@@ -41,9 +45,11 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private IEnumerable<MapViewModel> MontaIndicadoresNoMapa(ICollection<Geolocalizacao> posicoes)
+        private IEnumerable<MapViewModel>MontaIndicadoresNoMapa(ICollection<Geolocalizacao> posicoes)
         {
-            foreach (var posicao in posicoes)
+            var lista = new List<MapViewModel>();
+
+            foreach (var posicao in posicoes.Take(10))
             {
                 yield return new MapViewModel
                 {
@@ -52,9 +58,14 @@ namespace PollPlus.Controllers
                     Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
                     Nome = posicao.Usuario.Nome,
                     Icon = posicao.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
-                    "IconMarkerOutrasEmpresas.png" : "IcoMarkerMais.png"
+                    "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"
                 };
             }
+        }
+
+        private async Task<Usuario> RetornaDadosDoUsuario(int usuarioId)
+        {
+            return await this.user.RetornarUsuarioPorId(usuarioId);
         }
     }
 }

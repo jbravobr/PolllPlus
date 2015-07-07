@@ -12,6 +12,6 @@ namespace PollPlus.Domain
         public double Longitude { get; set; }
 
         public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

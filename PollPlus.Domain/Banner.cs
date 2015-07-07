@@ -1,4 +1,5 @@
-﻿using PollPlus.Domain.Enumeradores;
+﻿using Newtonsoft.Json;
+using PollPlus.Domain.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace PollPlus.Domain
 
         public EnumStatusUsuario Status { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<CategoriaBanner> CategoriaBanner { get; set; }
+        [JsonIgnore]
         public virtual ICollection<EmpresaBanner> EmpresaBanner { get; set; }
     }
 }

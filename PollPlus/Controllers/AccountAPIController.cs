@@ -217,61 +217,68 @@ namespace PollPlus.Controllers
 
         [HttpPost]
         [Route("respondeenquete")]
-        public async Task<IHttpActionResult> RespondeEnquete([FromBody]string responde)
+        public async Task<IHttpActionResult> RespondeEnquete([FromBody]string perguntaresposta)
         {
-            if (String.IsNullOrEmpty(responde))
-                return BadRequest("Objeto vazio");
-
-            var respondeJson = JsonConvert.DeserializeObject<PerguntaResposta>(responde);
-            var respondeu = await Task.Factory.StartNew(() => this.perguntaRespostaRepo.InserirPerguntaResposta(respondeJson));
-
-            var pr = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorPergunta(respondeJson.PerguntaId);
-            var totalRespostas = pr.Count;
-
-            var calculos = pr
-             .GroupBy(n => n.Resposta)
-             .Select(n => new
-             {
-                 Resposta = n.Key,
-                 Quantidade = n.Count(),
-                 Percentual = n.Count() * 100 / totalRespostas
-             }
-             )
-             .ToList();
-
-            foreach (var c in calculos)
+            try
             {
-                var pergResp = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorResposta(c.Resposta.Id);
+                if (String.IsNullOrEmpty(perguntaresposta))
+                    return BadRequest("Objeto vazio");
 
-                foreach (var p in pergResp)
+                var respondeJson = JsonConvert.DeserializeObject<PerguntaResposta>(perguntaresposta);
+                var respondeu = await this.perguntaRespostaRepo.InserirPerguntaResposta(respondeJson);
+
+                var pr = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorPergunta(respondeJson.PerguntaId);
+                var totalRespostas = pr.Count;
+
+                var calculos = pr
+                 .GroupBy(n => n.RespostaId)
+                 .Select(n => new
+                 {
+                     Resposta = n.Key,
+                     Quantidade = n.Count(),
+                     Percentual = n.Count() * 100 / totalRespostas
+                 }
+                 )
+                 .ToList();
+
+                foreach (var c in calculos)
                 {
-                    p.percentual = Convert.ToDouble(c.Percentual);
-                    await this.perguntaRespostaRepo.AtualizarPerguntaResposta(p);
-                }
-            }
+                    var pergResp = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorResposta(c.Resposta);
 
-            var enquete = (await this.enqueteRepo.RetornarTodasEnquetes()).First(e => e.PerguntaId == respondeJson.PerguntaId);
-
-            if (enquete.TemVoucher)
-            {
-                var vouchers = await this.enqueteVoucherRepo.RetornarEnqueteVoucherPorEnquete(enquete.Id);
-
-                foreach (var item in vouchers)
-                {
-                    if (item.Voucher.Status == EnumStatusVoucher.Disponivel && !item.Voucher.Usado)
+                    foreach (var p in pergResp)
                     {
-                        if (EnviarEmailConfirmacaoVoucher(respondeJson.Usuario, item.Voucher.Identificador, item.Voucher.DataValidade))
-                        {
-                            item.Voucher.Status = EnumStatusVoucher.Indisponivel;
-                            this.voucherRepo.Atualizar(item.Voucher);
-                            break;
-                        }
+                        p.percentual = Convert.ToDouble(c.Percentual);
+                        await this.perguntaRespostaRepo.AtualizarPerguntaResposta(p);
                     }
-
                 }
-            }
 
-            return Ok(respondeu);
+                var enquete = (await this.enqueteRepo.RetornarTodasEnquetes()).First(e => e.PerguntaId == respondeJson.PerguntaId);
+
+                if (enquete.TemVoucher)
+                {
+                    var vouchers = await this.enqueteVoucherRepo.RetornarEnqueteVoucherPorEnquete(enquete.Id);
+
+                    foreach (var item in vouchers)
+                    {
+                        if (item.Voucher.Status == EnumStatusVoucher.Disponivel && !item.Voucher.Usado)
+                        {
+                            if (EnviarEmailConfirmacaoVoucher(respondeJson.Usuario, item.Voucher.Identificador, item.Voucher.DataValidade))
+                            {
+                                item.Voucher.Status = EnumStatusVoucher.Indisponivel;
+                                this.voucherRepo.Atualizar(item.Voucher);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
+                return Ok(respondeu);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         [NonAction]
@@ -308,7 +315,16 @@ namespace PollPlus.Controllers
         {
             var categorias = await this.catRepo.RetornarTodasCategorias();
 
-            return Ok(JsonConvert.SerializeObject(categorias));
+            try
+            {
+                var cats = JsonConvert.SerializeObject(categorias);
+
+                return Ok(cats);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
         }
 
         [HttpGet]
@@ -346,7 +362,8 @@ namespace PollPlus.Controllers
                         {
                             Id = 0,
                             PerguntaServerId = r.PerguntaId,
-                            TextoResposta = r.TextoResposta
+                            TextoResposta = r.TextoResposta,
+                            RespostaServerId = r.Id
                         }).ToList()
                     },
                     PerguntaServerId = enquete.Pergunta.Id,
@@ -367,6 +384,7 @@ namespace PollPlus.Controllers
         public int Id { get; set; }
         public string TextoResposta { get; set; }
         public int PerguntaServerId { get; set; }
+        public int RespostaServerId { get; set; }
     }
 
     public class EnqueteMobile

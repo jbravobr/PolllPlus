@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace PollPlus.Domain
         public virtual Plataforma Plataforma { get; set; }
 
         public virtual ICollection<Mensagem> Mensagem { get; set; }
+        [JsonIgnore]
         public virtual ICollection<EmpresaBanner> EmpresaBanner { get; set; }
     }
 }
