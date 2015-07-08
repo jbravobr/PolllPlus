@@ -9,6 +9,7 @@ namespace PollPlus.Domain.Enumeradores
     public enum EnumTipoEnquete
     {
         Publica =1, 
-        Interesse = 2
+        Interesse = 2,
+        Mensagem
     }
 }

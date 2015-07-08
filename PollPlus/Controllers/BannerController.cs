@@ -95,6 +95,15 @@ namespace PollPlus.Controllers
             return RedirectToAction("ListarBanners");
         }
 
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> AtivarBanner(int bannerId)
+        {
+            var banner = await this.service.RetornarBannerPorId(bannerId);
+            banner.Status = Domain.Enumeradores.EnumStatusUsuario.Ativo;
+
+            return RedirectToAction("ListarBanners");
+        }
+
         [NonAction]
         private static IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
         {

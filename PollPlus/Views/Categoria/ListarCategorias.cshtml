@@ -17,6 +17,11 @@
                 <h3>Listagem das Categorias Cadastradas</h3>
             </div>
 
+            @if (ViewBag.Mensagem != null)
+            {
+                <span style="font-weight:bold;color:red">@(Convert.ToString(ViewBag.Mensagem))</span>
+            }
+
             <div class="content">
                 <div class="table-responsive">
                     <div role="grid" class="dataTables_wrapper form-inline" id="datatable_wrapper">
@@ -34,18 +39,18 @@
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_categoria.Nome</td>
-                                        @*<td class="center ">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-default btn-xs">Ações</button>
-                                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="@Url.Action("DesativarBanner", "Banner", new { bannerId = _banner.Id })">Desativar</a></li>
-                                                    </ul>
-                                                </div>
-                                            </td>*@
+                                        <td class="center ">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("RemoverCategoria", "Categoria", new { categoriaId = _categoria.Id })">Remover</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
 

@@ -61,12 +61,12 @@
                             @if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
                             {
                                 @*<Empresas>*@
-                                { Html.RenderAction("MontaMenuEmpresas", "Menu"); }
-                                @*</Empresas>*@
+                            { Html.RenderAction("MontaMenuEmpresas", "Menu"); }
+                            @*</Empresas>*@
 
                                 @*<Categoria>*@
-                                { Html.RenderAction("MontaMenuCategoria", "Menu"); }
-                                @*</Categoria>*@
+                            { Html.RenderAction("MontaMenuCategoria", "Menu"); }
+                            @*</Categoria>*@
                             }
 
                             @*<Mapa>*@
@@ -77,9 +77,8 @@
                             @{Html.RenderAction("MontaMenuEnquetes", "Menu"); }
                             @*</Enquetes>*@
 
-                            @*Comentado enquanto não decide-se qual o modelo de msg -- 05/07/2015*@
                             @*<Mensagens>*@
-                            @*@{Html.RenderAction("MontaMenuMensagens", "Menu");}*@
+                            @{Html.RenderAction("MontaMenuMensagens", "Menu");}
                             @*</Mensagens>*@
 
                             @*<Vouchers>*@
@@ -89,8 +88,8 @@
                             @if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
                             {
                                 @*<Banners>*@
-                                { Html.RenderAction("MontaMenuBanners", "Menu"); }
-                                @*</Banners>*@
+                            { Html.RenderAction("MontaMenuBanners", "Menu"); }
+                            @*</Banners>*@
                             }
 
                             @*<Relatórios>*@
@@ -190,6 +189,13 @@
 
                 $("#example2").multiselect();
                 $("#example3").multiselect();
+                $("#jqxColorPicker").jqxColorPicker({ width: 350, height: 350 });
+
+                $("#jqxColorPicker").bind('colorchange', function (event) {
+
+                    var color = $("#jqxColorPicker").jqxColorPicker('getColor').hex;
+                    $('#Css').val(color);
+                });
 
             });
 
@@ -212,6 +218,12 @@
         <script src="@Url.Content("~/Scripts/Theme/jquery.datatables/bootstrap-adapter/js/datatables.js")"></script>
         <script src="@Url.Content("~/Scripts/Theme/jquery.niftymodals/js/jquery.modalEffects.js")"></script>
         <script src="@Url.Content("~/Scripts/Theme/bootstrap.datetimepicker/js/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+
+
+        <!-- jqwidgets -->
+        <link href="~/Content/jqx.base.css" rel="stylesheet" />
+        <script src="~/Scripts/jqxcore.js"></script>
+        <script src="~/Scripts/jqxcolorpicker.js"></script>
 
         @RenderSection("Scripts", false)
 

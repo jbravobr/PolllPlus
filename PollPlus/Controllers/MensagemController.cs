@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace PollPlus.Controllers
 {
     [OnlyAuthorizedUser]
-    public class EnqueteController : BaseController
+    public class MensagemController : BaseController
     {
         readonly IEnqueteServiceWEB service;
 
@@ -26,7 +26,7 @@ namespace PollPlus.Controllers
 
         readonly IBlackListServiceWEB serviceBlackList;
 
-        public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
+        public MensagemController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
             IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList, IUsuarioServiceWEB _serviceUsuario)
         {
             this.service = _service;
@@ -36,64 +36,19 @@ namespace PollPlus.Controllers
             this.serviceUsuario = _serviceUsuario;
         }
 
-        public EnqueteController() { }
+        public MensagemController() { }
 
         [OnlyAuthorizedUser, HttpGet]
-        public async Task<ActionResult> NovaEnquete()
+        public async Task<ActionResult> NovaMensagem()
         {
             var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
             ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
 
             return View();
         }
-
-        [HttpPost, OnlyAuthorizedUser]
-        public async Task<ActionResult> SalvaRespostas(PerguntaViewModel Pergunta, List<string> resposta)
-        {
-            if (!ModelState.IsValid || !resposta.Any())
-                return View(Pergunta);
-
-            var respostas = MapeiaListaDeRespostas(resposta, Pergunta.Id);
-
-            foreach (var r in respostas)
-            {
-                await this.serviceResposta.InserirResposta(r);
-            }
-
-            return RedirectToAction("ListarEnquetes");
-        }
-
-        [HttpGet, OnlyAuthorizedUser]
-        public ActionResult ImportarBlackList()
-        {
-            return View();
-        }
-
-        [HttpPost, OnlyAuthorizedUser]
-        public async Task<ActionResult> ImportarBlackList(HttpPostedFileBase file)
-        {
-            if (file.ContentLength <= 0)
-                return View(0);
-
-            try
-            {
-                var blacklist = (ICollection<BlackList>)Util.ImportarCSV(EnumTipoImportacao.Blacklist, file);
-
-                foreach (var item in blacklist)
-                {
-                    await this.serviceBlackList.InserirBlackList(item);
-                }
-
-                return View(1);
-            }
-            catch (Exception ex)
-            {
-                return View(0);
-            }
-        }
-
+      
         [OnlyAuthorizedUser, HttpPost]
-        public async Task<ActionResult> NovaEnquete(EnqueteViewModel model, HttpPostedFileBase file, List<string> resposta)
+        public async Task<ActionResult> NovaMensagem(EnqueteViewModel model, HttpPostedFileBase file, List<string> resposta)
         {
             var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
             ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
@@ -116,51 +71,34 @@ namespace PollPlus.Controllers
                     await service.InserirEnqueteCategoria(uc);
                 }
 
-                var respostas = MapeiaListaDeRespostas(resposta, enquete.Pergunta.Id);
-
-                foreach (var r in respostas)
-                {
-                    await this.serviceResposta.InserirResposta(r);
-                }
-
-                return RedirectToAction("ListarEnquetes");
+               return RedirectToAction("ListarMensagens");
             }
 
             return View();
         }
 
         [OnlyAuthorizedUser, HttpGet]
-        public async Task<ActionResult> EditarEnquete(int enqueteId)
+        public async Task<ActionResult> EditarMensagem(int enqueteId)
         {
             var enquete = await this.service.RetornarEnquetePorId(enqueteId);
-
-            var respostas = enquete.Pergunta.Resposta;
-
-            if (respostas != null && respostas.Any())
-                ViewData.Add("Respostas", AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas));
 
             return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
         }
 
         [OnlyAuthorizedUser, HttpPost]
-        public async Task<ActionResult> EditarEnquete(EnqueteViewModel model, HttpPostedFileBase file)
+        public async Task<ActionResult> EditarMensagem(EnqueteViewModel model, HttpPostedFileBase file)
         {
-            var respostas = model.Pergunta.Resposta;
-
-            if (respostas != null && respostas.Any())
-                ViewData.Add("Respostas", AutoMapper.Mapper.Map<RespostaViewModel>(respostas));
-
             if (!ModelState.IsValid)
                 return View(model);
 
             if (await this.service.AtualizarEnquete(AutoMapper.Mapper.Map<Enquete>(model)))
-                return RedirectToAction("ListarEmpresas");
+                return RedirectToAction("ListarMensagens");
 
             return View(model);
         }
 
         [OnlyAuthorizedUser, HttpGet]
-        public async Task<ActionResult> ListarEnquetes(int? pagina)
+        public async Task<ActionResult> ListarMensagens(int? pagina)
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 
@@ -174,7 +112,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarMensagens");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -184,7 +122,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Despublicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarMensagens");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -194,7 +132,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarMensagens");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -204,15 +142,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Inativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
-        }
-
-        private static IEnumerable<Resposta> MapeiaListaDeRespostas(List<string> respostas, int perguntaId)
-        {
-            foreach (var resposta in respostas)
-            {
-                yield return new Resposta { TextoResposta = resposta, PerguntaId = perguntaId };
-            }
+            return Redirect("ListarMensagens");
         }
 
         [NonAction]

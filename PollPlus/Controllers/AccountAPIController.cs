@@ -252,6 +252,8 @@ namespace PollPlus.Controllers
                     }
                 }
 
+                var perguntasRespostas = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorPergunta(respondeJson.PerguntaId);
+
                 var enquete = (await this.enqueteRepo.RetornarTodasEnquetes()).First(e => e.PerguntaId == respondeJson.PerguntaId);
 
                 if (enquete.TemVoucher)
@@ -273,7 +275,7 @@ namespace PollPlus.Controllers
                     }
                 }
 
-                return Ok(respondeu);
+                return Ok(perguntasRespostas);
             }
             catch (Exception ex)
             {
