@@ -36,6 +36,11 @@ namespace PollPlus.Service
             return await this.service.InserirBanner(e);
         }
 
+        public async Task<bool> AtualizarBanner(Banner r)
+        {
+            return await this.service.AtualizarBanner(r);
+        }
+
         public async Task<ICollection<Banner>> RetornarBannerPorEmpresaId(int empresaId)
         {
             var _banner = new List<Banner>();

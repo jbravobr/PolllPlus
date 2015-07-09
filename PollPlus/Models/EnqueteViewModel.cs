@@ -24,7 +24,7 @@ namespace PollPlus.Models
         public EnumStatusEnquete Status { get; set; }
         public string Titulo { get; set; }
 
-        [Required(ErrorMessage = "Campo obrigatório.")]
+        //[Required(ErrorMessage = "Campo obrigatório.")]
         public PerguntaViewModel Pergunta { get; set; }
 
         public ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }

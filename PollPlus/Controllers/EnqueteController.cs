@@ -139,6 +139,9 @@ namespace PollPlus.Controllers
             if (respostas != null && respostas.Any())
                 ViewData.Add("Respostas", AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas));
 
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
             return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
         }
 

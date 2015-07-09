@@ -88,16 +88,22 @@
 
 </div>
 
-
 @section Scripts{
     <script>
-
         $(function () {
 
             @{ var guid = Guid.NewGuid().ToString();}
 
             var _guid = "@guid";
             $('.app').val(_guid);
+        });
+
+        $("#jqxColorPicker").jqxColorPicker({ width: 350, height: 350 });
+
+        $("#jqxColorPicker").bind('colorchange', function (event) {
+
+            var color = $("#jqxColorPicker").jqxColorPicker('getColor').hex;
+            $('#Css').val(color);
         });
 
     </script>

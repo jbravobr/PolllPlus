@@ -28,6 +28,12 @@ namespace PollPlus.Repositorio
             return await base.InsertAndReturnEntity(e);
         }
 
+        public async Task<bool> AtualizarBanner(Banner e)
+        {
+            base.Atualizar(e);
+            return await base.Salvar();
+        }
+
         /// <summary>
         /// Método para Deletar uma Banner
         /// </summary>

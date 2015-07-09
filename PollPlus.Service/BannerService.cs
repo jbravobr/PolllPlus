@@ -26,6 +26,11 @@ namespace PollPlus.Service
             this._repositorio = repositorio;
         }
 
+        public async Task<bool> AtualizarBanner(Banner e)
+        {
+            return await this._repositorio.AtualizarBanner(e);
+        }
+
         /// <summary>
         /// Realiza a chamada ao repositório para inserção da Banner
         /// </summary>

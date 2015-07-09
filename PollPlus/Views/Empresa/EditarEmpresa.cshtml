@@ -86,3 +86,17 @@
     }
 
 </div>
+
+@section Scripts{
+    <script>
+       
+        $("#jqxColorPicker").jqxColorPicker({ width: 350, height: 350 });
+
+        $("#jqxColorPicker").bind('colorchange', function (event) {
+
+            var color = $("#jqxColorPicker").jqxColorPicker('getColor').hex;
+            $('#Css').val(color);
+        });
+
+    </script>
+}

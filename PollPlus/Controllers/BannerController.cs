@@ -92,6 +92,8 @@ namespace PollPlus.Controllers
             var banner = await this.service.RetornarBannerPorId(bannerId);
             banner.Status = Domain.Enumeradores.EnumStatusUsuario.Inativo;
 
+            await this.service.AtualizarBanner(banner);
+
             return RedirectToAction("ListarBanners");
         }
 
@@ -100,6 +102,8 @@ namespace PollPlus.Controllers
         {
             var banner = await this.service.RetornarBannerPorId(bannerId);
             banner.Status = Domain.Enumeradores.EnumStatusUsuario.Ativo;
+
+            await this.service.AtualizarBanner(banner);
 
             return RedirectToAction("ListarBanners");
         }

@@ -49,7 +49,7 @@ namespace PollPlus.Controllers
         {
             var lista = new List<MapViewModel>();
 
-            foreach (var posicao in posicoes.Take(10))
+            foreach (var posicao in posicoes.Distinct())
             {
                 yield return new MapViewModel
                 {

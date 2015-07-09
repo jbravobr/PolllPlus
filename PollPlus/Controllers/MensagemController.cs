@@ -46,7 +46,7 @@ namespace PollPlus.Controllers
 
             return View();
         }
-      
+
         [OnlyAuthorizedUser, HttpPost]
         public async Task<ActionResult> NovaMensagem(EnqueteViewModel model, HttpPostedFileBase file, List<string> resposta)
         {
@@ -71,7 +71,7 @@ namespace PollPlus.Controllers
                     await service.InserirEnqueteCategoria(uc);
                 }
 
-               return RedirectToAction("ListarMensagens");
+                return RedirectToAction("ListarMensagens");
             }
 
             return View();
@@ -82,7 +82,12 @@ namespace PollPlus.Controllers
         {
             var enquete = await this.service.RetornarEnquetePorId(enqueteId);
 
-            return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
+            var mapper = AutoMapper.Mapper.Map<EnqueteViewModel>(enquete);
+
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, mapper.CategoriasInteresse));
+
+            return View(mapper);
         }
 
         [OnlyAuthorizedUser, HttpPost]
@@ -102,7 +107,7 @@ namespace PollPlus.Controllers
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 
-            return View(listaEnquetes.ToPagedList(pagina ?? 1, 10));
+            return View(listaEnquetes.Where(x => x.Tipo == Domain.Enumeradores.EnumTipoEnquete.Mensagem).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]

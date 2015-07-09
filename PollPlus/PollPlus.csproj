@@ -3663,6 +3663,7 @@
     <Content Include="Views\Mensagem\ListarMensagens.cshtml" />
     <Content Include="Views\Mensagem\NovaMensagem.cshtml" />
     <Content Include="Views\Mensagem\EditarMensagem.cshtml" />
+    <Content Include="Views\Mensagem\_MultiSelectCategorias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

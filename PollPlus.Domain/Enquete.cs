@@ -26,7 +26,7 @@ namespace PollPlus.Domain
         public int? EmpresaId { get; set; }
         public virtual Empresa Empresa { get; set; }
 
-        public int PerguntaId { get; set; }
+        public int? PerguntaId { get; set; }
         public virtual Pergunta Pergunta { get; set; }
 
         public virtual ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }

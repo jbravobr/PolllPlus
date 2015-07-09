@@ -11,6 +11,7 @@ namespace PollPlus.Service.Interfaces
     {
         Task<bool> InserirBanner(Banner r);
         Task<bool> DeletarBanner(Banner r);
+        Task<bool> AtualizarBanner(Banner r);
         Task<Banner> RetornarBannerPorId(int id);
         Task<Banner> InserirRetornarBanner(Banner r);
         Task<ICollection<Banner>> RetornarBannerPorEmpresaId(int empresaId);

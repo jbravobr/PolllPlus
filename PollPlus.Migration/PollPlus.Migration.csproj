@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201507060751593_Adiciona_Banner_Empresa.Designer.cs">
       <DependentUpon>201507060751593_Adiciona_Banner_Empresa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507091004504_alteracao_para_noticia.cs" />
+    <Compile Include="Migrations\201507091004504_alteracao_para_noticia.Designer.cs">
+      <DependentUpon>201507091004504_alteracao_para_noticia.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -84,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507060751593_Adiciona_Banner_Empresa.resx">
       <DependentUpon>201507060751593_Adiciona_Banner_Empresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507091004504_alteracao_para_noticia.resx">
+      <DependentUpon>201507091004504_alteracao_para_noticia.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
