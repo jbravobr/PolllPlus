@@ -287,6 +287,7 @@
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\MensagemController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\PushController.cs" />
     <Compile Include="Controllers\VoucherController.cs" />
     <Compile Include="Filters\CustomActionFilter.cs" />
     <Compile Include="Filters\CustomMenuActionFilter.cs" />
@@ -305,7 +306,9 @@
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\EmpresaViewModel.cs" />
     <Compile Include="Models\EnqueteViewModel.cs" />
+    <Compile Include="Models\FilialViewModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Models\NovaMensagemPushViewModel.cs" />
     <Compile Include="Models\PerguntaViewModel.cs" />
     <Compile Include="Models\PlataformaViewModel.cs" />
     <Compile Include="Models\RelEnquetesViewModel.cs" />
@@ -319,6 +322,7 @@
     <Compile Include="Service\BannerService.cs" />
     <Compile Include="Service\EmpresaServiceWEB.cs" />
     <Compile Include="Service\EnqueteServiceWEB.cs" />
+    <Compile Include="Service\EnvioPush.cs" />
     <Compile Include="Service\Interfaces\IBlackListServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IBannerServiceWEB.cs" />
     <Compile Include="Service\Interfaces\IEmpresaServiceWEB.cs" />
@@ -3664,6 +3668,10 @@
     <Content Include="Views\Mensagem\NovaMensagem.cshtml" />
     <Content Include="Views\Mensagem\EditarMensagem.cshtml" />
     <Content Include="Views\Mensagem\_MultiSelectCategorias.cshtml" />
+    <Content Include="Views\Empresa\NovaFilial.cshtml" />
+    <Content Include="Views\Empresa\EditarFilial.cshtml" />
+    <Content Include="Views\Empresa\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Push\NovoPush.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

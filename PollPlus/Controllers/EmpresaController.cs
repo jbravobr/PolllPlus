@@ -72,5 +72,53 @@ namespace PollPlus.Controllers
 
             return View(listarEmpresas.ToPagedList(pagina ?? 1, 10));
         }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> NovaFilial()
+        {
+            var empresas = await this.service.RetornarTodasEmpresas();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
+            return View();
+        }
+
+        [OnlyAuthorizedUser, HttpPost]
+        public async Task<ActionResult> NovaFilial(FilialViewModel model)
+        {
+            var empresas = await this.service.RetornarTodasEmpresas();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
+
+            if (!ModelState.IsValid)
+            {
+                ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
+                return View(model);
+            }
+            else if (await this.service.InserirEmpresa(AutoMapper.Mapper.Map<Empresa>(model)))
+                return RedirectToAction("ListarEmpresas");
+
+            return View(model);
+        }
+
+        [NonAction]
+        private static IEnumerable<SelectListItem> PreparaParaListaDeEmpresas(ICollection<Empresa> empresas, int? empresaSelecionada = null)
+        {
+            foreach (var empresa in empresas)
+            {
+                if (empresaSelecionada != null)
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = empresa.Nome,
+                        Value = empresa.Id.ToString(),
+                        Selected = empresa.Id == empresaSelecionada
+                    };
+                }
+
+                yield return new SelectListItem
+                {
+                    Text = empresa.Nome,
+                    Value = empresa.Id.ToString()
+                };
+            }
+        }
     }
 }

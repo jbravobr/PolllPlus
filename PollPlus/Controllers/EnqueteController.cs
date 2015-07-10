@@ -3,6 +3,7 @@ using PollPlus.Domain;
 using PollPlus.Filter;
 using PollPlus.Helpers;
 using PollPlus.Models;
+using PollPlus.Repositorio;
 using PollPlus.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -101,13 +102,19 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
+            model.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
+            model.Tipo = Domain.Enumeradores.EnumTipoEnquete.Interesse;
             var enquete = await this.service.InserirRetornarEnquete(AutoMapper.Mapper.Map<Enquete>(model));
 
             if (enquete != null)
             {
                 if (file != null && file.ContentLength > 0)
                     Util.SalvarImagem(file);
+
+                var repo = new UsoPushPorEmpresaRepositorio();
+                var dado = (await repo.RetornarTodos()).First(e => e.EmpresaId == enquete.Id);
+                dado.QtdePushDisponiveis = enquete.QtdePush;
+                await repo.InserirUsoPushPorEmpresa(dado);
 
                 enquete.AdicionarCategoria(model.CategoriasInteresse);
 

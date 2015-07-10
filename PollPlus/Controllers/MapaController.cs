@@ -49,22 +49,28 @@ namespace PollPlus.Controllers
             //{
             //    throw ex;
             //}
+            
+            try
+            {
+                var key = "AIzaSyAJXiJ8FatzUwzUKOfgv3Eh9qMTlPewBu0";
+                string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}";
+                url = string.Format(url, latitude.ToString().Replace(',', '.'), longitude.ToString().Replace(',', '.'), key);
+                HttpClient client = new HttpClient();
 
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var key = "AIzaSyAJXiJ8FatzUwzUKOfgv3Eh9qMTlPewBu0";
-            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}";
-            url = string.Format(url, latitude.ToString().Replace(',', '.'), longitude.ToString().Replace(',', '.'), key);
-            HttpClient client = new HttpClient();
+                var result = client.GetStringAsync(new Uri(url)).Result;
+                var endereco = JsonConvert.DeserializeObject<RootObject>(result);
 
-            //client.BaseAddress = new Uri(url);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.Timeout = TimeSpan.FromMinutes(3);
-
-            var result = client.GetStringAsync(new Uri(url)).Result;
-            var endereco = JsonConvert.DeserializeObject<RootObject>(result);
-
-            return endereco.results.First().formatted_address;
+                return endereco != null && endereco.results != null && endereco.results.Any() ?
+                    endereco.results.First().formatted_address :
+                    "Endereço não resolvido pelo Google";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [NonAction]
@@ -78,7 +84,7 @@ namespace PollPlus.Controllers
                 {
                     Latitude = posicao.Latitude,
                     Longitude = posicao.Longitude,
-                    Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
+                    //Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
                     Nome = posicao.Usuario.Nome,
                     Icon = posicao.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
                     "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"

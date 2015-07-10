@@ -65,6 +65,22 @@
     <Compile Include="Migrations\201507091004504_alteracao_para_noticia.Designer.cs">
       <DependentUpon>201507091004504_alteracao_para_noticia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507091528295_Cria_Filial.cs" />
+    <Compile Include="Migrations\201507091528295_Cria_Filial.Designer.cs">
+      <DependentUpon>201507091528295_Cria_Filial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507091801242_cria_Amigos_Add_Facebook.cs" />
+    <Compile Include="Migrations\201507091801242_cria_Amigos_Add_Facebook.Designer.cs">
+      <DependentUpon>201507091801242_cria_Amigos_Add_Facebook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507101347513_novoscampos.cs" />
+    <Compile Include="Migrations\201507101347513_novoscampos.Designer.cs">
+      <DependentUpon>201507101347513_novoscampos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507101356446_novoscampos2.cs" />
+    <Compile Include="Migrations\201507101356446_novoscampos2.Designer.cs">
+      <DependentUpon>201507101356446_novoscampos2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -91,6 +107,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507091004504_alteracao_para_noticia.resx">
       <DependentUpon>201507091004504_alteracao_para_noticia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507091528295_Cria_Filial.resx">
+      <DependentUpon>201507091528295_Cria_Filial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507091801242_cria_Amigos_Add_Facebook.resx">
+      <DependentUpon>201507091801242_cria_Amigos_Add_Facebook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507101347513_novoscampos.resx">
+      <DependentUpon>201507101347513_novoscampos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507101356446_novoscampos2.resx">
+      <DependentUpon>201507101356446_novoscampos2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

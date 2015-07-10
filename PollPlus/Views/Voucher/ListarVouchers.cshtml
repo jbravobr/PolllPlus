@@ -42,9 +42,9 @@
                                         <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                             <strong>Empresa</strong>
                                         </th>
-                                        @*<th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                             <strong>Criado por</strong>
-                                        </th>*@
+                                        </th>
                                         <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 120px;" aria-label="">
                                         </th>
                                     </tr>
@@ -60,8 +60,7 @@
                                             <td class=" ">@_voucher.DataValidade</td>
                                             <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Pergunta.TextoPergunta)</td>
                                             <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Empresa.Nome)</td>
-                                            @*<td class=" ">@(String.Format("{0} / {1}", _voucher.Usuario.Nome, _voucher.Usuario.Email))</td>*@
-                                            @*<td class="center ">
+                                            <td class="center ">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-default btn-xs">Ações</button>
                                                     <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -72,7 +71,7 @@
                                                         <li><a href="javascript: if(confirm('Deseja marcar como utilizado este vocuher?')) {window.location.href='@Url.Action("MarcarComoUtilizado", "Voucher", new { voucherId = _voucher.Id })">Associar</a></li>
                                                     </ul>
                                                 </div>
-                                            </td>*@
+                                            </td>
                                         </tr>
                                     }
 

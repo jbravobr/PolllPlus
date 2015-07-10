@@ -18,6 +18,7 @@ namespace PollPlus.Domain
         public int ClientId { get; set; }
         public string UrlVideo { get; set; }
         public bool TemVoucher { get; set; }
+        public int QtdePush { get; set; }
 
         public int UsuarioId { get; set; }
         [JsonIgnore]

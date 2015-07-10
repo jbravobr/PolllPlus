@@ -24,5 +24,11 @@ namespace PollPlus.Domain
         public virtual ICollection<Mensagem> Mensagem { get; set; }
         [JsonIgnore]
         public virtual ICollection<EmpresaBanner> EmpresaBanner { get; set; }
+
+        public string AppKeyForPush { get; set; }
+        public string AppPassForPush { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Filial> Filial { get; set; }
     }
 }

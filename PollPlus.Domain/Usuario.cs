@@ -19,6 +19,7 @@ namespace PollPlus.Domain
         public string Municipio { get; set; }
         public EnumStatusUsuario Status { get; protected set; }
         public EnumPerfil Perfil { get; protected set; }
+        public string FacebookID { get; set; }
 
         public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
         public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }

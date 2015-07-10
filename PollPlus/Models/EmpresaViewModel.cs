@@ -20,5 +20,8 @@ namespace PollPlus.Models
 
         public PlataformaViewModel Plataforma { get; set; }
         public DocumentoViewModel Documento { get; set; }
+
+        public string AppKeyForPush { get; set; }
+        public string AppPassForPush { get; set; }
     }
 }

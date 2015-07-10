@@ -54,6 +54,15 @@ namespace PollPlus.Mappers
                 {
                     d.FileName = vm.file.FileName;
                 });
+
+            Mapper.CreateMap<FilialViewModel, Filial>()
+                .BeforeMap((vm, d) =>
+                {
+                    if (vm.Empresa != null && vm.Empresa.Any())
+                    {
+
+                    }
+                });
         }
     }
 }
