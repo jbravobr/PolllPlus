@@ -69,7 +69,7 @@ namespace PollPlus.Controllers
                 if (_usuario == null)
                     return Unauthorized();
                 else if (_usuario != null && senha == senhaDecrypt)
-                    return Ok();
+                    return Ok(_usuario);
                 else
                     return Unauthorized();
             }
@@ -91,10 +91,31 @@ namespace PollPlus.Controllers
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
                 usuarioJson.Senha = Util.EncriptarSenha(usuarioJson.Senha);
 
-                var retornoInsertUsuario = await this.service.InserirUsuario(usuarioJson);
+                var retornoInsertUsuario = await this.service.InserirRetornarUsuario(usuarioJson);
 
-                if (retornoInsertUsuario)
+                if (retornoInsertUsuario != null)
                     EnviarEmailConfirmacaoCadastro(usuarioJson);
+
+                return Ok(retornoInsertUsuario);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("atualizarcadastro")]
+        public async Task<IHttpActionResult> AtualizarCadastro([FromBody]string usuario)
+        {
+            if (String.IsNullOrEmpty(usuario))
+                return BadRequest("Usuário inválido");
+
+            try
+            {
+                var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
+
+                var retornoInsertUsuario = await this.service.AtualizarUsuario(usuarioJson);
 
                 return Ok();
             }
