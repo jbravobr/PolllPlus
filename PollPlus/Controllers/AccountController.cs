@@ -45,15 +45,15 @@ namespace PollPlus.Controllers
             if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(senha))
                 return View();
 
-            //if (await this.service.LogarUsuario(usuario, senha))
-            //{
-            var _usuario = await this.service.RetornarUsuarioPorId(1);
-            //Session.Add("UsuarioLogado", _usuario.FirstOrDefault(u => u.Email == usuario));
-            Session.Add("UsuarioLogado", _usuario);
+            if (await this.service.LogarUsuario(usuario, senha))
+            {
+                //var _usuario = await this.service.RetornarUsuarioPorId(1);
+                var _usuario = await this.service.RetornarTodosUsuarios();
+                Session.Add("UsuarioLogado", _usuario.FirstOrDefault(u => u.Email == usuario));
+                //Session.Add("UsuarioLogado", _usuario);
 
-
-            return RedirectToAction("Index", "Home");
-            //}
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
         }

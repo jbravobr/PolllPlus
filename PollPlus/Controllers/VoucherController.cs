@@ -41,7 +41,7 @@ namespace PollPlus.Controllers
             else
             {
                 var enquetes = await this.serviceEnquete.RetornarTodasEnquetes();
-                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes, null));
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x=>x.PerguntaId != null).ToList(), null));
             }
             return View();
         }
@@ -128,7 +128,7 @@ namespace PollPlus.Controllers
 
             await this._service.AtualizarVoucher(voucher);
 
-            return RedirectToAction("ListarVouchres");
+            return RedirectToAction("ListarVouchers");
         }
 
         [NonAction]

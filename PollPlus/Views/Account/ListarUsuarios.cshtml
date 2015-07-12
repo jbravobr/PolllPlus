@@ -57,7 +57,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li><a href="@Url.Action("EditarUsuario", "Account", new { usuarioId = _usuario.Id })">Alterar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja remover este usuário?')) {window.location.href='@Url.Action("RemoverUsuario", "Account", new { usuarioId = _usuario.Id })';}">Remover</a></li>
+                                                    <li><a href="javascript: if(confirm('Deseja remover ste usuário?')) {window.location.href='@Url.Action("RemoverUsuario", "Account", new { usuarioId = _usuario.Id })';}">Remover</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            @Html.PagedListPager(Model, page => Url.Action("ListarUsuarios", "Usuario", new { pagina = page }),
+            @Html.PagedListPager(Model, page => Url.Action("ListarUsuarios", "Account", new { pagina = page }),
             new PagedListRenderOptions
             {
                 DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,

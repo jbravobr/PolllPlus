@@ -56,7 +56,7 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
+            model.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
             var enquete = await this.service.InserirRetornarEnquete(AutoMapper.Mapper.Map<Enquete>(model));
 
             if (enquete != null)
@@ -107,7 +107,7 @@ namespace PollPlus.Controllers
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 
-            return View(listaEnquetes.Where(x => x.Tipo == Domain.Enumeradores.EnumTipoEnquete.Mensagem).ToPagedList(pagina ?? 1, 10));
+            return View(listaEnquetes.Where(x => x.PerguntaId == null).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]

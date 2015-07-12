@@ -111,11 +111,6 @@ namespace PollPlus.Controllers
                 if (file != null && file.ContentLength > 0)
                     Util.SalvarImagem(file);
 
-                var repo = new UsoPushPorEmpresaRepositorio();
-                var dado = (await repo.RetornarTodos()).First(e => e.EmpresaId == enquete.Id);
-                dado.QtdePushDisponiveis = enquete.QtdePush;
-                await repo.InserirUsoPushPorEmpresa(dado);
-
                 enquete.AdicionarCategoria(model.CategoriasInteresse);
 
                 foreach (var uc in enquete.EnqueteCategoria)

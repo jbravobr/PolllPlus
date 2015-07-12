@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        @if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
+        if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
         {
             <div class="form-group">
                 @Html.LabelFor(x => x.AppKeyForPush, "Chave do PushWoosh", new { @class = "col-sm-2 control-label" })

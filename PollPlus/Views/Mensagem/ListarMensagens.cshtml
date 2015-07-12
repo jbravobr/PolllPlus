@@ -39,7 +39,7 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _enquete in Model)
+                                @foreach (var _enquete in Model.Where(x => x.PerguntaId == null))
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_enquete.Titulo.</td>

@@ -116,6 +116,7 @@ namespace PollPlus.Helpers
             }
             catch (Exception p_ex)
             {
+                File.WriteAllText(@"E:\Inetroot\app01.training.cloudfacil.net\Images\erroEmail.txt", p_ex.Message);
                 _msgErro = p_ex.Message;
             }
 
