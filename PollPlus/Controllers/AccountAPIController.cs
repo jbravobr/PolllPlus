@@ -173,17 +173,45 @@ namespace PollPlus.Controllers
                 if (enquetes != null)
                 {
 
-                    foreach (var enquete in enquetes)
+                    foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
                     {
                         var respostas = (await this.respostaRepo.RetornarTodasRespostas()).Where(r => r.PerguntaId == enquete.Pergunta.Id);
                         enquete.Pergunta.Resposta = respostas.ToList();
                     }
 
-                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaEnqueteDomainParaEnqueteMobile(enquetes)));
+
+                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes.Where(w => w.PerguntaId != null).ToList()).ToList();
+                    var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
+                    var todas = e.Union(_e);
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(todas));
                     return Ok(enquetesJson);
                 }
                 else
                     return BadRequest("Não há enquetes disponíveis");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("mensagem/{id}/{empresaId}")]
+        public async Task<IHttpActionResult> GetMensagen(int id, int empresaId)
+        {
+            List<Enquete> enquetes = null;
+
+            if (id > 0)
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Mensagem
+                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
+            else
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Mensagem
+                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
+
+            try
+            {
+                var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaMensagemParaMensagemMobile(enquetes)));
+                return Ok(enquetesJson);
             }
             catch (Exception ex)
             {
@@ -394,6 +422,24 @@ namespace PollPlus.Controllers
                     Status = enquete.Status,
                     Tipo = enquete.Tipo,
                     Titulo = enquete.Pergunta.TextoPergunta,
+                    UrlVideo = enquete.UrlVideo,
+                    UsuarioId = enquete.UsuarioId,
+                    Imagem = enquete.Imagem
+                };
+            }
+        }
+
+        private IEnumerable<EnqueteMobile> MapeiaMensagemParaMensagemMobile(ICollection<Enquete> enquetes)
+        {
+            foreach (var enquete in enquetes)
+            {
+                yield return new EnqueteMobile
+                {
+                    Id = 0,
+                    ServerEnqueteId = enquete.Id,
+                    Status = enquete.Status,
+                    Tipo = enquete.Tipo,
+                    Titulo = enquete.Titulo,
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
                     Imagem = enquete.Imagem
