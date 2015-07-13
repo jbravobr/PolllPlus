@@ -147,7 +147,7 @@ namespace PollPlus.Controllers
                     return Ok(enquetesJson);
                 }
                 else
-                    return BadRequest("Não há enquetes disponíveis");
+                    return Ok("Não há enquetes disponíveis");
             }
             catch (Exception ex)
             {
@@ -181,13 +181,13 @@ namespace PollPlus.Controllers
 
 
                     var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes.Where(w => w.PerguntaId != null).ToList()).ToList();
-                    var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
-                    var todas = e.Union(_e);
-                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(todas));
+                    //var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
+                    //var todas = e.Union(_e);
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(e));
                     return Ok(enquetesJson);
                 }
                 else
-                    return BadRequest("Não há enquetes disponíveis");
+                    return Ok("Não há enquetes disponíveis");
             }
             catch (Exception ex)
             {
@@ -210,8 +210,13 @@ namespace PollPlus.Controllers
 
             try
             {
-                var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaMensagemParaMensagemMobile(enquetes)));
-                return Ok(enquetesJson);
+                if (enquetes != null && enquetes.Any())
+                {
+                    var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaMensagemParaMensagemMobile(enquetes)));
+                    return Ok(enquetesJson);
+                }
+                else
+                    return Ok("Não há mensagens");
             }
             catch (Exception ex)
             {
@@ -424,7 +429,8 @@ namespace PollPlus.Controllers
                     Titulo = enquete.Pergunta.TextoPergunta,
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
-                    Imagem = enquete.Imagem
+                    Imagem = enquete.Imagem,
+                    Categoria = GetCategoriaById(enquete.EnqueteCategoria.First().CategoriaId).Result
                 };
             }
         }
@@ -442,9 +448,16 @@ namespace PollPlus.Controllers
                     Titulo = enquete.Titulo,
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
-                    Imagem = enquete.Imagem
+                    Imagem = enquete.Imagem,
+                    Categoria = GetCategoriaById(enquete.EnqueteCategoria.First().CategoriaId).Result,
+                    Descricao = enquete.Descricao
                 };
             }
+        }
+
+        private async Task<Categoria> GetCategoriaById(int categoriaId)
+        {
+            return await this.catRepo.RetornarCategoriaPorId(categoriaId);
         }
     }
 
@@ -468,6 +481,8 @@ namespace PollPlus.Controllers
         public EnumStatusEnquete Status { get; set; }
         public int UsuarioId { get; set; }
         public string Imagem { get; set; }
+        public Categoria Categoria { get; set; }
+        public string Descricao { get; set; }
     }
 
     public class PerguntaMobile

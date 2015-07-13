@@ -11,6 +11,7 @@ namespace PollPlus.Domain
     public class Enquete : EntityBase
     {
         public string Titulo { get; set; }
+        public string Descricao { get; set; }
         public EnumStatusEnquete Status { get; set; }
         public EnumTipoEnquete Tipo { get; set; }
         public EnumTipoImagem TipoImagem { get; set; }

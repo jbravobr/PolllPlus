@@ -16,6 +16,7 @@ namespace PollPlus.Models
     {
         public int Id { get; set; }
         public bool TemVoucher { get; set; }
+        public string Descricao { get; set; }
         public int EmpresaId { get; set; }
         public int UsuarioId { get; set; }
         public EnumTipoEnquete Tipo { get; set; }
