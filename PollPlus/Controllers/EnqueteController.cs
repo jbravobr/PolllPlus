@@ -103,7 +103,7 @@ namespace PollPlus.Controllers
                 return View(model);
 
             model.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
-            model.Tipo = Domain.Enumeradores.EnumTipoEnquete.Interesse;
+            model.Tipo = Domain.Enumeradores.EnumTipoEnquete.Publica;
             var enquete = await this.service.InserirRetornarEnquete(AutoMapper.Mapper.Map<Enquete>(model));
 
             if (enquete != null)

@@ -55,11 +55,11 @@ namespace PollPlus.Service
         {
             var _usuario = (await this._service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == usuario);
 
-            var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
+            //var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
 
             if (_usuario == null)
                 return await Task.FromResult(false);
-            else if (_usuario != null && senha == senhaDecrypt)
+            else if (_usuario != null && senha == _usuario.Senha)
                 return await Task.FromResult(true);
             else
                 return await Task.FromResult(false);

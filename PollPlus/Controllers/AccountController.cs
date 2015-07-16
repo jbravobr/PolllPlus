@@ -176,22 +176,30 @@ namespace PollPlus.Controllers
         [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> EditarUsuario(UsuarioViewModel model)
         {
-            var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, model.UsuarioCategoria.Select(c => c.CategoriaId).ToList()));
-
-            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
-            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, model.EmpresaId));
-
-            if (!ModelState.IsValid)
+            try
             {
-                ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, model.EmpresaId);
-                ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, model.CategoriasInteresse);
-                return View(model);
+                var categorias = await this.service.RetornarCategoriasDisponniveis();
+                ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+
+                var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+                ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, model.EmpresaId));
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Empresas = PreparaParaListaDeEmpresas(empresas, model.EmpresaId);
+                    ViewBag.CategoriasInteresse = PreparaParaListaDeCategorias(categorias, model.CategoriasInteresse);
+                    return View(model);
+                }
+                else if (await this.service.AtualizarUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
+                    return RedirectToAction("ListarUsuarios");
+                else
+                    return View();
             }
-            else if (await this.service.AtualizarUsuario(AutoMapper.Mapper.Map<Usuario>(model)))
-                return RedirectToAction("ListarUsuarios");
-            else
-                return View();
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpGet, OnlyAuthorizedUser]

@@ -55,7 +55,6 @@
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li><a href="@Url.Action("EditarEnquete", "Enquete", new { enqueteId = _enquete.Id })">Alterar</a></li>
                                                     <li><a href="javascript: if(confirm('Deseja Desabilitar esta Enquete?')) {window.location.href='@Url.Action("DespublicarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Desabilitar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja Publicar esta Enquete?')) {window.location.href='@Url.Action("PublicarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Publicar</a></li>
                                                     <li><a href="javascript: if(confirm('Deseja Encerrar esta Enquete?')) {window.location.href='@Url.Action("DesativarEnquete", "Enquete", new { enqueteId = _enquete.Id })';}">Encerrar</a></li>
                                                 </ul>
                                             </div>

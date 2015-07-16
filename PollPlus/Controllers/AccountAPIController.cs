@@ -9,6 +9,7 @@ using PollPlus.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -56,22 +57,22 @@ namespace PollPlus.Controllers
                 return BadRequest();
         }
 
-        [HttpGet]
-        [Route("autenticar/{email}/{senha}")]
-        public async Task<IHttpActionResult> Autenticar(string email, string senha)
+        [HttpPost]
+        [Route("errou")]
+        public async Task<IHttpActionResult> EsqueciMinhaSenha([FromBody]string email)
         {
             try
             {
-                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == email);
+                var _email = JsonConvert.DeserializeObject<string>(email);
+                var _usuario = (await this.service.RetornarTodosUsuarios()).FirstOrDefault(u => u.Email == _email);
 
-                var senhaDecrypt = Util.DescriptarSenha(_usuario.Senha);
+                if (_usuario != null)
+                {
+                    EnviarEmailEsqueciMinhaSenha(_usuario, _usuario.Senha);
+                    return Ok();
+                }
 
-                if (_usuario == null)
-                    return Unauthorized();
-                else if (_usuario != null && senha == senhaDecrypt)
-                    return Ok(_usuario);
-                else
-                    return Unauthorized();
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -79,24 +80,83 @@ namespace PollPlus.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("autenticar/{email}/{senha}")]
+        public async Task<IHttpActionResult> Autenticar(string email, string senha)
+        {
+
+            if ((await this.service.RetornarTodosUsuarios()).Any(x => x.Email == email && x.Senha == senha))
+            {
+                var u = (await this.service.RetornarTodosUsuarios()).First(x => x.Email == email && x.Senha == senha);
+
+                var user = new UsuarioMobile
+                {
+                    DataNascimento = u.DataNascimento,
+                    Email = u.Email,
+                    DDD = u.DDD.ToString(),
+                    Municipio = u.Municipio,
+                    Nome = u.Nome,
+                    Sexo = u.Sexo,
+                    Telefone = u.Telefone,
+                    Id = u.Id
+                };
+
+                var lista = new List<CategoriaMobile>();
+                foreach (var item in u.UsuarioCategoria)
+                {
+                    lista.Add(new CategoriaMobile { Id = item.Categoria.Id, Nome = item.Categoria.Nome });
+                }
+
+                user.Categorias = lista;
+
+                return Ok(user);
+            }
+
+            return BadRequest();
+        }
+
         [HttpPost]
         [Route("novocadastro")]
         public async Task<IHttpActionResult> NovoCadastro([FromBody]string usuario)
         {
             if (String.IsNullOrEmpty(usuario))
-                return BadRequest("Usuário inválido");
+                return InternalServerError(new ArgumentException("Json inválido"));
 
             try
             {
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
-                usuarioJson.Senha = Util.EncriptarSenha(usuarioJson.Senha);
+
+                if ((await this.service.RetornarTodosUsuarios()).Any(x => x.Email == usuarioJson.Email))
+                    return BadRequest("Email Já existe");
 
                 var retornoInsertUsuario = await this.service.InserirRetornarUsuario(usuarioJson);
 
                 if (retornoInsertUsuario != null)
                     EnviarEmailConfirmacaoCadastro(usuarioJson);
 
-                return Ok(retornoInsertUsuario);
+                var user = new UsuarioMobile
+                {
+                    DataNascimento = retornoInsertUsuario.DataNascimento,
+                    DDD = retornoInsertUsuario.DDD.ToString(),
+                    Municipio = retornoInsertUsuario.Municipio,
+                    Nome = retornoInsertUsuario.Nome,
+                    Sexo = retornoInsertUsuario.Sexo,
+                    Telefone = retornoInsertUsuario.Telefone,
+                    Id = retornoInsertUsuario.Id,
+                    Email = retornoInsertUsuario.Email
+                };
+
+                //var lista = new List<CategoriaMobile>();
+                //foreach (var item in retornoInsertUsuario.UsuarioCategoria)
+                //{
+                //    lista.Add(new CategoriaMobile { Id = item.Categoria.Id, Nome = item.Categoria.Nome });
+                //}
+
+                //user.Categorias = lista;
+
+                var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
+
+                return Ok(user.Id);
             }
             catch (Exception ex)
             {
@@ -162,25 +222,32 @@ namespace PollPlus.Controllers
             List<Enquete> enquetes = null;
 
             if (id > 0)
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse
-                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
+            {
+                Expression<Func<Enquete, bool>> filtro = (x) => x.Id > id && x.Tipo == EnumTipoEnquete.Interesse
+                && x.EmpresaId == empresaId && x.Status == EnumStatusEnquete.Publicada;
+                enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+            }
             else
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Interesse
-                && e.EmpresaId == empresaId && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
+            {
+                Expression<Func<Enquete, bool>> filtro = (x) => x.Tipo == EnumTipoEnquete.Interesse
+                && x.EmpresaId == empresaId && x.Status == EnumStatusEnquete.Publicada;
+                enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+            }
 
             try
             {
                 if (enquetes != null)
                 {
 
-                    foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
+                    /*foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
                     {
-                        var respostas = (await this.respostaRepo.RetornarTodasRespostas()).Where(r => r.PerguntaId == enquete.Pergunta.Id);
+                        Expression<Func<Resposta, bool>> filtro = (x) => x.PerguntaId == enquete.PerguntaId;
+                        var respostas = (await this.respostaRepo.ProcurarPorColecao(filtro));
                         enquete.Pergunta.Resposta = respostas.ToList();
-                    }
+                    }*/
 
 
-                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes.Where(w => w.PerguntaId != null).ToList()).ToList();
+                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes).ToList();
                     //var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
                     //var todas = e.Union(_e);
                     var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(e));
@@ -236,7 +303,9 @@ namespace PollPlus.Controllers
                 var enqueteJson = JsonConvert.DeserializeObject<Enquete>(enquete);
                 var retornoInsertEnquete = await this.enqueteRepo.InserirRetornarEnquete(enqueteJson);
 
-                return Ok(retornoInsertEnquete.PerguntaId);
+                var result = new RetornoGravacaoEnquete { EnqueteId = retornoInsertEnquete.Id, PerguntaId = (int)retornoInsertEnquete.PerguntaId };
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -256,12 +325,15 @@ namespace PollPlus.Controllers
                 var respostasJson = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<ICollection<RespostaMobile>>(resposta));
                 var respostasDomain = MapeiaRespostaMobileParaRespostaDomain(respostasJson);
 
+                var lista = new List<RespostaMobile>();
                 foreach (var r in respostasDomain)
                 {
-                    await this.respostaRepo.InserirResposta(r);
+                    var _resposta = await this.respostaRepo.InserirRetornarResposta(r);
+                    lista.Add(new RespostaMobile { PerguntaServerId = r.PerguntaId, RespostaServerId = r.Id, TextoResposta = r.TextoResposta });
                 }
+                var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(lista));
 
-                return Ok();
+                return Ok(lista);
             }
             catch (Exception ex)
             {
@@ -347,6 +419,20 @@ namespace PollPlus.Controllers
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
             var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
+
+            return Util.SendMail(_message);
+        }
+
+        [NonAction]
+        private bool EnviarEmailEsqueciMinhaSenha(Usuario usuario, string senha)
+        {
+            var _corpoMessage = new StringBuilder();
+
+            _corpoMessage.Append("<p>Recuperação da Senha para acesso ao sistema Mais.</p>");
+            _corpoMessage.AppendLine(String.Format("<p>Sua senha é: {0}.</p>", senha));
+            _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
+
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Sistema Mais - Recuperação de senha");
 
             return Util.SendMail(_message);
         }
@@ -461,6 +547,19 @@ namespace PollPlus.Controllers
         }
     }
 
+    public class UsuarioMobile
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public DateTime DataNascimento { get; set; }
+        public EnumSexo Sexo { get; set; }
+        public string DDD { get; set; }
+        public string Telefone { get; set; }
+        public string Municipio { get; set; }
+        public List<CategoriaMobile> Categorias { get; set; }
+    }
+
     public class RespostaMobile
     {
         public int Id { get; set; }
@@ -491,5 +590,17 @@ namespace PollPlus.Controllers
         public string TextoPergunta { get; set; }
         public int PerguntaServerId { get; set; }
         public List<RespostaMobile> Respostas { get; set; }
+    }
+
+    public class CategoriaMobile
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+    }
+
+    public class RetornoGravacaoEnquete
+    {
+        public int EnqueteId { get; set; }
+        public int PerguntaId { get; set; }
     }
 }

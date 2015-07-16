@@ -60,14 +60,20 @@ namespace PollPlus.Controllers
             var ban = await this.service.InserirRetornarBanner(AutoMapper.Mapper.Map<Banner>(model));
             if (ban != null)
             {
-                foreach (var item in model.Empresas)
+                if (model.Empresas != null)
                 {
-                    await this.empBanner.InserirCB(new EmpresaBanner { EmpresaId = item, BannerId = ban.Id });
+                    foreach (var item in model.Empresas)
+                    {
+                        await this.empBanner.InserirCB(new EmpresaBanner { EmpresaId = item, BannerId = ban.Id });
+                    }
                 }
 
-                foreach (var item in model.Categorias)
+                if (model.Categorias != null)
                 {
-                    await this.catBanner.InserirCB(new CategoriaBanner { CategoriaId = item, BannerId = ban.Id });
+                    foreach (var item in model.Categorias)
+                    {
+                        await this.catBanner.InserirCB(new CategoriaBanner { CategoriaId = item, BannerId = ban.Id });
+                    }
                 }
 
                 if (file.ContentLength > 0)

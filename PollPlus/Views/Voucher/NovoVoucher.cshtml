@@ -29,7 +29,7 @@
         <div class="form-group">
             @Html.LabelFor(x => x.DataValidade, "Valido Até:", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
-                @Html.TextBoxFor(x => x.DataValidade, new { @class = "form-control app" })
+                @Html.TextBoxFor(x => x.DataValidade, new { @class = "form-control datepicker" })
                 @Html.ValidationMessageFor(x => x.DataValidade)
             </div>
         </div>

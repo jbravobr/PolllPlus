@@ -9,9 +9,9 @@ namespace PollPlus.Domain
     public class UsuarioCategoria : EntityBase
     {
         public int CategoriaId { get; set; }
-        public Categoria Categoria { get; set; }
+        public virtual Categoria Categoria { get; set; }
 
         public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }
