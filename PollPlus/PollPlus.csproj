@@ -288,6 +288,7 @@
     <Compile Include="Controllers\MensagemController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PushController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\VoucherController.cs" />
     <Compile Include="Filters\CustomActionFilter.cs" />
     <Compile Include="Filters\CustomMenuActionFilter.cs" />
@@ -3634,7 +3635,7 @@
     <Content Include="Views\Menu\_MenuUsuarios.cshtml" />
     <Content Include="Views\Menu\_MenuBanners.cshtml" />
     <Content Include="Views\Menu\_MenuVouchers.cshtml" />
-    <Content Include="Views\Menu\_MenuRelatorios.cshtml" />
+    <Content Include="Views\Menu\_MenuRelatorio.cshtml" />
     <Content Include="Views\Enquete\NovaEnquete.cshtml" />
     <Content Include="Views\Menu\_MenuEmpresas.cshtml" />
     <Content Include="Views\Enquete\_EnqueteRespostas.cshtml" />
@@ -3672,6 +3673,13 @@
     <Content Include="Views\Empresa\EditarFilial.cshtml" />
     <Content Include="Views\Empresa\_DropDownlistForEmpresas.cshtml" />
     <Content Include="Views\Push\NovoPush.cshtml" />
+    <Content Include="Views\Relatorio\RelUsuarios.cshtml" />
+    <Content Include="Views\Relatorio\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Relatorio\_GridRelatorio.cshtml" />
+    <Content Include="Views\Relatorio\_GridRelatorioEmpresas.cshtml" />
+    <Content Include="Views\Relatorio\RelEmpresas.cshtml" />
+    <Content Include="Views\Relatorio\RelEnquetes.cshtml" />
+    <Content Include="Views\Relatorio\_GridRelatorioEnquetes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

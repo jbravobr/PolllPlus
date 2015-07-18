@@ -1,0 +1,33 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Usuario>
+@using GridMvc.Html;
+@using PollPlus.Helpers;
+
+<div>
+
+    <div class="header">
+        <h3>Informações</h3>
+    </div>
+
+    <div class="content" id="DadosRelatorio">
+        <div id="tabelaListaColaboradores" class="table-responsive">
+            <div role="grid" class="dataTables_wrapper form-inline" id="datatable_wrapper">
+                @if (Model != null && Model.Any())
+                {
+                    @Html.Grid(Model).Columns(col =>
+               {
+                   col.Add(b => b.Nome);
+                   col.Add(b => b.Email);
+                   col.Add(b => b.Telefone);
+                   col.Add(b => b.DataNascimento).Titled("Data de Nascimento").Format("{0:dd/MM/yyy}");
+                   col.Add(b => b.DataCriacao).Titled("Data do cadastro").Format("{0:dd/MM/yyy}");
+
+               });
+                }
+                else
+                {
+                    <p>Nenhum registro encontrado.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

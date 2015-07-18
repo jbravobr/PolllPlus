@@ -1,0 +1,10 @@
+﻿@{var empresas = (IEnumerable<SelectListItem>)ViewData["EmpresasForSelectList"]; }
+
+@if (empresas.Any())
+{
+    @Html.DropDownList("EmpresaId", empresas, "Selecione uma empresa");
+}
+else
+{
+    <p>Erro ao carregar lista de Empresas.</p>
+}

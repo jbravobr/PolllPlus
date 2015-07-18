@@ -1,0 +1,20 @@
+﻿
+@*<Vendas>*@
+<li class="parent">
+    <a href="#">
+        <i class="fa fa-list-alt"></i>
+        <span>Relatórios</span>
+    </a>
+    <ul class="sub-menu" style="display: none;">
+        <li>
+            @Html.ActionLink("Usuários cadastrados", "RelUsuariosCadastrados", "Relatorio")
+        </li>
+        <li>
+            @Html.ActionLink("Empresas cadastradas", "RelEmpresasCadastradas", "Relatorio")
+        </li>
+        <li>
+            @Html.ActionLink("Enquetes cadastradas", "RelEnquetesCadastradas", "Relatorio")
+        </li>
+    </ul>
+</li>
+@*</Vendas>*@

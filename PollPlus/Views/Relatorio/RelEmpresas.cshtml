@@ -1,0 +1,57 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Empresa>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Relatório Gerencial - Empresas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .ui-autocomplete-loading {
+        background: white url("../../Content/images/loader-autocomplete.gif") right center no-repeat;
+    }
+</style>
+
+<div class="content tamanho-reduzido">
+
+    <div class="header">
+        <h3>Relatório Gerencial - Empresas Cadatradas</h3>
+    </div>
+
+    @Html.Partial("_GridRelatorioEmpresas", Model)
+
+    <br />
+
+    @Html.PagedListPager(Model, page => Url.Action("RelEmpresasCadastradas", "Relatorio", new { page = page }),
+                new PagedListRenderOptions
+                {
+                    DisplayLinkToLastPage = PagedList.Mvc.PagedListDisplayMode.IfNeeded,
+                    DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                    Display = PagedListDisplayMode.IfNeeded,
+                    LinkToNextPageFormat = "Próximo",
+                    LinkToPreviousPageFormat = "Anterior"
+                })
+
+    <br />
+    <br />
+
+    @using (Html.BeginForm("ExportaRelatorioParaExcel", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    {
+        if (Model != null)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Exportar</button><br />
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+    </script>
+}
+
+

@@ -1,0 +1,51 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Enquete>
+@using GridMvc.Html;
+@using PollPlus.Domain.Enumeradores;
+@using PollPlus.Helpers;
+
+@if (Model != null)
+{
+    <div class="table-responsive">
+        <div id="datatable2_wrapper" class="dataTables_wrapper form-inline" role="grid">
+            @*<div class="row">
+                </div>*@
+            <table class="table table-bordered dataTable" id="datatable2" aria-describedby="datatable2_info">
+                <thead>
+                    <tr role="row">
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Pergunta</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Categoria</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Tem Voucher?</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Url do vídeo</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Nome da imagem</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Status</th>
+                        <th role="columnheader" tabindex="0" aria-controls="datatable2" rowspan="1" colspan="1">Data de Criação</th>
+                    </tr>
+                </thead>
+
+                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                    @if (Model != null)
+                    {
+                        foreach (var enquete in Model.Where(e => e.Tipo == EnumTipoEnquete.Interesse || e.Tipo == EnumTipoEnquete.Publica))
+                        {
+                            <tr class="gradeA odd" id="@enquete.Id">
+                                <td class=" sorting_1">@enquete.Pergunta.TextoPergunta</td>
+                                <td class=" ">@(enquete.EnqueteCategoria.FirstOrDefault() != null ? enquete.EnqueteCategoria.FirstOrDefault().Categoria.Nome : "Sem Categoria")</td>
+                                <td class=" ">@(enquete.TemVoucher ? "Sim" : "Não" )</td>
+                                <td class=" ">@enquete.UrlVideo</td>
+                                <td class=" ">@enquete.Imagem</td>
+                                <td class=" ">@enquete.Status.GetDescription()</td>
+                                <td class=" ">@enquete.DataCriacao.ToShortDateString()</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            @*<div class="row">
+                </div>*@
+        </div>
+    </div>
+}
+else
+{
+    <p>Nenhum resultado foi encontrado.</p>
+}

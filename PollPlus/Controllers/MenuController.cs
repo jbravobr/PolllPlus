@@ -47,5 +47,10 @@ namespace PollPlus.Controllers
         {
             return PartialView("_MenuCategoria");
         }
+
+        public PartialViewResult MontaRelatorio()
+        {
+            return PartialView("_MenuRelatorio");
+        }
     }
 }

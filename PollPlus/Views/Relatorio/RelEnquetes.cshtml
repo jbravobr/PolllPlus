@@ -1,0 +1,197 @@
+﻿@model PagedList.IPagedList<PollPlus.Domain.Enquete>
+@using PollPlus.Helpers;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Relatório Gerencial - Enquetes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .ui-autocomplete-loading {
+        background: white url("../../Content/images/loader-autocomplete.gif") right center no-repeat;
+    }
+</style>
+
+<div class="content tamanho-reduzido">
+
+    <div class="header">
+        <h3>Relatório Gerencial - Enquetes Cadatradas</h3>
+    </div>
+
+    @using (Html.BeginForm("RelEnquetesCadastradas", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    {
+        if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
+        {
+            <div class="form-group">
+                @Html.Label("Empresa", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.Partial("_DropDownListForEmpresas")
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary cancel" type="submit">Gerar</button><br />
+            </div>
+        </div>
+        <br />
+
+        <div>
+            <div class="content" id="listaVinculos">
+                <div class="header">
+                    <h3>Associações</h3>
+                </div>
+                <br />
+                @{
+                    Html.RenderPartial("_GridRelatorioEnquetes", Model);
+                }
+            </div>
+        </div>
+
+        <br />
+                    }
+
+    <br />
+
+    @Html.PagedListPager(Model, page => Url.Action("RelEnquetesCadastradas", "Relatorio", new { page = page }),
+                new PagedListRenderOptions
+                {
+                    DisplayLinkToLastPage = PagedList.Mvc.PagedListDisplayMode.IfNeeded,
+                    DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                    Display = PagedListDisplayMode.IfNeeded,
+                    LinkToNextPageFormat = "Próximo",
+                    LinkToPreviousPageFormat = "Anterior"
+                })
+
+    <br />
+    <br />
+
+    @using (Html.BeginForm("ExportaRelatorioParaExcel", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    {
+        if (Model != null)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Exportar</button><br />
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        //Add dataTable Functions
+        var functions = $('<div class="btn-group"><button class="btn btn-default btn-xs" type="button">Actions</button><button data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle" type="button"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul role="menu" class="dropdown-menu"><li><a href="#">Edit</a></li><li><a href="#">Copy</a></li><li><a href="#">Details</a></li><li class="divider"></li><li><a href="#">Remove</a></li></ul></div>');
+        $("#datatable tbody tr td:last-child").each(function () {
+            $(this).html("");
+            functions.clone().appendTo(this);
+        });
+
+        $(document).ready(function () {
+            //initialize the javascript
+            //Basic Instance
+            $("#datatable").dataTable();
+
+            /* Formating function for row details */
+            function fnFormatDetails(oTable, nTr) {
+                var aData;
+                var perguntaID = $(nTr).attr('id');
+                var parametro = JSON.stringify({ perguntaId: perguntaID });
+                var sOut = "";
+
+                $.ajax({
+                    url: "@Url.Action("GetRespostasComPercentual", "Relatorio")",
+                    type: "POST",
+                    data: parametro,
+                    dataType: "json",
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.length > 0) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                sOut += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                                sOut += '<tr><td style="width: 1%;">Resposta:</td><td>' + data[i].TextoResposta + '</td></tr>';
+                                sOut += '<tr><td style="width: 1%;">Percentual de votos:</td><td>' + data[i].Percentual + '</td></tr>';
+                                sOut += '</table>';
+                            }
+                        }
+                        else {
+                            sOut += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                            sOut += '<tr><td>Houve um erro ao processar a informação. Recarregue a página</td></tr>';
+                            sOut += '</table>';
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        sOut += '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                        sOut += '<tr><td>Houve um erro ao processar a informação. Recarregue a página</td></tr>';
+                        sOut += '</table>';
+                        Console.log = jqXHR;
+                    }
+                });
+
+                return sOut;
+            }
+
+            /*
+             * Insert a 'details' column to the table
+             */
+            var nCloneTh = document.createElement('th');
+            var nCloneTd = document.createElement('td');
+            nCloneTd.innerHTML = '<img class="toggle-details" src="/Content/Theme/images/plus.png" />';
+            nCloneTd.className = "center";
+
+            $('#datatable2 thead tr').each(function () {
+                this.insertBefore(nCloneTh, this.childNodes[0]);
+            });
+
+            $('#datatable2 tbody tr').each(function () {
+                this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+            });
+
+            /*
+             * Initialise DataTables, with no sorting on the 'details' column
+             */
+            var oTable = $('#datatable2').dataTable({
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [0] }
+                ],
+                "aaSorting": [[1, 'asc']]
+            });
+
+            /* Add event listener for opening and closing details
+             * Note that the indicator for showing which row is open is not controlled by DataTables,
+             * rather it is done here
+             */
+            $('#datatable2').delegate('tbody td img', 'click', function () {
+                var nTr = $(this).parents('tr')[0];
+                if (oTable.fnIsOpen(nTr)) {
+                    /* This row is already open - close it */
+                    this.src = "/Content/Theme/images/plus.png";
+                    oTable.fnClose(nTr);
+                }
+                else {
+                    /* Open this row */
+                    this.src = "/Content/Theme/images/minus.png";
+                    oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+                }
+            });
+
+            //$('.dataTables_filter input').addClass('form-control').attr('placeholder', 'Search');
+            //$('.dataTables_length select').addClass('form-control');
+
+            $('#datatable2').prev().remove();
+            $('#datatable2').next().remove();
+
+        });
+    </script>
+}
