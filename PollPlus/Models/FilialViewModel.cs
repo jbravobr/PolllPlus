@@ -11,9 +11,9 @@ namespace PollPlus.Models
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public double Latitute { get; set; }
+        public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public List<int> Empresa { get; set; }
+        public int EmpresaId { get; set; }
     }
 }

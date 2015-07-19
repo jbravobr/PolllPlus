@@ -35,7 +35,7 @@
     <br />
     <br />
 
-    @using (Html.BeginForm("ExportaRelatorioParaExcel", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("ExportarEmpresasCadastrados", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (Model != null)
         {

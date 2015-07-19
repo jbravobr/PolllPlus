@@ -44,7 +44,7 @@
     }
 
 
-    @Html.PagedListPager(Model, page => Url.Action("RelUsuariosCadastrados", "Relatorio", new { page = page }),
+    @Html.PagedListPager(Model, page => Url.Action("RelUsuariosCadastradosPaginado", "Relatorio", new { page = page }),
                 new PagedListRenderOptions
                 {
                     DisplayLinkToLastPage = PagedList.Mvc.PagedListDisplayMode.IfNeeded,
@@ -57,7 +57,7 @@
     <br />
     <br />
 
-    @using (Html.BeginForm("ExportaRelatorioParaExcel", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("ExportarUsuariosCadastrados", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (Model != null)
         {

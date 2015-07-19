@@ -7,7 +7,7 @@ using SimpleExcelExport;
 
 namespace PollPlus.Models
 {
-    public class RelUsuariosViewModdel
+    public class RelUsuariosViewModel
     {
         [ExcelExport("Nome")]
         public string Nome { get; set; }
@@ -20,5 +20,8 @@ namespace PollPlus.Models
 
         [ExcelExport("Telefone")]
         public string Telefone { get; set; }
+
+        [ExcelExport("Data de criação")]
+        public string DataCriacao { get; set; }
     }
 }

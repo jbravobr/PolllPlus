@@ -88,23 +88,28 @@
 {
                                 @*<Banners>*@
 
+
+
+
 { Html.RenderAction("MontaMenuBanners", "Menu"); }
                             @*</Banners>*@
+
+
+
 
 }
 
                             @*<Relatórios>*@
                 @{Html.RenderAction("MontaRelatorio", "Menu");}
                 @*</Relatórios*@
-                    <
                 </ul>
             </div>
         </div>
         @*MENU*@
 
-        <div class="text-right collapse-button" style="padding:7px 9px;">
-            <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
-        </div>
+        @*<div class="text-right collapse-button" style="padding:7px 9px;">
+                <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
+            </div>*@
     </div>
 </div>
 <div class="container-fluid" id="pcont">

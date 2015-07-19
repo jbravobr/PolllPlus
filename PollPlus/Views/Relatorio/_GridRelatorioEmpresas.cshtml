@@ -17,7 +17,7 @@
                     @Html.Grid(Model).Columns(col =>
                {
                    col.Add(b => b.Nome);
-                   col.Add(b => String.Format(@"{0:00\.000\.000\-00}", b.Documento.Numero)).Titled("Documento");
+                   col.Add(b => b.Documento.Numero).Titled("Documento");
                    col.Add(b => b.DataCriacao).Titled("Data de criação").Format("{0:dd/MM/yyy}");
                })
                 }

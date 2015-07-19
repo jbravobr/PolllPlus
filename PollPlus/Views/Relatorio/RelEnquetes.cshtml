@@ -55,7 +55,7 @@
 
     <br />
 
-    @Html.PagedListPager(Model, page => Url.Action("RelEnquetesCadastradas", "Relatorio", new { page = page }),
+    @Html.PagedListPager(Model, page => Url.Action("RelEnquetesCadastradasPaginada", "Relatorio", new { page = page }),
                 new PagedListRenderOptions
                 {
                     DisplayLinkToLastPage = PagedList.Mvc.PagedListDisplayMode.IfNeeded,
@@ -64,17 +64,42 @@
                     LinkToNextPageFormat = "Próximo",
                     LinkToPreviousPageFormat = "Anterior"
                 })
-
-    <br />
     <br />
 
-    @using (Html.BeginForm("ExportaRelatorioParaExcel", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("ExportarEnquetesCadastradas", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
+    {
+        if (Model != null)
+        {
+            @*<div class="form-group">
+                    @Html.Label("Enquete", new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.Partial("_DropDownListForEnquete")
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Exportar Enquetes</button><br />
+                </div>
+            </div>
+        }
+    }
+    <br />
+    <br />
+    @using (Html.BeginForm("ExportarRespostasEnquete", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (Model != null)
         {
             <div class="form-group">
+                @Html.Label("Enquete", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.Partial("_DropDownListForEnquete")
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-primary" type="submit">Exportar</button><br />
+                    <button class="btn btn-primary" type="submit">Exportar Respostas da Enquete Selecionada</button><br />
                 </div>
             </div>
         }

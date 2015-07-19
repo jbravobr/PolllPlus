@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using PollPlus.Repositorio;
 
 namespace PollPlus.Controllers
 {
@@ -16,6 +17,7 @@ namespace PollPlus.Controllers
     public class EmpresaController : BaseController
     {
         readonly IEmpresaServiceWEB service;
+        private FilialRepositorio repoFilial = new FilialRepositorio();
 
         public EmpresaController(IEmpresaServiceWEB _service)
         {
@@ -92,10 +94,18 @@ namespace PollPlus.Controllers
                 ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
                 return View(model);
             }
-            else if (await this.service.InserirEmpresa(AutoMapper.Mapper.Map<Empresa>(model)))
-                return RedirectToAction("ListarEmpresas");
+            else if (await this.repoFilial.InserirFilial(AutoMapper.Mapper.Map<Filial>(model)))
+                return RedirectToAction("ListarFiliais");
 
             return View(model);
+        }
+
+        [OnlyAuthorizedUser, HttpGet]
+        public async Task<ActionResult> ListarFiliais(int? pagina)
+        {
+            var listaFiliais = await this.repoFilial.RetornarTodasFiliais();
+
+            return View(listaFiliais.ToPagedList(pagina ?? 1, 10));
         }
 
         [NonAction]
