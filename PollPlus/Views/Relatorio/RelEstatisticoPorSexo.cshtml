@@ -16,10 +16,10 @@
 <div class="content tamanho-reduzido">
 
     <div class="header">
-        <h3>Relatório Gerencial - Enquetes Cadatradas</h3>
+        <h3>Relatório Gerencial - Enquetes Cadatradas com Respostas por Sexo</h3>
     </div>
 
-    @using (Html.BeginForm("RelEnquetesCadastradas", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("RelEnquetesCadastradasPorSexo", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
         if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
         {
@@ -55,7 +55,7 @@
 
     <br />
 
-    @Html.PagedListPager(Model, page => Url.Action("RelEnquetesCadastradasPaginada", "Relatorio", new { page = page }),
+    @Html.PagedListPager(Model, page => Url.Action("RelEnquetesPorSexoCadastradasPaginada", "Relatorio", new { page = page }),
                 new PagedListRenderOptions
                 {
                     DisplayLinkToLastPage = PagedList.Mvc.PagedListDisplayMode.IfNeeded,
@@ -66,7 +66,7 @@
                 })
     <br />
 
-    @using (Html.BeginForm("ExportarEnquetesCadastradas", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("ExportarEnquetesPorSexoCadastradas", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (Model != null)
         {
@@ -86,7 +86,7 @@
     }
     <br />
     <br />
-    @using (Html.BeginForm("ExportarRespostasEnquete", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("ExportarRespostasEnquetePorSexo", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (Model != null)
         {

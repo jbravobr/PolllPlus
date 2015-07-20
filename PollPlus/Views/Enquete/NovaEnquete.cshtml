@@ -19,14 +19,35 @@
                 @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
             </div>
         </div>
+
         <div class="form-group">
+            <label class="col-sm-3 control-label">Escolha um tipo de conteúdo</label>
+            <div class="col-sm-6">
+                <label class="radio-inline">
+                    <div id="rad1" class="iradio_flat-green" aria-checked="false" aria-disabled="false" style="position: relative;float:left;padding:5px">
+                        <input class="icheck" type="radio" checked="" name="rad1" style="position: absolute; opacity: 0;">
+                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">
+                        </ins>
+                    </div> Inserir Vídeo
+                </label>
+                <label class="radio-inline">
+                    <div id="rad2" class="iradio_flat-green" aria-checked="false" aria-disabled="false"  style="position: relative;float:left;padding:5px">
+                        <input class="icheck" type="radio" name="rad2" style="position: absolute; opacity: 0;">
+                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);">
+                        </ins>
+                    </div>Inserir Imagem
+                </label>
+            </div>
+        </div>
+
+        <div id="dvVideo" style="display:none" class="form-group">
             @Html.LabelFor(x => x.UrlVideo, "URL para Vídeo", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.UrlVideo, new { placeholder = "URL do vídeo", @class = "form-control" })
                 @Html.ValidationMessageFor(x => x.UrlVideo)
             </div>
         </div>
-        <div class="form-group">
+        <div id="dvImagem" style="display:none" class="form-group">
             @Html.LabelFor(x => x.file, "Imagem", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.file, new { type = "file" })
@@ -34,62 +55,93 @@
                 <span style="font-size:9px;font-weight:bold">Tamanho permitido é 640 x 325 pixels</span>
             </div>
         </div>
-            <div class="form-group">
-                @Html.Label("Categoria", new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.Partial("_MultiSelectCategorias")
-                </div>
+        <div class="form-group">
+            @Html.Label("Categoria", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.Partial("_MultiSelectCategorias")
             </div>
-            @*<div class="form-group">
+        </div>
+        @*<div class="form-group">
                 @Html.Label("Tipo", new { @class = "col-sm-2 control-label" })
                 <div class="col-sm-10">
                     @Html.EnumDropDownListFor(x => x.Tipo, "Selecione uma opção")
                 </div>
             </div>*@
 
-            <div class="header">
-                <h3>Respostas</h3>
-            </div>
+        <div class="header">
+            <h3>Respostas</h3>
+        </div>
 
-            <div class="row">
-                <div id="respostas" class="content">
-                    @{Html.RenderPartial("_EnqueteRespostas");}
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button class="btn btn-primary" type="submit">Salvar</button>
-                    </div>
+        <div class="row">
+            <div id="respostas" class="content">
+                @{Html.RenderPartial("_EnqueteRespostas");}
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>
                 </div>
             </div>
-                        }
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                </div>
+            </div>
+        </div>
+                    }
 </div>
-<script src="~/Scripts/jquery-1.10.2.js"></script>
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
 <script src="~/Scripts/Theme/bootstrap.multiselect/js/bootstrap-multiselect.js"></script>
 
 @section Scripts{
     <script type="text/javascript">
 
-            $("#btnNovaResposta").click(function () {
+        $("#btnNovaResposta").click(function () {
 
-                var html = $("#novaRespostas").clone();
-                $('input[id="resposta"]', html).val("");
+            var html = $("#novaRespostas").clone();
+            $('input[id="resposta"]', html).val("");
 
-                $("#respostas").append(html);
+            $("#respostas").append(html);
+        });
+
+        function Remover(obj) {
+            $(obj).parent().parent().remove();
+        }
+
+        $(function () {
+
+            $($("#rad1").children()[0]).removeClass('checked');
+            $($("#rad2").children()[0]).removeClass('checked');
+
+            $("#example2").multiselect();
+
+            $("#rad1").click(function (element, index) {
+
+                $('#rad2').attr('checked', '');
+
+                if ($(element).attr('checked', 'checked')) {
+                    $($("#rad2").children()[0]).removeClass('checked');
+                    $($("#rad1").children()[0]).addClass('checked')
+
+                    $('#dvVideo').show();
+                    $('#dvImagem').hide();
+                    $('#file').val('');
+                }
             });
 
-            function Remover(obj) {
-                $(obj).parent().parent().remove();
-            }
+            $("#rad2").click(function (element, index) {
 
-            $(function () {
+                $('#rad1').attr('checked', '');
 
-                $("#example2").multiselect();
+                if ($(element).attr('checked', 'checked')) {
+                    $($("#rad1").children()[0]).removeClass('checked');
+                    $($("#rad2").children()[0]).addClass('checked');
+
+                    $('#dvImagem').show();
+                    $('#dvVideo').hide();
+                    $('#UrlVideo').val('');
+                }
             });
+        });
 
     </script>
 }

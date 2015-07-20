@@ -20,7 +20,8 @@
                    col.Add(b => b.Telefone);
                    col.Add(b => b.DataNascimento).Titled("Data de Nascimento").Format("{0:dd/MM/yyy}");
                    col.Add(b => b.DataCriacao).Titled("Data do cadastro").Format("{0:dd/MM/yyy}");
-
+                   col.Add(b => b.Municipio).Titled("Município");
+                   col.Add(b => b.Sexo).Titled("Sexo");
                });
                 }
                 else

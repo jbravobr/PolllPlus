@@ -19,6 +19,7 @@
                    col.Add(b => b.Nome);
                    col.Add(b => b.Documento.Numero).Titled("Documento");
                    col.Add(b => b.DataCriacao).Titled("Data de criação").Format("{0:dd/MM/yyy}");
+                   col.Add(b => b.QtdePush).Titled("Quantidade de Push");
                })
                 }
                 else

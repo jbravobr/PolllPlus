@@ -24,6 +24,9 @@
                             <thead>
                                 <tr role="row">
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>ID</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                         <strong>Nome</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
@@ -47,6 +50,7 @@
                                 @foreach (var _empresa in Model)
                                 {
                                     <tr class="gradeA odd">
+                                        <td class=" ">@_empresa.Id</td>
                                         <td class=" ">@_empresa.Nome</td>
                                         <td class=" ">@_empresa.Documento.Numero</td>
                                         @*<td class=" ">@_usuario.DataAtualizacao.Value.ToShortDateString()</td>*@

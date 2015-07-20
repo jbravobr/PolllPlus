@@ -22,7 +22,13 @@ namespace PollPlus.Mappers
 
         protected override void Configure()
         {
-            Mapper.CreateMap<UsuarioViewModel, Usuario>();
+            Mapper.CreateMap<UsuarioViewModel, Usuario>()
+                .BeforeMap((vm, d) =>
+                {
+                    d.ConfiguraPerfil(vm.Perfil);
+                });
+
+
             Mapper.CreateMap<CategoriaViewModel, Categoria>();
             Mapper.CreateMap<EmpresaViewModel, Empresa>()
                 .BeforeMap((vm, d) =>

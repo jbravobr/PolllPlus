@@ -48,6 +48,7 @@
     <Compile Include="BlackList.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="CategoriaBanner.cs" />
+    <Compile Include="ControleAcesso.cs" />
     <Compile Include="Documento.cs" />
     <Compile Include="Empresa.cs" />
     <Compile Include="EmpresaBanner.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="EnqueteCategoria.cs" />
     <Compile Include="EnqueteVoucher.cs" />
     <Compile Include="EntityBase.cs" />
+    <Compile Include="Enumeradores\EnumAreaAcesso.cs" />
     <Compile Include="Enumeradores\EnumExtensions.cs" />
     <Compile Include="Enumeradores\EnumPerfil.cs" />
     <Compile Include="Enumeradores\EnumSexo.cs" />

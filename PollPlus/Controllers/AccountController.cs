@@ -162,7 +162,9 @@ namespace PollPlus.Controllers
             var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
 
             var categorias = await this.service.RetornarCategoriasDisponniveis();
-            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, usuario.UsuarioCategoria.Select(c => c.CategoriaId).ToList()));
+
+            var _c = PreparaParaListaDeCategorias(categorias, usuario.UsuarioCategoria.Select(c => c.CategoriaId).ToList());
+            ViewData.Add("CategoriasForSelectList", _c);
 
             var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
             ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, usuario.EmpresaId));
@@ -289,12 +291,14 @@ namespace PollPlus.Controllers
                         Selected = categoriaSelecionada.Contains((int)categoria.Id)
                     };
                 }
-
-                yield return new SelectListItem
+                else
                 {
-                    Text = categoria.Nome,
-                    Value = categoria.Id.ToString()
-                };
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString()
+                    };
+                }
             }
         }
     }

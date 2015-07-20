@@ -96,7 +96,9 @@ namespace PollPlus.Controllers
                     Email = x.Email,
                     Telefone = x.Telefone,
                     DataCriacao = x.DataCriacao.ToShortDateString(),
-                    DataNascimento = x.DataNascimento
+                    DataNascimento = x.DataNascimento,
+                    Municipio = x.Municipio,
+                    Sexo = x.Sexo.GetDescription()
                 });
 
                 var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelUsuariosViewModel>(mapper.ToList());
@@ -120,7 +122,7 @@ namespace PollPlus.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> RelUsuariosCadastradosPaginado(int? empresaId, int? page)
         {
             var empresas = await this.srvEmpresa.RetornarTodasEmpresas();
@@ -163,6 +165,7 @@ namespace PollPlus.Controllers
                 Nome = x.Nome,
                 Documento = x.Documento.Numero.ToString(),
                 DataCriacao = x.DataCriacao.ToShortDateString(),
+                QtdePush = x.QtdePush.ToString()
             });
 
             var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelEmpresaViewModel>(mapper.ToList());
@@ -171,6 +174,40 @@ namespace PollPlus.Controllers
 
         [HttpGet]
         public async Task<ActionResult> RelEnquetesCadastradas()
+        {
+            var empresas = await this.srvEmpresa.RetornarTodasEmpresas();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
+
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
+            {
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                var filtro = enquetes.Where(e => e.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(filtro, null));
+            }
+            else
+            {
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x => x.PerguntaId != null).ToList(), null));
+            }
+
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorMaster)
+            {
+                var _enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                var _toList = _enquetes.OrderByDescending(e => e.DataCriacao).ToList();
+
+                return View("RelEnquetes", _toList.ToPagedList(1, 20));
+            }
+            else
+            {
+                var _enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                var _toList = _enquetes.Where(x => x.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).OrderByDescending(x => x.DataCriacao).ToList();
+
+                return View("RelEnquetes", _toList.ToPagedList(1, 20));
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> RelEnquetesCadastradasPorSexo()
         {
             var empresas = await this.srvEmpresa.RetornarTodasEmpresas();
             ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
@@ -269,7 +306,7 @@ namespace PollPlus.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> RelEnquetesCadastradasPaginada(int? empresaId, int? page)
         {
             var empresas = await this.srvEmpresa.RetornarTodasEmpresas();
@@ -329,6 +366,37 @@ namespace PollPlus.Controllers
             return Json(_respostaJsonToList);
         }
 
+        [AcceptVerbs(new[] { "POST" })]
+        public async Task<JsonResult> GetRespostasComPercentualPorSexo(int perguntaId)
+        {
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == perguntaId).ToList();
+
+            var _respostaJsonToList = new List<RespostasJson>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                var groupUsuarios = from q in _respostasRespondidas
+                             group q by q.Usuario into porUsuario
+                             select new
+                             {
+                                RespostaId = porUsuario.Key,
+                                DataNascimento = porUsuario.ToList()
+                             };
+
+                _respostaJsonToList.Add(new RespostasJson
+                {
+                    Id = resposta.Id,
+                    TextoResposta = resposta.TextoResposta,
+                    PorHomens = resposta.PerguntaResposta.Count(x => x.Usuario.Sexo == EnumSexo.Masculino),
+                    PorMulheres = resposta.PerguntaResposta.Count(x => x.Usuario.Sexo == EnumSexo.Feminino)
+                });
+            }
+            return Json(_respostaJsonToList);
+        }
+
         [HttpGet]
         public async Task<ActionResult> ExportarRespostasEnquete(int enqueteId)
         {
@@ -365,5 +433,7 @@ namespace PollPlus.Controllers
         public int Id { get; set; }
         public string TextoResposta { get; set; }
         public double Percentual { get; set; }
+        public int PorHomens { get; set; }
+        public int PorMulheres { get; set; }
     }
 }

@@ -16,5 +16,8 @@ namespace PollPlus.Models
 
         [ExcelExport("Data de Criação")]
         public string DataCriacao { get; set; }
+
+        [ExcelExport("Quantidade de Push")]
+        public string QtdePush { get; set; }
     }
 }

@@ -52,5 +52,10 @@ namespace PollPlus.Controllers
         {
             return PartialView("_MenuRelatorio");
         }
+
+        public PartialViewResult MontaControleAcesso()
+        {
+            return PartialView("_MenuControleAcesso");
+        }
     }
 }

@@ -52,22 +52,25 @@
                                     {
                                         <tr class="gradeA odd">
                                             <td class=" ">@_voucher.Identificador</td>
-                                            <td class=" ">@_voucher.Status</td>
+                                            <td style="color:red;font-weight:bold">@_voucher.Status</td>
                                             <td class=" ">@_voucher.DataCriacao.ToShortDateString()</td>
                                             <td class=" ">@_voucher.DataValidade</td>
                                             <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Pergunta.TextoPergunta)</td>
                                             <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Empresa.Nome)</td>
                                             <td class="center ">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-default btn-xs">Ações</button>
-                                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="javascript: if(confirm('Deseja marcar como utilizado?')) {window.location.href='@Url.Action("MarcarComoUtilizado", "Voucher", new { voucherId = _voucher.Id })';}">Utilizado</a></li>
-                                                    </ul>
-                                                </div>
+                                                @if (!_voucher.Usado)
+                                                {
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                        <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                            <li><a href="javascript: if(confirm('Deseja marcar como utilizado?')) {window.location.href='@Url.Action("MarcarComoUtilizado", "Voucher", new { voucherId = _voucher.Id })';}">Utilizado</a></li>
+                                                        </ul>
+                                                    </div>
+                                                }
                                             </td>
                                         </tr>
                                     }

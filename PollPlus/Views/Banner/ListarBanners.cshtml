@@ -27,6 +27,9 @@
                                         <strong>Url</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
+                                        <strong>Empresa</strong>
+                                    </th>
+                                    <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
                                         <strong>Data do Cadastro</strong>
                                     </th>
                                     <th role="columnheader" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" style="width: 232px;" aria-label="">
@@ -45,6 +48,7 @@
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_banner.Url</td>
+                                        <td class="">@_banner.EmpresaBanner.First().Empresa.Nome</td>
                                         <td class=" ">@_banner.DataCriacao.ToShortDateString()</td>
                                         <td class=" ">@_banner.DataValidade.ToShortDateString()</td>
                                         <td class=" ">@_banner.Status</td>

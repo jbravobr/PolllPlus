@@ -266,6 +266,7 @@
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
+    <Compile Include="Controllers\ControleAcessoController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EnqueteController.cs" />
     <Compile Include="Controllers\ErroController.cs" />
@@ -3671,6 +3672,12 @@
     <Content Include="Views\Relatorio\_GridRelatorioEnquetes.cshtml" />
     <Content Include="Views\Relatorio\_DropDownlistForEnquete.cshtml" />
     <Content Include="Views\Empresa\ListarFiliais.cshtml" />
+    <Content Include="Views\ControleAcesso\ListarControlesAcessos.cshtml" />
+    <Content Include="Views\ControleAcesso\NovoControleAcesso.cshtml" />
+    <Content Include="Views\ControleAcesso\_DropDownlistForEmpresas.cshtml" />
+    <Content Include="Views\Menu\_MenuControleAcesso.cshtml" />
+    <Content Include="Views\Relatorio\RelEstatisticoPorSexo.cshtml" />
+    <Content Include="Views\Relatorio\_GridRelatorioEnquetesPorSexo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -23,5 +23,11 @@ namespace PollPlus.Models
 
         [ExcelExport("Data de criação")]
         public string DataCriacao { get; set; }
+
+        [ExcelExport("Município")]
+        public string Municipio { get; set; }
+
+        [ExcelExport("Sexo")]
+        public string Sexo { get; set; }
     }
 }
