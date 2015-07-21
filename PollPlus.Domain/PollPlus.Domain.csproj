@@ -78,6 +78,7 @@
     <Compile Include="Permissao.cs" />
     <Compile Include="Plataforma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RespostaImagem.cs" />
     <Compile Include="Subcategoria.cs" />
     <Compile Include="SubcategoriaCategoria.cs" />
     <Compile Include="UsoPushPorEmpresa.cs" />

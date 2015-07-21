@@ -27,6 +27,8 @@ namespace PollPlus.Controllers
 
         readonly IBlackListServiceWEB serviceBlackList;
 
+        private RespostaImagemRepositorio repoRespostaImagem = new RespostaImagemRepositorio();
+
         public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
             IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList, IUsuarioServiceWEB _serviceUsuario)
         {
@@ -94,7 +96,7 @@ namespace PollPlus.Controllers
         }
 
         [OnlyAuthorizedUser, HttpPost]
-        public async Task<ActionResult> NovaEnquete(EnqueteViewModel model, HttpPostedFileBase file, List<string> resposta)
+        public async Task<ActionResult> NovaEnquete(EnqueteViewModel model, HttpPostedFileBase file, List<string> resposta, List<HttpPostedFileBase> imagemResposta)
         {
             var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
             ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
@@ -120,9 +122,24 @@ namespace PollPlus.Controllers
 
                 var respostas = MapeiaListaDeRespostas(resposta, enquete.Pergunta.Id);
 
+                var count = 0;
                 foreach (var r in respostas)
                 {
-                    await this.serviceResposta.InserirResposta(r);
+                    var _resposta = await this.serviceResposta.InserirRetornarResposta(r);
+
+                    if (imagemResposta != null && imagemResposta.Any())
+                    {
+                        if (imagemResposta[count] != null)
+                        {
+                            var obj = new RespostaImagem { RespostaId = _resposta.Id, Imagem = imagemResposta[count].FileName };
+
+                            if (await this.repoRespostaImagem.InserirRespostaImagem(obj))
+                            {
+                                Util.SalvarImagem(imagemResposta[count]);
+                                count++;
+                            }
+                        }
+                    }
                 }
 
                 return RedirectToAction("ListarEnquetes");

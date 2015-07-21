@@ -14,5 +14,7 @@ namespace PollPlus.Domain
         public virtual Pergunta Pergunta { get; set; }
 
         public virtual ICollection<PerguntaResposta> PerguntaResposta { get; set; }
+
+        public virtual ICollection<RespostaImagem> RespostaImagem { get; set; }
     }
 }

@@ -57,6 +57,21 @@ namespace PollPlus.Controllers
                 return BadRequest();
         }
 
+        [HttpGet]
+        [Route("recuperardados/{usuarioId}")]
+        public async Task<IHttpActionResult> RecuperarDados(int usuarioId)
+        {
+            if (usuarioId <= 0)
+                return BadRequest("Id inválido");
+
+            var respostas = await this.perguntaRespostaRepo.RetornarTodos();
+            var usuarioRespostas = respostas.Where(c => c.UsuarioId == usuarioId);
+
+            var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(usuarioRespostas));
+
+            return Ok(json);
+        }
+
         [HttpPost]
         [Route("errou")]
         public async Task<IHttpActionResult> EsqueciMinhaSenha([FromBody]string email)
@@ -505,7 +520,8 @@ namespace PollPlus.Controllers
                             Id = 0,
                             PerguntaServerId = r.PerguntaId,
                             TextoResposta = r.TextoResposta,
-                            RespostaServerId = r.Id
+                            RespostaServerId = r.Id,
+                            Imagem = r.RespostaImagem != null && r.RespostaImagem.Any() ? r.RespostaImagem.First(x => x.RespostaId == r.Id).Imagem : String.Empty
                         }).ToList()
                     },
                     PerguntaServerId = enquete.Pergunta.Id,
@@ -566,6 +582,7 @@ namespace PollPlus.Controllers
         public string TextoResposta { get; set; }
         public int PerguntaServerId { get; set; }
         public int RespostaServerId { get; set; }
+        public string Imagem { get; set; }
     }
 
     public class EnqueteMobile
