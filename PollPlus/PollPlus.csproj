@@ -303,6 +303,9 @@
     <Compile Include="Models\RelEmpresaViewModel.cs" />
     <Compile Include="Models\RelEnquetesRespostas.cs" />
     <Compile Include="Models\RelEnquetesViewModel.cs" />
+    <Compile Include="Models\RelRespostasPorMunicipio.cs" />
+    <Compile Include="Models\RelRespostasPorIdade.cs" />
+    <Compile Include="Models\RelRespostasPorSexo.cs" />
     <Compile Include="Models\RelUsuariosViewModel.cs" />
     <Compile Include="Models\RespostaViewModel.cs" />
     <Compile Include="Helpers\UsuarioLogado.cs" />
@@ -3677,7 +3680,8 @@
     <Content Include="Views\ControleAcesso\_DropDownlistForEmpresas.cshtml" />
     <Content Include="Views\Menu\_MenuControleAcesso.cshtml" />
     <Content Include="Views\Relatorio\RelEstatisticoPorSexo.cshtml" />
-    <Content Include="Views\Relatorio\_GridRelatorioEnquetesPorSexo.cshtml" />
+    <Content Include="Views\Relatorio\RelEstatisticoPorIdade.cshtml" />
+    <Content Include="Views\Relatorio\RelEstatisticoPorMunicipio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

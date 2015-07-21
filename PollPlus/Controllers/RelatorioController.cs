@@ -207,11 +207,8 @@ namespace PollPlus.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> RelEnquetesCadastradasPorSexo()
+        public async Task<ActionResult> RelEstatisticoPorSexo()
         {
-            var empresas = await this.srvEmpresa.RetornarTodasEmpresas();
-            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, null));
-
             if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
             {
                 var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
@@ -224,20 +221,43 @@ namespace PollPlus.Controllers
                 ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x => x.PerguntaId != null).ToList(), null));
             }
 
-            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorMaster)
-            {
-                var _enquetes = await this.srvEnquete.RetornarTodasEnquetes();
-                var _toList = _enquetes.OrderByDescending(e => e.DataCriacao).ToList();
+            return View();
+        }
 
-                return View("RelEnquetes", _toList.ToPagedList(1, 20));
+        [HttpGet]
+        public async Task<ActionResult> RelEstatisticoPorIdade()
+        {
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
+            {
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                var filtro = enquetes.Where(e => e.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(filtro, null));
             }
             else
             {
-                var _enquetes = await this.srvEnquete.RetornarTodasEnquetes();
-                var _toList = _enquetes.Where(x => x.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).OrderByDescending(x => x.DataCriacao).ToList();
-
-                return View("RelEnquetes", _toList.ToPagedList(1, 20));
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x => x.PerguntaId != null).ToList(), null));
             }
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> RelEstatisticoPorMunicipio()
+        {
+            if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
+            {
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                var filtro = enquetes.Where(e => e.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(filtro, null));
+            }
+            else
+            {
+                var enquetes = await this.srvEnquete.RetornarTodasEnquetes();
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x => x.PerguntaId != null).ToList(), null));
+            }
+
+            return View();
         }
 
         [NonAction]
@@ -378,23 +398,181 @@ namespace PollPlus.Controllers
             {
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
-                var groupUsuarios = from q in _respostasRespondidas
-                             group q by q.Usuario into porUsuario
-                             select new
-                             {
-                                RespostaId = porUsuario.Key,
-                                DataNascimento = porUsuario.ToList()
-                             };
-
                 _respostaJsonToList.Add(new RespostasJson
                 {
                     Id = resposta.Id,
                     TextoResposta = resposta.TextoResposta,
-                    PorHomens = resposta.PerguntaResposta.Count(x => x.Usuario.Sexo == EnumSexo.Masculino),
-                    PorMulheres = resposta.PerguntaResposta.Count(x => x.Usuario.Sexo == EnumSexo.Feminino)
+                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Masculino),
+                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Feminino)
                 });
             }
             return Json(_respostaJsonToList);
+        }
+
+        [AcceptVerbs(new[] { "POST" })]
+        public async Task<JsonResult> GetRespostasComPercentualPorNascimento(int perguntaId)
+        {
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == perguntaId).ToList();
+
+            var _respostaJsonToList = new List<RespostasJson>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                var groupNascimento = (from n in _respostasRespondidas
+                                       group n by n.Usuario.DataNascimento.Year into porAnoNascimento
+                                       select new
+                                       {
+                                           AnoNascimento = DateTime.Now.Year - porAnoNascimento.Key,
+                                           QtdeRespostas = porAnoNascimento.Count()
+                                       }).ToList();
+
+                foreach (var nascimento in groupNascimento)
+                {
+                    _respostaJsonToList.Add(new RespostasJson
+                    {
+                        Id = resposta.Id,
+                        TextoResposta = resposta.TextoResposta,
+                        Idade = nascimento.AnoNascimento
+                    });
+                }
+
+            }
+            return Json(_respostaJsonToList);
+        }
+
+        [AcceptVerbs(new[] { "POST" })]
+        public async Task<JsonResult> GetRespostasComPercentualPorMunicipio(int perguntaId)
+        {
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == perguntaId).ToList();
+
+            var _respostaJsonToList = new List<RespostasJson>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                var groupMunicipio = (from mun in _respostasRespondidas
+                                      group mun by mun.Usuario.Municipio into porMunicipio
+                                      select new
+                                      {
+                                          Municipio = porMunicipio.Key,
+                                          QtdeRespostas = porMunicipio.Count()
+                                      }).ToList();
+
+                foreach (var municipio in groupMunicipio)
+                {
+                    _respostaJsonToList.Add(new RespostasJson
+                    {
+                        Id = resposta.Id,
+                        TextoResposta = resposta.TextoResposta,
+                        Municipio = municipio.Municipio
+                    });
+                }
+            }
+            return Json(_respostaJsonToList);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ExportaRelEnquetesCadastradasPorMunicipio(int enqueteId)
+        {
+            var _pergunta = await this.srvEnquete.RetornarEnquetePorId(enqueteId);
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == _pergunta.PerguntaId).ToList();
+
+            var _respostaJsonToList = new List<RelRespostasPorMunicipio>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                var groupMunicipio = (from mun in _respostasRespondidas
+                                      group mun by mun.Usuario.Municipio into porMunicipio
+                                      select new
+                                      {
+                                          Municipio = porMunicipio.Key,
+                                          QtdeRespostas = porMunicipio.Count()
+                                      }).ToList();
+
+                foreach (var municipio in groupMunicipio)
+                {
+                    _respostaJsonToList.Add(new RelRespostasPorMunicipio
+                    {
+                        Id = resposta.Id,
+                        TextoResposta = resposta.TextoResposta,
+                        Municipio = municipio.Municipio
+                    });
+                }
+            }
+
+            var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelRespostasPorMunicipio>(_respostaJsonToList);
+            return File(_arqExcelBytes, "application/ms-excel", string.Format("Relatorio_Respostas_Enquete_PorMunicipio_{0}.xls", DateTime.Now.ToShortDateString()));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ExportaRelEnquetesCadastradasPorSexo(int enqueteId)
+        {
+            var _pergunta = await this.srvEnquete.RetornarEnquetePorId(enqueteId);
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == _pergunta.PerguntaId).ToList();
+
+            var _respostaJsonToList = new List<RelRespostasPorSexo>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                _respostaJsonToList.Add(new RelRespostasPorSexo
+                {
+                    Id = resposta.Id,
+                    TextoResposta = resposta.TextoResposta,
+                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Masculino),
+                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Feminino)
+                });
+            }
+
+            var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelRespostasPorSexo>(_respostaJsonToList);
+            return File(_arqExcelBytes, "application/ms-excel", string.Format("Relatorio_Respostas_Enquete_PorSexo_{0}.xls", DateTime.Now.ToShortDateString()));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ExportaRelEnquetesCadastradasPorIdade(int enqueteId)
+        {
+            var _pergunta = await this.srvEnquete.RetornarEnquetePorId(enqueteId);
+            var _respostas = await this.srvResposta.RetornarTodosRespostas();
+            var _toList = _respostas.Where(r => r.PerguntaId == _pergunta.PerguntaId).ToList();
+
+            var _respostaJsonToList = new List<RelRespostasPorIdade>();
+
+            foreach (var resposta in _toList)
+            {
+                var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
+
+                var groupNascimento = (from n in _respostasRespondidas
+                                       group n by n.Usuario.DataNascimento.Year into porAnoNascimento
+                                       select new
+                                       {
+                                           AnoNascimento = DateTime.Now.Year - porAnoNascimento.Key,
+                                           QtdeRespostas = porAnoNascimento.Count()
+                                       }).ToList();
+
+                foreach (var nascimento in groupNascimento)
+                {
+                    _respostaJsonToList.Add(new RelRespostasPorIdade
+                    {
+                        Id = resposta.Id,
+                        TextoResposta = resposta.TextoResposta,
+                        Idade = nascimento.AnoNascimento
+                    });
+                }
+
+            }
+
+            var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelRespostasPorIdade>(_respostaJsonToList);
+            return File(_arqExcelBytes, "application/ms-excel", string.Format("Relatorio_Respostas_Enquete_PorIdade_{0}.xls", DateTime.Now.ToShortDateString()));
         }
 
         [HttpGet]
@@ -435,5 +613,7 @@ namespace PollPlus.Controllers
         public double Percentual { get; set; }
         public int PorHomens { get; set; }
         public int PorMulheres { get; set; }
+        public int Idade { get; set; }
+        public string Municipio { get; set; }
     }
 }

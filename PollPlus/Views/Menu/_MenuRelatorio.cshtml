@@ -1,5 +1,4 @@
-﻿
-@*<Vendas>*@
+﻿@*<Vendas>*@
 <li class="parent">
     <a href="#">
         <i class="fa fa-list-alt"></i>
@@ -14,6 +13,15 @@
         </li>
         <li>
             @Html.ActionLink("Enquetes cadastradas", "RelEnquetesCadastradas", "Relatorio")
+        </li>
+        <li>
+            @Html.ActionLink("Exporta Respostas por Sexo", "RelEstatisticoPorSexo", "Relatorio")
+        </li>
+        <li>
+            @Html.ActionLink("Exporta Respostas por Idade", "RelEstatisticoPorIdade", "Relatorio")
+        </li>
+        <li>
+            @Html.ActionLink("Exporta Respostas por Município", "RelEstatisticoPorMunicipio", "Relatorio")
         </li>
     </ul>
 </li>
