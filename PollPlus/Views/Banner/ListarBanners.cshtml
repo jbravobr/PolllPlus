@@ -48,7 +48,7 @@
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_banner.Url</td>
-                                        <td class="">@_banner.EmpresaBanner.First().Empresa.Nome</td>
+                                        <td class="">@(_banner.EmpresaBanner.FirstOrDefault() == null ? "Sem Empresa" : _banner.EmpresaBanner.First().Empresa.Nome)</td>
                                         <td class=" ">@_banner.DataCriacao.ToShortDateString()</td>
                                         <td class=" ">@_banner.DataValidade.ToShortDateString()</td>
                                         <td class=" ">@_banner.Status</td>

@@ -125,6 +125,7 @@ namespace PollPlus.Controllers
         {
             var voucher = await this._service.RetornarVoucherPorId(voucherId);
             voucher.Usado = true;
+            voucher.Status = Domain.Enumeradores.EnumStatusVoucher.Indisponivel;
 
             await this._service.AtualizarVoucher(voucher);
 
