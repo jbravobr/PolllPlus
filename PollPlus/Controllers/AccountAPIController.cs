@@ -8,6 +8,7 @@ using PollPlus.Repositorio;
 using PollPlus.Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -393,8 +394,6 @@ namespace PollPlus.Controllers
                     }
                 }
 
-                var perguntasRespostas = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorPergunta(respondeJson.PerguntaId);
-
                 var enquete = (await this.enqueteRepo.RetornarTodasEnquetes()).First(e => e.PerguntaId == respondeJson.PerguntaId);
 
                 if (enquete.TemVoucher)
@@ -416,10 +415,15 @@ namespace PollPlus.Controllers
                     }
                 }
 
-                return Ok(perguntasRespostas);
+                var perguntasRespostas = await this.perguntaRespostaRepo.RetornarPerguntaRespostaPorPergunta(respondeJson.PerguntaId);
+                var _toList = perguntasRespostas.ToList();
+                var obj = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(MapeiaParaPerguntaRespostaMobile(_toList)));
+
+                return Ok(obj);
             }
             catch (Exception ex)
             {
+                //File.WriteAllText(@"E:\Inetroot\app01.training.cloudfacil.net\Images\erroRespondeEnquete.txt", ex.Message);
                 return InternalServerError(ex);
             }
         }
@@ -501,6 +505,14 @@ namespace PollPlus.Controllers
         private ICollection<Resposta> MapeiaRespostaMobileParaRespostaDomain(ICollection<RespostaMobile> respMobile)
         {
             return respMobile.Select(r => new Resposta { TextoResposta = r.TextoResposta, PerguntaId = r.PerguntaServerId }).ToList();
+        }
+
+        private IEnumerable<PerguntaRespostaMobile> MapeiaParaPerguntaRespostaMobile(ICollection<PerguntaResposta> p)
+        {
+            foreach (var item in p)
+            {
+                yield return new PerguntaRespostaMobile { percentual = item.percentual, PerguntaId = item.PerguntaId, RespostaId = item.RespostaId, TextoResposta = string.Empty, UsuarioId = item.UsuarioId };
+            }
         }
 
         private IEnumerable<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes)
@@ -619,5 +631,18 @@ namespace PollPlus.Controllers
     {
         public int EnqueteId { get; set; }
         public int PerguntaId { get; set; }
+    }
+
+    public class PerguntaRespostaMobile
+    {
+        public int PerguntaId { get; set; }
+
+        public int RespostaId { get; set; }
+
+        public string TextoResposta { get; set; }
+
+        public int UsuarioId { get; set; }
+
+        public double percentual { get; set; }
     }
 }
