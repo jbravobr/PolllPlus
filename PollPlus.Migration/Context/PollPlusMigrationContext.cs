@@ -30,6 +30,7 @@ namespace PollPlus.Migration.Context
         DbSet<UsoPushPorEmpresa> UsoPushEmpresa { get; set; }
         DbSet<ControleAcesso> ControleAcesso { get; set; }
         DbSet<RespostaImagem> RespostaImagem { get; set; }
+        DbSet<AmigoEnquete> AmigoEnquete { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

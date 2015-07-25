@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201507212005187_Cria_Banco.Designer.cs">
       <DependentUpon>201507212005187_Cria_Banco.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507221728432_cria_AmigoEnquete.cs" />
+    <Compile Include="Migrations\201507221728432_cria_AmigoEnquete.Designer.cs">
+      <DependentUpon>201507221728432_cria_AmigoEnquete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Context\PollPlusMigrationContext.cs" />
@@ -70,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201507212005187_Cria_Banco.resx">
       <DependentUpon>201507212005187_Cria_Banco.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507221728432_cria_AmigoEnquete.resx">
+      <DependentUpon>201507221728432_cria_AmigoEnquete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

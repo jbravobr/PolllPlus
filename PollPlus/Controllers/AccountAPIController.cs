@@ -40,6 +40,8 @@ namespace PollPlus.Controllers
 
         private EnqueteVoucherRepositorio enqueteVoucherRepo = new EnqueteVoucherRepositorio();
 
+        private AmigoEnqueteRepositorio amigoRepo = new AmigoEnqueteRepositorio();
+
         public AccountAPIController() { }
 
         [HttpPost]
@@ -232,22 +234,24 @@ namespace PollPlus.Controllers
         }
 
         [HttpGet]
-        [Route("enqueteinteresse/{id}/{empresaId}")]
-        public async Task<IHttpActionResult> GetEnquetesInteresse(int id, int empresaId)
+        [Route("enqueteinteresse/{id}/{usuarioId}")]
+        public async Task<IHttpActionResult> GetEnquetesInteresse(int id, int usuarioId)
         {
             List<Enquete> enquetes = null;
 
             if (id > 0)
             {
                 Expression<Func<Enquete, bool>> filtro = (x) => x.Id > id && x.Tipo == EnumTipoEnquete.Interesse
-                && x.EmpresaId == empresaId && x.Status == EnumStatusEnquete.Publicada;
+                && x.Status == EnumStatusEnquete.Publicada;
                 enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+                enquetes = enquetes.Where(x => x.AmigoEnquete != null && x.AmigoEnquete.Any(y => y.UsuarioId == usuarioId)).ToList();
             }
             else
             {
                 Expression<Func<Enquete, bool>> filtro = (x) => x.Tipo == EnumTipoEnquete.Interesse
-                && x.EmpresaId == empresaId && x.Status == EnumStatusEnquete.Publicada;
+                && x.Status == EnumStatusEnquete.Publicada && x.AmigoEnquete.All(y => y.EnqueteId == x.Id && y.UsuarioId == usuarioId);
                 enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+                enquetes = enquetes.Where(x => x.AmigoEnquete != null && x.AmigoEnquete.Any(y => y.UsuarioId == usuarioId)).ToList();
             }
 
             try
@@ -276,6 +280,27 @@ namespace PollPlus.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+        [HttpPost]
+        [Route("retornaamigosencontrados")]
+        public async Task<IHttpActionResult> GetAmigos([FromBody]string telefones)
+        {
+            var _tels = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<List<string>>(telefones));
+
+            var _usuarios = await this.service.RetornarTodosUsuarios();
+
+            var amigos = new List<Usuario>();
+            foreach (var usuario in _usuarios)
+            {
+                var tel = String.Concat(usuario.DDD, usuario.Telefone);
+                if (_tels.Contains(tel))
+                    amigos.Add(usuario);
+            }
+
+            var _result = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(amigos));
+
+            return Ok(_result);
         }
 
         [HttpGet]
@@ -320,6 +345,14 @@ namespace PollPlus.Controllers
                 var retornoInsertEnquete = await this.enqueteRepo.InserirRetornarEnquete(enqueteJson);
 
                 var result = new RetornoGravacaoEnquete { EnqueteId = retornoInsertEnquete.Id, PerguntaId = (int)retornoInsertEnquete.PerguntaId };
+
+                if (enqueteJson.colegas != null && !String.IsNullOrEmpty(enqueteJson.colegas))
+                {
+                    foreach (var amigo in enqueteJson.colegas.Split(';'))
+                    {
+                        await this.amigoRepo.InserirAmigoEnquete(new AmigoEnquete { UsuarioId = Convert.ToInt32(amigo), EnqueteId = retornoInsertEnquete.Id });
+                    }
+                }
 
                 return Ok(result);
             }
@@ -515,11 +548,13 @@ namespace PollPlus.Controllers
             }
         }
 
-        private IEnumerable<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes)
+        private List<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes)
         {
+            var lista = new List<EnqueteMobile>();
+
             foreach (var enquete in enquetes)
             {
-                yield return new EnqueteMobile
+                var e = new EnqueteMobile
                 {
                     Id = 0,
                     Pergunta = new PerguntaMobile
@@ -544,9 +579,17 @@ namespace PollPlus.Controllers
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
                     Imagem = enquete.Imagem,
-                    Categoria = GetCategoriaById(enquete.EnqueteCategoria.First().CategoriaId).Result
                 };
+
+                if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
+                {
+                    e.Categoria = enquete.EnqueteCategoria.First().Categoria;
+                }
+
+                lista.Add(e);
             }
+
+            return lista;
         }
 
         private IEnumerable<EnqueteMobile> MapeiaMensagemParaMensagemMobile(ICollection<Enquete> enquetes)

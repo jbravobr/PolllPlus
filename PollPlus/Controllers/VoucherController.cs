@@ -117,7 +117,7 @@ namespace PollPlus.Controllers
             if (listaEnquete.Any())
                 ViewBag.Enquetes = listaEnquete;
 
-            return View(lista.ToPagedList(pagina ?? 1, 10));
+            return View(lista.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]

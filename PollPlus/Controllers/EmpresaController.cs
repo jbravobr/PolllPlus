@@ -105,7 +105,7 @@ namespace PollPlus.Controllers
         {
             var listaFiliais = await this.repoFilial.RetornarTodasFiliais();
 
-            return View(listaFiliais.ToPagedList(pagina ?? 1, 10));
+            return View(listaFiliais.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [NonAction]

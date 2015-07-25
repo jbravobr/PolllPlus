@@ -212,7 +212,7 @@ namespace PollPlus.Controllers
             ViewBag.ContUsuariosTotal = listaUsuarios.Count;
             ViewBag.ContUsuariosAtivosTotal = listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).Count();
 
-            return View(listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).ToPagedList(pagina ?? 1, 10));
+            return View(listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [HttpGet, OnlyAuthorizedUser]

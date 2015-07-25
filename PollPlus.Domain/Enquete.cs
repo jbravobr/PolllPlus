@@ -21,6 +21,8 @@ namespace PollPlus.Domain
         public bool TemVoucher { get; set; }
         public int QtdePush { get; set; }
 
+        public string colegas { get; set; }
+
         public int UsuarioId { get; set; }
         [JsonIgnore]
         public virtual Usuario Usuario { get; set; }
@@ -33,6 +35,8 @@ namespace PollPlus.Domain
 
         public virtual ICollection<EnqueteCategoria> EnqueteCategoria { get; set; }
         public virtual ICollection<EnqueteVoucher> EnqueteVoucher { get; set; }
+
+        public virtual ICollection<AmigoEnquete> AmigoEnquete { get; set; }
 
         public void ConfiguraTipo(EnumTipoEnquete tipo)
         {

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmigoEnqueteRepositorio.cs" />
     <Compile Include="RespostaImagemRepositorio.cs" />
     <Compile Include="ControleAcessoRepositorio.cs" />
     <Compile Include="FilialRepositorio.cs" />

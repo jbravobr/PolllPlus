@@ -186,7 +186,7 @@ namespace PollPlus.Controllers
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 
-            return View(listaEnquetes.ToPagedList(pagina ?? 1, 10));
+            return View(listaEnquetes.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]

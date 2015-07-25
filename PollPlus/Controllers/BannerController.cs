@@ -89,7 +89,7 @@ namespace PollPlus.Controllers
         {
             var lista = await this.service.RetornarTodosBanners();
 
-            return View(lista.ToPagedList(pagina ?? 1, 10));
+            return View(lista.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]

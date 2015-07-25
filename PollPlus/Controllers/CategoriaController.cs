@@ -34,7 +34,7 @@ namespace PollPlus.Controllers
         {
             var categorias = await this.repo.RetornarTodasCategorias();
 
-            return View(categorias.ToPagedList(pagina ?? 1, 10));
+            return View(categorias.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [HttpGet, OnlyAuthorizedUser]
