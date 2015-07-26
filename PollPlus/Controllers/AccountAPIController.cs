@@ -42,6 +42,8 @@ namespace PollPlus.Controllers
 
         private AmigoEnqueteRepositorio amigoRepo = new AmigoEnqueteRepositorio();
 
+        private UsuarioCategoriaRepositorio ucRepo = new UsuarioCategoriaRepositorio();
+
         public AccountAPIController() { }
 
         [HttpPost]
@@ -149,6 +151,16 @@ namespace PollPlus.Controllers
 
                 var retornoInsertUsuario = await this.service.InserirRetornarUsuario(usuarioJson);
 
+                List<int> catIds = new List<int>();
+                foreach (var item in usuarioJson.CategoriaMobileSelection.Split(';'))
+                {
+                    var uc = new UsuarioCategoria { UsuarioId = retornoInsertUsuario.Id, CategoriaId = Convert.ToInt32(item) };
+                    await this.ucRepo.InserirUsuarioCategoria(uc);
+                    catIds.Add(Convert.ToInt32(item));
+                }
+
+                var listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
+
                 if (retornoInsertUsuario != null)
                     EnviarEmailConfirmacaoCadastro(usuarioJson);
 
@@ -161,16 +173,9 @@ namespace PollPlus.Controllers
                     Sexo = retornoInsertUsuario.Sexo,
                     Telefone = retornoInsertUsuario.Telefone,
                     Id = retornoInsertUsuario.Id,
-                    Email = retornoInsertUsuario.Email
+                    Email = retornoInsertUsuario.Email,
+                    Categorias = MapeiaCategoriaParaMobile(listaCategorias).ToList()
                 };
-
-                //var lista = new List<CategoriaMobile>();
-                //foreach (var item in retornoInsertUsuario.UsuarioCategoria)
-                //{
-                //    lista.Add(new CategoriaMobile { Id = item.Categoria.Id, Nome = item.Categoria.Nome });
-                //}
-
-                //user.Categorias = lista;
 
                 var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
 
@@ -179,6 +184,14 @@ namespace PollPlus.Controllers
             catch (Exception ex)
             {
                 return InternalServerError(ex);
+            }
+        }
+
+        private IEnumerable<CategoriaMobile> MapeiaCategoriaParaMobile(List<Categoria> cat)
+        {
+            foreach (var c in cat)
+            {
+                yield return new CategoriaMobile { Id = c.Id, Nome = c.Nome };
             }
         }
 
@@ -502,7 +515,7 @@ namespace PollPlus.Controllers
             _corpoMessage.AppendLine(String.Format("<p>{0}</p>", voucherDescricao));
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Aviso de Sistema - Sistema Mais");
 
             return Util.SendMail(_message);
         }
