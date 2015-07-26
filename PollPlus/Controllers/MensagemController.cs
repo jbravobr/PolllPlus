@@ -86,7 +86,8 @@ namespace PollPlus.Controllers
             var mapper = AutoMapper.Mapper.Map<EnqueteViewModel>(enquete);
 
             var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
-            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, mapper.CategoriasInteresse));
+            var cats = enquete.EnqueteCategoria.Select(x => x.CategoriaId).ToList();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, cats));
 
             return View(mapper);
         }
@@ -94,6 +95,10 @@ namespace PollPlus.Controllers
         [OnlyAuthorizedUser, HttpPost]
         public async Task<ActionResult> EditarMensagem(EnqueteViewModel model, HttpPostedFileBase file)
         {
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            var cats = model.EnqueteCategoria.Select(x => x.CategoriaId).ToList();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, cats));
+
             if (!ModelState.IsValid)
                 return View(model);
 

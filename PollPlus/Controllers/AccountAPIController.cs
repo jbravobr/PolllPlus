@@ -437,10 +437,13 @@ namespace PollPlus.Controllers
                     {
                         if (item.Voucher.Status == EnumStatusVoucher.Disponivel && !item.Voucher.Usado)
                         {
-                            if (EnviarEmailConfirmacaoVoucher(respondeJson.Usuario, item.Voucher.Identificador, item.Voucher.DataValidade))
+                            var u = await this.service.RetornarUsuarioPorId(respondeJson.UsuarioId);
+
+                            if (EnviarEmailConfirmacaoVoucher(u, item.Voucher.Identificador, item.Voucher.DataValidade, item.Voucher.Descricao))
                             {
-                                item.Voucher.Status = EnumStatusVoucher.Indisponivel;
-                                this.voucherRepo.Atualizar(item.Voucher);
+                                var v = await this.voucherRepo.RetornarVoucherPorId(item.Id);
+                                v.Status = EnumStatusVoucher.Indisponivel;
+                                this.voucherRepo.Atualizar(v);
                                 break;
                             }
                         }
@@ -490,12 +493,13 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private bool EnviarEmailConfirmacaoVoucher(Usuario usuario, string voucherNro, DateTime dataValidade)
+        private bool EnviarEmailConfirmacaoVoucher(Usuario usuario, string voucherNro, DateTime dataValidade, string voucherDescricao)
         {
             var _corpoMessage = new StringBuilder();
 
             _corpoMessage.Append(String.Format("<p>Está é a confirmação da criação do seu voucher número {0}.</p>", voucherNro));
-            _corpoMessage.AppendLine(String.Format("<p>Este voucher é valido até {0}.</p>", dataValidade));
+            _corpoMessage.AppendLine(String.Format("<p>Este voucher é valido até {0}.</p>", dataValidade.ToString()));
+            _corpoMessage.AppendLine(String.Format("<p>{0}</p>", voucherDescricao));
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
             var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
@@ -522,15 +526,27 @@ namespace PollPlus.Controllers
         }
 
         [HttpGet]
-        [Route("banners/{id}/{empresaId}")]
-        public async Task<IHttpActionResult> GetBanners(int id, int empresaId)
+        [Route("banners/{id}/{empresaId}/{categorias}")]
+        public async Task<IHttpActionResult> GetBanners(int id, int empresaId, string categorias)
         {
             ICollection<Banner> banners;
+            List<int> cats = new List<int>();
+
+            foreach (var item in categorias.Split(';'))
+            {
+                cats.Add(Convert.ToInt32(item));
+            }
 
             if (id <= 0)
-                banners = (await this.bannerRepo.RetornarTodosBanners()).Where(b => b.EmpresaBanner.Any(e => e.EmpresaId == empresaId)).ToList();
+                banners = (await this.bannerRepo.RetornarTodosBanners())
+                    .Where(b => b.EmpresaBanner.Any(e => e.EmpresaId == empresaId))
+                    .Where(b => b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
+                    .ToList();
             else
-                banners = (await this.bannerRepo.RetornarTodosBanners()).Where(b => b.Id > id && b.EmpresaBanner.Any(e => e.EmpresaId == empresaId)).ToList();
+                banners = (await this.bannerRepo.RetornarTodosBanners())
+                    .Where(b => b.Id > id && b.EmpresaBanner.Any(e => e.EmpresaId == empresaId))
+                    .Where(b => b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
+                    .ToList();
 
             return Ok(JsonConvert.SerializeObject(banners));
         }

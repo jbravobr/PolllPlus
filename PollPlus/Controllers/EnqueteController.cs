@@ -159,7 +159,8 @@ namespace PollPlus.Controllers
                 ViewData.Add("Respostas", AutoMapper.Mapper.Map<ICollection<RespostaViewModel>>(respostas));
 
             var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
-            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, null));
+            var cats = enquete.EnqueteCategoria.Select(x => x.CategoriaId).ToList();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, cats));
 
             return View(AutoMapper.Mapper.Map<EnqueteViewModel>(enquete));
         }
@@ -168,6 +169,11 @@ namespace PollPlus.Controllers
         public async Task<ActionResult> EditarEnquete(EnqueteViewModel model, HttpPostedFileBase file)
         {
             var respostas = model.Pergunta.Resposta;
+            var enquete = await this.service.RetornarEnquetePorId(model.Id);
+
+            var categorias = await this.serviceUsuario.RetornarCategoriasDisponniveis();
+            var cats = enquete.EnqueteCategoria.Select(x => x.CategoriaId).ToList();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, cats));
 
             if (respostas != null && respostas.Any())
                 ViewData.Add("Respostas", AutoMapper.Mapper.Map<RespostaViewModel>(respostas));
@@ -186,7 +192,7 @@ namespace PollPlus.Controllers
         {
             var listaEnquetes = await this.service.RetornarTodasEnquetes();
 
-            return View(listaEnquetes.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
+            return View(listaEnquetes.OrderByDescending(x => x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -251,12 +257,14 @@ namespace PollPlus.Controllers
                         Selected = categoriaSelecionada.Contains((int)categoria.Id)
                     };
                 }
-
-                yield return new SelectListItem
+                else
                 {
-                    Text = categoria.Nome,
-                    Value = categoria.Id.ToString()
-                };
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString()
+                    };
+                }
             }
         }
     }

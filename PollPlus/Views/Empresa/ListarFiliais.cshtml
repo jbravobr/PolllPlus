@@ -44,7 +44,7 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _filial in Model)
+                                @foreach (var _filial in Model.OrderBy(x => x.Nome))
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_filial.Nome</td>
@@ -53,18 +53,18 @@
                                         <td class=" ">@_filial.Empresa.Nome</td>
                                         <td class=" ">@_filial.DataCriacao.ToShortDateString()</td>
                                         @*<td class="center ">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-xs">Ações</button>
-                                                <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                    <span class="sr-only">Toggle Dropdown</span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("EditarEmpresa", "Empresa", new { empresaId = _empresa.Id })">Alterar</a></li>
-                                                    <li><a href="javascript: if(confirm('Deseja remover esta empresa?')) {window.location.href='@Url.Action("RemoverEmpresa", "Empresa", new { empresaId = _empresa.Id })';}">Remover</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>*@
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-xs">Ações</button>
+                                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a href="@Url.Action("EditarEmpresa", "Empresa", new { empresaId = _empresa.Id })">Alterar</a></li>
+                                                        <li><a href="javascript: if(confirm('Deseja remover esta empresa?')) {window.location.href='@Url.Action("RemoverEmpresa", "Empresa", new { empresaId = _empresa.Id })';}">Remover</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>*@
                                     </tr>
                                 }
 

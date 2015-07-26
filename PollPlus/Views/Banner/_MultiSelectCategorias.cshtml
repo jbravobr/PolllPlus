@@ -2,6 +2,6 @@
 <select id="example2" multiple="multiple" name="Categorias" style="display: none;">
     @foreach (var cat in categorias)
     {
-        <option value="@cat.Value">@cat.Text</option>
+        <option value="@cat.Value" selected="@cat.Selected">@cat.Text</option>
     }
 </select>

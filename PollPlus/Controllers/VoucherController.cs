@@ -41,7 +41,7 @@ namespace PollPlus.Controllers
             else
             {
                 var enquetes = await this.serviceEnquete.RetornarTodasEnquetes();
-                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x=>x.PerguntaId != null).ToList(), null));
+                ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes.Where(x => x.PerguntaId != null).ToList(), null));
             }
             return View();
         }
@@ -55,12 +55,13 @@ namespace PollPlus.Controllers
             if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
             {
                 var enquetes = await this.serviceEnquete.RetornarTodasEnquetes();
-                var filtro = enquetes.Where(e => e.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId).ToList();
+                var filtro = enquetes.Where(e => e.Id == UsuarioLogado.UsuarioAutenticado().EmpresaId &&
+                e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica).ToList();
                 ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(filtro, null));
             }
             else
             {
-                var enquetes = await this.serviceEnquete.RetornarTodasEnquetes();
+                var enquetes = (await this.serviceEnquete.RetornarTodasEnquetes()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica).ToList();
                 ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes, null));
             }
 
@@ -71,6 +72,10 @@ namespace PollPlus.Controllers
                 if (voucher != null)
                     await this._service.AssociaVoucherEnquete(model.EnqueteId, voucher.Id);
             }
+
+            var enquente = await this.serviceEnquete.RetornarEnquetePorId(model.EnqueteId);
+            enquente.TemVoucher = true;
+            await this.serviceEnquete.AtualizarEnquete(enquente);
 
             return RedirectToAction("ListarVouchers", "Voucher");
         }
@@ -117,7 +122,7 @@ namespace PollPlus.Controllers
             if (listaEnquete.Any())
                 ViewBag.Enquetes = listaEnquete;
 
-            return View(lista.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
+            return View(lista.OrderByDescending(x => x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -146,12 +151,14 @@ namespace PollPlus.Controllers
                         Selected = enquete.Id == enqueteSelecionada
                     };
                 }
-
-                yield return new SelectListItem
+                else
                 {
-                    Text = enquete.Pergunta.TextoPergunta,
-                    Value = enquete.Id.ToString()
-                };
+                    yield return new SelectListItem
+                    {
+                        Text = enquete.Pergunta.TextoPergunta,
+                        Value = enquete.Id.ToString()
+                    };
+                }
             }
         }
     }

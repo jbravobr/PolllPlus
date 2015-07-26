@@ -42,6 +42,38 @@ namespace PollPlus.Controllers
             return View();
         }
 
+        [HttpGet, OnlyAuthorizedUser]
+        public async Task<ActionResult> EditarBanner(int bannerId)
+        {
+            var banner = await this.service.RetornarBannerPorId(bannerId);
+
+            var categorias = await this.serviceEnquete.RetornarCategoriasDisponniveis();
+            var b = banner.CategoriaBanner.Select(x => x.CategoriaId).ToList();
+            ViewData.Add("CategoriasForSelectList", PreparaParaListaDeCategorias(categorias, b));
+
+            var empresas = await this.serviceEmpresas.RetornarTodasEmpresas();
+            var e = banner.EmpresaBanner.Select(x => x.EmpresaId).First();
+            ViewData.Add("EmpresasForSelectList", PreparaParaListaDeEmpresas(empresas, e));
+
+            return View(AutoMapper.Mapper.Map<BannerViewModel>(banner));
+        }
+
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> EditarBanner(BannerViewModel model, HttpPostedFileBase file)
+        {
+            if (ModelState.IsValid)
+            {
+                if(await this.service.AtualizarBanner(AutoMapper.Mapper.Map<Banner>(model)))
+                {
+                    if (file.ContentLength > 0)
+                        if (Util.SalvarImagem(file))
+                            return RedirectToAction("ListarBanners");
+                }
+            }
+
+            return View(model);
+        }
+
         [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> NovoBanner(BannerViewModel model, HttpPostedFileBase file)
         {
@@ -89,7 +121,7 @@ namespace PollPlus.Controllers
         {
             var lista = await this.service.RetornarTodosBanners();
 
-            return View(lista.OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
+            return View(lista.OrderByDescending(x => x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -128,12 +160,14 @@ namespace PollPlus.Controllers
                         Selected = empresa.Id == empresaSelecionada
                     };
                 }
-
-                yield return new SelectListItem
+                else
                 {
-                    Text = empresa.Nome,
-                    Value = empresa.Id.ToString()
-                };
+                    yield return new SelectListItem
+                    {
+                        Text = empresa.Nome,
+                        Value = empresa.Id.ToString()
+                    };
+                }
             }
         }
 
@@ -151,12 +185,14 @@ namespace PollPlus.Controllers
                         Selected = categoriaSelecionada.Contains((int)categoria.Id)
                     };
                 }
-
-                yield return new SelectListItem
+                else
                 {
-                    Text = categoria.Nome,
-                    Value = categoria.Id.ToString()
-                };
+                    yield return new SelectListItem
+                    {
+                        Text = categoria.Nome,
+                        Value = categoria.Id.ToString()
+                    };
+                }
             }
         }
     }

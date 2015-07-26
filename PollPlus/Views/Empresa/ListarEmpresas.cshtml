@@ -47,7 +47,7 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _empresa in Model)
+                                @foreach (var _empresa in Model.OrderBy(x=>x.Nome))
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_empresa.Id</td>

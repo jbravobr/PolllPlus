@@ -9,9 +9,11 @@ namespace PollPlus.Domain
     public class EnqueteVoucher : EntityBase
     {
         public int EnqueteId { get; set; }
-        public Enquete Enquete { get; set; }
+
+        public virtual Enquete Enquete { get; set; }
 
         public int VoucherId { get; set; }
-        public Voucher Voucher { get; set; }
+
+        public virtual Voucher Voucher { get; set; }
     }
 }

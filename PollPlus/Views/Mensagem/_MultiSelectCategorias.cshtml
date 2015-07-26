@@ -1,7 +1,2 @@
 ﻿@{var categorias = (IEnumerable<SelectListItem>)ViewData["CategoriasForSelectList"]; }
-<select id="example2" multiple="multiple" name="CategoriasInteresse" style="display: none;">
-    @foreach (var cat in categorias)
-    {
-        <option value="@cat.Value">@cat.Text</option>
-    }
-</select>
+@Html.DropDownList("CategoriasInteresse", categorias, "Selecione uma opção")

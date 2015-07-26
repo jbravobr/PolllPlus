@@ -3683,6 +3683,7 @@
     <Content Include="Views\Relatorio\RelEstatisticoPorIdade.cshtml" />
     <Content Include="Views\Relatorio\RelEstatisticoPorMunicipio.cshtml" />
     <Content Include="Views\Enquete\_EnqueteRespostaEdicao.cshtml" />
+    <Content Include="Views\Banner\EditarBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
