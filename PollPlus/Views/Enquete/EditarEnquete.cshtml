@@ -10,7 +10,7 @@
 </div>
 
 <div class="content">
-    @using (Html.BeginForm("NovaEnquete", "Enquete", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditarEnquete", "Enquete", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
     {
         @Html.HiddenFor(x => x.Id)
 

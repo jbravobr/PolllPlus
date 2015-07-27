@@ -124,7 +124,7 @@ namespace PollPlus.Controllers
                 var lista = new List<CategoriaMobile>();
                 foreach (var item in u.UsuarioCategoria)
                 {
-                    lista.Add(new CategoriaMobile { Id = item.Categoria.Id, Nome = item.Categoria.Nome });
+                    lista.Add(new CategoriaMobile { Id = item.Categoria.Id, Nome = item.Categoria.Nome, UsuarioId = user.Id });
                 }
 
                 user.Categorias = lista;
@@ -608,6 +608,7 @@ namespace PollPlus.Controllers
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
                     Imagem = enquete.Imagem,
+                    TemVoucher = enquete.TemVoucher
                 };
 
                 if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
@@ -683,6 +684,7 @@ namespace PollPlus.Controllers
         public string Imagem { get; set; }
         public Categoria Categoria { get; set; }
         public string Descricao { get; set; }
+        public bool TemVoucher { get; set; }
     }
 
     public class PerguntaMobile
@@ -697,6 +699,7 @@ namespace PollPlus.Controllers
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        public int UsuarioId { get; set; }
     }
 
     public class RetornoGravacaoEnquete

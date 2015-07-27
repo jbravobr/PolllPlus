@@ -29,6 +29,8 @@ namespace PollPlus.Controllers
 
         private RespostaImagemRepositorio repoRespostaImagem = new RespostaImagemRepositorio();
 
+        private EnqueteCategoriaRepositorio enqueteCategoriaRepositorio = new EnqueteCategoriaRepositorio();
+
         public EnqueteController(IEnqueteServiceWEB _service, IPerguntaServiceWEB _servicePergunta,
             IRespostaServiceWEB _serviceResposta, IBlackListServiceWEB _serviceBlackList, IUsuarioServiceWEB _serviceUsuario)
         {
@@ -166,7 +168,7 @@ namespace PollPlus.Controllers
         }
 
         [OnlyAuthorizedUser, HttpPost]
-        public async Task<ActionResult> EditarEnquete(EnqueteViewModel model, HttpPostedFileBase file)
+        public async Task<ActionResult> EditarEnquete(EnqueteViewModel model, List<string> resposta, HttpPostedFileBase file, List<HttpPostedFileBase> imagemResposta)
         {
             var respostas = model.Pergunta.Resposta;
             var enquete = await this.service.RetornarEnquetePorId(model.Id);
@@ -180,6 +182,30 @@ namespace PollPlus.Controllers
 
             if (!ModelState.IsValid)
                 return View(model);
+
+            //if(resposta != null && resposta.Any())
+            //{
+            //    for (int i = 0; i < resposta.Count; i++)
+            //    {
+            //        model.Pergunta.Resposta.ElementAt(i).TextoResposta = resposta[i];
+            //    }
+
+            //    if (imagemResposta != null && imagemResposta.Any())
+            //    {
+            //        for (int i = 0; i < imagemResposta.Count; i++)
+            //        {
+            //            var respostaId = model.Pergunta.Resposta.ElementAt(i).Id;
+            //            var imgResposta = await this.repoRespostaImagem.RetornarRepostaImagemPorRespostaId(respostaId);
+            //            imgResposta.Imagem = imagemResposta[i].FileName;
+            //            await this.repoRespostaImagem.AtualizarRespostaImagem(imgResposta);
+
+            //        }
+            //    }
+            //}
+
+            //var enqueteCategoria = await this.enqueteCategoriaRepositorio.RetornarEnqueteCategoriaEnquete(model.Id);
+            //enqueteCategoria.First().CategoriaId = model.CategoriasInteresse.First();
+            ////await this.enqueteCategoriaRepositorio.Atualizar(enqueteCategoria.First());
 
             if (await this.service.AtualizarEnquete(AutoMapper.Mapper.Map<Enquete>(model)))
                 return RedirectToAction("ListarEmpresas");
