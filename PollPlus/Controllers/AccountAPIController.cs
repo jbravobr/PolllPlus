@@ -456,7 +456,7 @@ namespace PollPlus.Controllers
                             {
                                 var v = await this.voucherRepo.RetornarVoucherPorId(item.Id);
                                 v.Status = EnumStatusVoucher.Indisponivel;
-                                this.voucherRepo.Atualizar(v);
+                                await this.voucherRepo.AtualizarVoucher(v);
                                 break;
                             }
                         }
