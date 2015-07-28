@@ -14,6 +14,10 @@
 
     @{
 
+        var Lat = Convert.ToDouble(ViewData["Lat"]);
+        var Long = Convert.ToDouble(ViewData["Long"]);
+        var raio = Convert.ToInt32(ViewData["Raio"]);
+
         if (Model == null)
         {
             <p>Nenhum informação Encontrada.</p>
@@ -28,8 +32,8 @@
                 .Name("map")
                 .Culture(CultureInfo.CurrentCulture)
                 .Height(600)
-                .Center(c => c.Latitude(latInicial)
-                              .Longitude(LongInicial))
+                .Center(c => c.Latitude(Lat)
+                              .Longitude(Long))
                 .Zoom(10)
                 .BindTo<MapViewModel, Marker>
                 (Model, mappings => mappings.For<MapViewModel>
@@ -50,14 +54,54 @@
                                             {
                                                 Template =
                                                                 {
-                                                                Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, String.Empty))
+                                                                Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, markerModel.Endereco))
                                                                 }
                                             };
                                         }
                                     )
                             )
-                ).Render();
+                )
+                .Circles(cf =>
+                {
+                    cf.Add()
+                        .Center(new Location(Lat, Long))
+                        .Radius(raio)
+                        .FillColor(System.Drawing.Color.Red)
+                        .StrokeColor(System.Drawing.Color.DarkRed)
+                        .StrokeWeight(4);
+                }
+            ).Render();
         }
+    }
+
+    @using (Html.BeginForm("Sonar", "Mapa", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    {
+        <div class="form-group">
+            @Html.Label("Latitude", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBox("Latitude")
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Longitude", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBox("Longitude")
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Distância", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBox("Raio")
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary cancel" type="submit">Pesquisar</button>
+            </div>
+        </div>
     }
 
 </div>

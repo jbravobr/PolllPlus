@@ -113,8 +113,10 @@ namespace PollPlus.Controllers
                 {
                     DataNascimento = u.DataNascimento,
                     Email = u.Email,
+                    Senha = u.Senha,
                     DDD = u.DDD.ToString(),
                     Municipio = u.Municipio,
+                    FacebookID = u.FacebookID,
                     Nome = u.Nome,
                     Sexo = u.Sexo,
                     Telefone = u.Telefone,
@@ -187,6 +189,40 @@ namespace PollPlus.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("atualizapush/{pushWooshToken}/{usuarioId}")]
+        public async Task<IHttpActionResult> AtualizaDadosPush(string pushWooshToken, int usuarioId)
+        {
+            if (!String.IsNullOrEmpty(pushWooshToken))
+            {
+                var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
+                usuario.PushWooshToken = pushWooshToken;
+
+                var result = await this.service.AtualizarUsuario(usuario);
+
+                return Ok(result);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("atualizafacebook/{facebookID}/{usuarioId}")]
+        public async Task<IHttpActionResult> AtualizaUsuarioFacebookId(string facebookID, int usuarioId)
+        {
+            if (!String.IsNullOrEmpty(facebookID))
+            {
+                var usuario = await this.service.RetornarUsuarioPorId(usuarioId);
+                usuario.FacebookID = facebookID;
+
+                var result = await this.service.AtualizarUsuario(usuario);
+
+                return Ok(result);
+            }
+
+            return BadRequest();
+        }
+
         private IEnumerable<CategoriaMobile> MapeiaCategoriaParaMobile(List<Categoria> cat)
         {
             foreach (var c in cat)
@@ -205,6 +241,11 @@ namespace PollPlus.Controllers
             try
             {
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
+
+                var usuarioBD = await this.service.RetornarUsuarioPorId(usuarioJson.Id);
+
+                if (usuarioBD != null)
+                    usuarioJson.Senha = usuarioBD.Senha;
 
                 var retornoInsertUsuario = await this.service.AtualizarUsuario(usuarioJson);
 
@@ -306,8 +347,7 @@ namespace PollPlus.Controllers
             var amigos = new List<Usuario>();
             foreach (var usuario in _usuarios)
             {
-                var tel = String.Concat(usuario.DDD, usuario.Telefone);
-                if (_tels.Contains(tel))
+                if (_tels.Contains(usuario.FacebookID))
                     amigos.Add(usuario);
             }
 
@@ -654,11 +694,14 @@ namespace PollPlus.Controllers
         public string Nome { get; set; }
         public string Email { get; set; }
         public DateTime DataNascimento { get; set; }
+        public string Senha { get; set; }
         public EnumSexo Sexo { get; set; }
         public string DDD { get; set; }
         public string Telefone { get; set; }
         public string Municipio { get; set; }
         public List<CategoriaMobile> Categorias { get; set; }
+        public string FacebookID { get; set; }
+        public string PushWooshToken { get; set; }
     }
 
     public class RespostaMobile

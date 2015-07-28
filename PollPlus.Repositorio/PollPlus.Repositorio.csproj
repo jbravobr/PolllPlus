@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmigoEnqueteRepositorio.cs" />
+    <Compile Include="AcaoEnvioRepositorio.cs" />
     <Compile Include="RespostaImagemRepositorio.cs" />
     <Compile Include="ControleAcessoRepositorio.cs" />
     <Compile Include="FilialRepositorio.cs" />

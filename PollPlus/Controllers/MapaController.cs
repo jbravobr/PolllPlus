@@ -27,11 +27,33 @@ namespace PollPlus.Controllers
 
         private UsuarioRepositorio user = new UsuarioRepositorio();
 
+        [HttpGet, OnlyAuthorizedUser]
+        public async Task<ActionResult> Mapa()
+        {
+            var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
+            var dados = MontaIndicadoresNoMapaSemRadar(localizacoes);
+
+            return View(dados);
+        }
+
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> Sonar(double Latitude, double Longitude, int Raio)
+        {
+            var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
+            var dados = MontaIndicadoresNoMapaComRadar(localizacoes);
+
+            ViewData.Add("Lat", Latitude);
+            ViewData.Add("Long",Longitude);
+            ViewData.Add("Raio",Raio);
+
+            return View(dados);
+        }
+
         // GET: Mapa
         public async Task<ActionResult> Index()
         {
             var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
-            var dados = MontaIndicadoresNoMapa(localizacoes);
+            var dados = MontaIndicadoresNoMapaSemRadar(localizacoes).Take(2);
 
             return View(dados);
         }
@@ -49,7 +71,7 @@ namespace PollPlus.Controllers
             //{
             //    throw ex;
             //}
-            
+
             try
             {
                 var key = "AIzaSyAJXiJ8FatzUwzUKOfgv3Eh9qMTlPewBu0";
@@ -74,20 +96,43 @@ namespace PollPlus.Controllers
         }
 
         [NonAction]
-        private IEnumerable<MapViewModel> MontaIndicadoresNoMapa(ICollection<Geolocalizacao> posicoes)
+        private IEnumerable<MapViewModel> MontaIndicadoresNoMapaComRadar(ICollection<Geolocalizacao> posicoes)
+        {
+            var lista = new List<MapViewModel>();
+            var group = posicoes.GroupBy(x => x.UsuarioId).Distinct();
+
+            foreach (var posicao in group)
+            {
+                foreach (var item in posicao)
+                {
+                    yield return new MapViewModel
+                    {
+                        Latitude = item.Latitude,
+                        Longitude = item.Longitude,
+                        //Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
+                        Nome = item.Usuario.Nome,
+                        Icon = item.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
+                    "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"
+                    };
+                }
+            }
+        }
+
+        [NonAction]
+        private IEnumerable<MapViewModel> MontaIndicadoresNoMapaSemRadar(ICollection<Geolocalizacao> posicoes)
         {
             var lista = new List<MapViewModel>();
 
-            foreach (var posicao in posicoes.Distinct())
+            foreach (var item in posicoes)
             {
                 yield return new MapViewModel
                 {
-                    Latitude = posicao.Latitude,
-                    Longitude = posicao.Longitude,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude,
                     //Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
-                    Nome = posicao.Usuario.Nome,
-                    Icon = posicao.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
-                    "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"
+                    Nome = item.Usuario.Nome,
+                    Icon = item.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
+    "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"
                 };
             }
         }

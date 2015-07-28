@@ -21,6 +21,7 @@ namespace PollPlus.Domain
         public EnumPerfil Perfil { get; protected set; }
         public string FacebookID { get; set; }
         public string CategoriaMobileSelection { get; set; }
+        public string PushWooshToken { get; set; }
 
         public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
         public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }

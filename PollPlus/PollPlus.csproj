@@ -3684,6 +3684,8 @@
     <Content Include="Views\Relatorio\RelEstatisticoPorMunicipio.cshtml" />
     <Content Include="Views\Enquete\_EnqueteRespostaEdicao.cshtml" />
     <Content Include="Views\Banner\EditarBanner.cshtml" />
+    <Content Include="Views\Mapa\Mapa.cshtml" />
+    <Content Include="Views\Mapa\Sonar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

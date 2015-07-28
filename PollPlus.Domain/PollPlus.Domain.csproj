@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcaoEnvio.cs" />
     <Compile Include="AmigoEnquete.cs" />
     <Compile Include="Banner.cs" />
     <Compile Include="BlackList.cs" />
