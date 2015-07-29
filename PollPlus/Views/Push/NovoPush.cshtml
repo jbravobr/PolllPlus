@@ -1,12 +1,12 @@
 ﻿@model string
 
 @{
-    ViewBag.Title = "Nova Categoria";
+    ViewBag.Title = "Envio de Push";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="header">
-    <h3>Cadastro de Categoria</h3>
+    <h3>Envio de Push - para base</h3>
 </div>
 
 <div class="content tamanho-reduzido">
@@ -16,12 +16,12 @@
         @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
     }
 
-    @using (Html.BeginForm("NovaCategoria", "Categoria", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("NovoPush", "Push", FormMethod.Post, new { role = "form", @class = "form-horizontal"}))
     {
         <div class="form-group">
-            <label class="col-sm-2 control-label">Nome</label>
+            <label class="col-sm-2 control-label">Mensagem</label>
             <div class="col-sm-10">
-                <input type="text" name="categoria" class="form-control" />
+                <input type="text" name="Mensagem" class="form-control" />
             </div>
         </div>
 

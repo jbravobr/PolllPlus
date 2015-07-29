@@ -69,7 +69,12 @@
                             @*</Categoria>*@
                             }
 
-                            @*<Mapa>*@@{Html.RenderAction("MontaMenuMapa", "Menu"); }
+                            @*<Mapa>*@
+                            @{Html.RenderAction("MontaMenuMapa", "Menu"); }
+                            @*</Mapa>*@
+
+                            @*<Mapa>*@
+                            @{Html.RenderAction("MontaPush", "Menu"); }
                             @*</Mapa>*@
 
                             @*<Enquetes>*@

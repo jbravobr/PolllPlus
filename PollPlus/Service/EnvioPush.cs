@@ -22,7 +22,7 @@ namespace PollPlus.Service
 
         public Boolean EnviarPushNotification(string p_novoPush)
         {
-            if (!String.IsNullOrEmpty(p_novoPush))
+            if (String.IsNullOrEmpty(p_novoPush))
                 return false;
 
             var _jsonPushWoosh = this.MontarJObjectPushWoosh(p_novoPush);
@@ -37,8 +37,8 @@ namespace PollPlus.Service
 
         protected JObject MontarJObjectPushWoosh(string p_novoPush)
         {
-            this._application = UsuarioLogado.UsuarioAutenticado().Empresa.AppKeyForPush;
-            this._auth = UsuarioLogado.UsuarioAutenticado().Empresa.AppPassForPush;
+            this._application = "DD549-64BF7";
+            this._auth = "2DftEBtCFBzbVsDcg6TjPkBnvigctPIbDxFg465BIdzEkMPJ0Vg0danWEYI3YNnk6zJarPPsezIT6ME6X36O";
 
             return new JObject(
                 new JProperty("application", this._application),
@@ -47,7 +47,8 @@ namespace PollPlus.Service
                     new JArray(
                         new JObject(
                             new JProperty("send_date", "now"),
-                            new JProperty("content", p_novoPush)
+                            new JProperty("content", p_novoPush),
+                            new JProperty("devices", new JArray("APA91bHnpkUJze8NnrBmGogx0yNbEU5mfgkJ6-VXOUBenCPHBIkSM1hmtxRuDC1u1MLfYfBpyCG-V8zirWdKQm5mvFe_hyf5HY-OvvjM2jZlw1RNa2sYY4CQnKVmJht3LwUSDokFNZik"))
                             ))));
         }
 

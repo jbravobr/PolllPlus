@@ -16,13 +16,13 @@ namespace PollPlus.Controllers
     public class PushController : BaseController
     {
         [HttpGet, OnlyAuthorizedUser]
-        public ActionResult NovaMensagemPush()
+        public ActionResult NovoPush()
         {
             return View();
         }
 
-        [HttpGet, OnlyAuthorizedUser]
-        public async Task<ActionResult> NovaMensagemPush(NovaMensagemPushViewModel p_mensagem)
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> NovoPush(NovaMensagemPushViewModel p_mensagem)
         {
             if (!ModelState.IsValid)
                 return View(p_mensagem);

@@ -57,5 +57,10 @@ namespace PollPlus.Controllers
         {
             return PartialView("_MenuControleAcesso");
         }
+
+        public PartialViewResult MontaPush()
+        {
+            return PartialView("_MenuPush");
+        }
     }
 }
