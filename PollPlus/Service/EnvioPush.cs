@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PollPlus.Helpers;
 using PollPlus.Service.Interfaces;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace PollPlus.Service
 {
@@ -29,6 +31,22 @@ namespace PollPlus.Service
             return this.EnviarPushNotification(_jsonPushWoosh);
         }
 
+        public Boolean EnviarPushNotification(List<string> p_novoPush, string texto)
+        {
+            if (p_novoPush == null || !p_novoPush.Any())
+                return false;
+
+            var envio = false;
+
+            foreach (var item in p_novoPush)
+            {
+                var _jsonPushWoosh = this.MontarJObjectPushWoosh(item, texto);
+                this.EnviarPushNotification(_jsonPushWoosh);
+                envio = true;
+            }
+            return envio;   
+        }
+
         protected Boolean EnviarPushNotification(JObject p_objectPushWoosh)
         {
             var _retornoPostEnvio = this.PWCall("createMessage", p_objectPushWoosh);
@@ -47,8 +65,26 @@ namespace PollPlus.Service
                     new JArray(
                         new JObject(
                             new JProperty("send_date", "now"),
-                            new JProperty("content", p_novoPush),
-                            new JProperty("devices", new JArray("APA91bHnpkUJze8NnrBmGogx0yNbEU5mfgkJ6-VXOUBenCPHBIkSM1hmtxRuDC1u1MLfYfBpyCG-V8zirWdKQm5mvFe_hyf5HY-OvvjM2jZlw1RNa2sYY4CQnKVmJht3LwUSDokFNZik"))
+                            new JProperty("content", p_novoPush)
+                               ))));
+        }
+
+        protected JObject MontarJObjectPushWoosh(string p_novoPush, string texto)
+        {
+            this._application = "DD549-64BF7";
+            this._auth = "2DftEBtCFBzbVsDcg6TjPkBnvigctPIbDxFg465BIdzEkMPJ0Vg0danWEYI3YNnk6zJarPPsezIT6ME6X36O";
+
+            var agg = p_novoPush;
+
+            return new JObject(
+                new JProperty("application", this._application),
+                new JProperty("auth", this._auth),
+                new JProperty("notifications",
+                    new JArray(
+                        new JObject(
+                            new JProperty("send_date", "now"),
+                            new JProperty("content", texto),
+                            new JProperty("devices", new JArray(agg))
                             ))));
         }
 

@@ -3687,6 +3687,7 @@
     <Content Include="Views\Mapa\Mapa.cshtml" />
     <Content Include="Views\Mapa\Sonar.cshtml" />
     <Content Include="Views\Menu\_MenuPush.cshtml" />
+    <Content Include="Views\Push\NovoPushPorArea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

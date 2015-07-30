@@ -22,7 +22,7 @@ namespace PollPlus.Domain
         public string FacebookID { get; set; }
         public string CategoriaMobileSelection { get; set; }
         public string PushWooshToken { get; set; }
-        public int EmpresaApp { get; set; }
+        public int? EmpresaApp { get; set; }
 
         public virtual ICollection<UsuarioCategoria> UsuarioCategoria { get; protected set; }
         public virtual ICollection<UsuarioPlataforma> UsuarioPlataforma { get; set; }

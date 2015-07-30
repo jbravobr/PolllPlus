@@ -66,5 +66,11 @@ namespace PollPlus.Repositorio
         {
             return await this.RetornarTodos();
         }
+
+        public async Task<ICollection<Geolocalizacao>> RetornarGeoPorUsuarioPorEmpresa(int empresaId)
+        {
+            Expression<Func<Geolocalizacao, bool>> porUsuarioPorEmpresa = (x) => x.Usuario.EmpresaApp == empresaId;
+            return await this.ProcurarPorColecao(porUsuarioPorEmpresa);
+        }
     }
 }
