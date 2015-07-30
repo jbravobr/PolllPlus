@@ -18,7 +18,7 @@ namespace PollPlus.Controllers
     {
         private UsuarioRepositorio usuarioRepo = new UsuarioRepositorio();
         private GeolocalizacaoRepositorio geoRepositorio = new GeolocalizacaoRepositorio();
-
+        private EmpresaRepositorio empresaRepositorio = new EmpresaRepositorio();
 
         [HttpGet, OnlyAuthorizedUser]
         public ActionResult NovoPush()
@@ -38,10 +38,19 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(p_mensagem);
 
-            var qtdePush = UsuarioLogado.UsuarioAutenticado().Empresa.QtdePush;
+            var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
 
-            var _retornoPushWoosh = EnvioPushWooshResult(p_mensagem);
-           
+            if (_empresa.QtdePush > 0)
+            {
+                var _retornoPushWoosh = EnvioPushWooshResult(p_mensagem);
+
+                if (_retornoPushWoosh)
+                {
+                    _empresa.QtdePush = _empresa.QtdePush - 1;
+                    await this.empresaRepositorio.AtualizarEmpresa(_empresa);
+                }
+            }
+
             return View();
         }
 
@@ -66,7 +75,18 @@ namespace PollPlus.Controllers
 
                 if (geoValidas.Any())
                 {
-                    this.EnvioPushWooshResult(geoValidas, p_mensagem.Mensagem);
+                    var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
+
+                    if (_empresa.QtdePush > 0 && _empresa.QtdePush <= geoValidas.Count)
+                    {
+                        var _retornoPushWoosh = this.EnvioPushWooshResult(geoValidas, p_mensagem.Mensagem);
+
+                        if (_retornoPushWoosh)
+                        {
+                            _empresa.QtdePush = _empresa.QtdePush - geoValidas.Count;
+                            await this.empresaRepositorio.AtualizarEmpresa(_empresa);
+                        }
+                    }
                 }
 
                 return View();
