@@ -1,5 +1,5 @@
 ﻿@model PollPlus.Models.BannerViewModel
-    @using PollPlus.Helpers
+@using PollPlus.Helpers
 
 @{
     ViewBag.Title = "Novo Banner";
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(x => x.DataValidade,"Valido até", new { @class = "col-sm-2 control-label" })
+            @Html.LabelFor(x => x.DataValidade, "Valido até", new { @class = "col-sm-2 control-label" })
             <div class="col-sm-10">
                 @Html.TextBoxFor(x => x.DataValidade, new { placeholder = "Insira a data de validade deste banners", @class = "form-control datepicker" })
                 @Html.ValidationMessageFor(x => x.DataValidade)
@@ -59,11 +59,44 @@
             </div>
         }
 
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-primary cancel" type="submit">Salvar</button>
-                </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary cancel" type="submit">Salvar</button>
             </div>
+        </div>
     }
 
 </div>
+
+@section Scripts{
+
+    <script>
+
+        $(function () {
+
+
+
+            $('#Url').focusout(function () {
+
+
+                var tt = $('#Url').val();
+
+                if ((tt.search(/www./g) != -1 && tt.search(/https:\/\//g) == -1) ||
+                    (tt.search(/WWW./g) != -1 && tt.search(/HTTPS:\/\//g) == -1)) {
+                    $('#Url').val(tt.replace(/www./g, 'http://'));
+                } else if ((tt.search(/https:\/\//) != -1 && tt.search(/www./g) != -1) ||
+                    (tt.search(/HTTPS:\/\//) != -1 && (tt.search(/WWW./g) != -1))) {
+                    $('#Url').val(tt.replace(/https:\/\//g, 'http://'));
+                    $('#Url').val(tt.replace(/www./g, ''));
+                } else if (tt.search(/https:\/\//) != -1) {
+                    $('#Url').val(tt.replace(/https:\/\//g, 'http://'));
+                }
+            });
+
+        })
+
+
+    </script>
+
+}
+
