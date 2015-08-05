@@ -44,7 +44,7 @@
                             </thead>
                             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
-                                @foreach (var _banner in Model.OrderBy(x => x.DataCriacao))
+                                @foreach (var _banner in Model.OrderByDescending(x => x.DataCriacao))
                                 {
                                     <tr class="gradeA odd">
                                         <td class=" ">@_banner.Url</td>

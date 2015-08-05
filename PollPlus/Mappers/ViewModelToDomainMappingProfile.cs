@@ -58,7 +58,8 @@ namespace PollPlus.Mappers
             Mapper.CreateMap<BannerViewModel, Banner>()
                 .BeforeMap((vm, d) =>
                 {
-                    d.FileName = vm.file.FileName;
+                    if (vm.file != null)
+                        d.FileName = vm.file.FileName;
                 });
 
             Mapper.CreateMap<FilialViewModel, Filial>();

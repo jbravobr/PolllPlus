@@ -70,5 +70,16 @@ namespace PollPlus.Repositorio
             Expression<Func<UsuarioCategoria, bool>> filtro = (x) => x.UsuarioId == UsuarioId;
             return await base.ProcurarPorColecao(filtro);
         }
+
+        public async Task DeletarCategoriasDoUsuario(int UsuarioId)
+        {
+            var remover = await this.RetornarUsuarioCategoriaPorUsuario(UsuarioId);
+
+            foreach (var item in remover)
+            {
+                base.Deletar(item);
+                await base.Salvar();
+            }
+        }
     }
 }

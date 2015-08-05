@@ -17,7 +17,7 @@
         @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
     }
 
-    @using (Html.BeginForm("NovoBanner", "Banner", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditarBanner", "Banner", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
     {
         <div class="form-group">
             @Html.LabelFor(x => x.Url, new { @class = "col-sm-2 control-label" })

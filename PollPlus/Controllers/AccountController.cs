@@ -34,6 +34,13 @@ namespace PollPlus.Controllers
 
         public AccountController() { }
 
+        [OnlyAuthorizedUser,HttpGet]
+        public ActionResult Logout()
+        {
+            UsuarioLogado.Logout();
+            return RedirectToAction("Login");
+        }
+
         [OnlyAuthorizedUser(true), HttpGet]
         public ActionResult Login()
         {

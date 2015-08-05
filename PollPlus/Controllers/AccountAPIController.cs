@@ -5,6 +5,7 @@ using PollPlus.Domain.Enumeradores;
 using PollPlus.Helpers;
 using PollPlus.Models;
 using PollPlus.Repositorio;
+using PollPlus.Service;
 using PollPlus.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -245,9 +246,35 @@ namespace PollPlus.Controllers
                 var usuarioBD = await this.service.RetornarUsuarioPorId(usuarioJson.Id);
 
                 if (usuarioBD != null)
-                    usuarioJson.Senha = usuarioBD.Senha;
+                {
+                    usuarioBD.CategoriaMobileSelection = usuarioJson.CategoriaMobileSelection.TrimEnd(';');
+                    usuarioBD.DataAtualizacao = DateTime.Now;
+                    usuarioBD.DataNascimento = usuarioJson.DataNascimento;
+                    usuarioBD.DDD = usuarioJson.DDD;
+                    usuarioBD.Email = usuarioJson.Email;
+                    usuarioBD.EmpresaApp = usuarioJson.EmpresaApp;
+                    usuarioBD.FacebookID = usuarioJson.FacebookID;
+                    usuarioBD.Municipio = usuarioJson.Municipio;
+                    usuarioBD.Nome = usuarioJson.Nome;
+                    usuarioBD.PushWooshToken = usuarioJson.PushWooshToken;
+                    usuarioBD.Sexo = usuarioJson.Sexo;
+                    usuarioBD.Telefone = usuarioJson.Telefone;
+                }
 
-                var retornoInsertUsuario = await this.service.AtualizarUsuario(usuarioJson);
+                var retornoInsertUsuario = await this.service.AtualizarUsuario(usuarioBD);
+
+                if (retornoInsertUsuario)
+                {
+                    await this.ucRepo.DeletarCategoriasDoUsuario(usuarioJson.Id);
+
+                    List<int> catIds = new List<int>();
+                    foreach (var item in usuarioJson.CategoriaMobileSelection.TrimEnd(';').Split(';'))
+                    {
+                        var uc = new UsuarioCategoria { UsuarioId = usuarioJson.Id, CategoriaId = Convert.ToInt32(item) };
+                        await this.ucRepo.InserirUsuarioCategoria(uc);
+                        catIds.Add(Convert.ToInt32(item));
+                    }
+                }
 
                 return Ok();
             }
@@ -292,25 +319,43 @@ namespace PollPlus.Controllers
         public async Task<IHttpActionResult> GetEnquetesInteresse(int id, int usuarioId)
         {
             List<Enquete> enquetes = null;
+            List<Enquete> enquetesAmigos = new List<Enquete>();
 
             if (id > 0)
             {
                 Expression<Func<Enquete, bool>> filtro = (x) => x.Id > id && x.Tipo == EnumTipoEnquete.Interesse
                 && x.Status == EnumStatusEnquete.Publicada;
                 enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
-                enquetes = enquetes.Where(x => x.AmigoEnquete != null && x.AmigoEnquete.Any(y => y.UsuarioId == usuarioId)).ToList();
+
+                if (enquetes.Any(x => x.AmigoEnquete.Any()))
+                {
+                    foreach (var enquete in enquetes)
+                    {
+                        if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
+                            enquetesAmigos.Add(enquete);
+                    }
+                }
+
             }
             else
             {
                 Expression<Func<Enquete, bool>> filtro = (x) => x.Tipo == EnumTipoEnquete.Interesse
-                && x.Status == EnumStatusEnquete.Publicada && x.AmigoEnquete.All(y => y.EnqueteId == x.Id && y.UsuarioId == usuarioId);
+                && x.Status == EnumStatusEnquete.Publicada;
                 enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
-                enquetes = enquetes.Where(x => x.AmigoEnquete != null && x.AmigoEnquete.Any(y => y.UsuarioId == usuarioId)).ToList();
+
+                if (enquetes.Any(x => x.AmigoEnquete.Any()))
+                {
+                    foreach (var enquete in enquetes)
+                    {
+                        if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
+                            enquetesAmigos.Add(enquete);
+                    }
+                }
             }
 
             try
             {
-                if (enquetes != null)
+                if (enquetesAmigos != null)
                 {
 
                     /*foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
@@ -345,7 +390,7 @@ namespace PollPlus.Controllers
             var _usuarios = await this.service.RetornarTodosUsuarios();
 
             var amigos = new List<Usuario>();
-            foreach (var usuario in _usuarios)
+            foreach (var usuario in _usuarios.Distinct())
             {
                 if (_tels.Contains(usuario.FacebookID))
                     amigos.Add(usuario);
@@ -398,12 +443,22 @@ namespace PollPlus.Controllers
                 var retornoInsertEnquete = await this.enqueteRepo.InserirRetornarEnquete(enqueteJson);
 
                 var result = new RetornoGravacaoEnquete { EnqueteId = retornoInsertEnquete.Id, PerguntaId = (int)retornoInsertEnquete.PerguntaId };
+                var listaEnvio = new List<string>();
 
                 if (enqueteJson.colegas != null && !String.IsNullOrEmpty(enqueteJson.colegas))
                 {
                     foreach (var amigo in enqueteJson.colegas.Split(';'))
                     {
                         await this.amigoRepo.InserirAmigoEnquete(new AmigoEnquete { UsuarioId = Convert.ToInt32(amigo), EnqueteId = retornoInsertEnquete.Id });
+
+                        var _usuario = await this.service.RetornarUsuarioPorId(Convert.ToInt32(amigo));
+
+                        if (_usuario != null && !String.IsNullOrEmpty(_usuario.PushWooshToken))
+                        {
+                            listaEnvio.Add(_usuario.PushWooshToken);
+                            this.EnvioPushWooshResult(listaEnvio, "Você tem uma nova enquete para responder!");
+                            listaEnvio.Clear();
+                        }
                     }
                 }
 
@@ -413,6 +468,14 @@ namespace PollPlus.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+        [NonAction]
+        private bool EnvioPushWooshResult(List<string> p_mensagens, string texto)
+        {
+            var _retornoPushWoosh = new EnvioPush().EnviarPushNotification(p_mensagens, texto);
+
+            return _retornoPushWoosh;
         }
 
         [HttpPost]
@@ -592,13 +655,11 @@ namespace PollPlus.Controllers
 
             if (id <= 0)
                 banners = (await this.bannerRepo.RetornarTodosBanners())
-                    .Where(b => b.EmpresaBanner.Any(e => e.EmpresaId == empresaId))
-                    .Where(b => b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
+                    .Where(b => b.EmpresaBanner.Any(e => e.EmpresaId == empresaId) && b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
                     .ToList();
             else
                 banners = (await this.bannerRepo.RetornarTodosBanners())
-                    .Where(b => b.Id > id && b.EmpresaBanner.Any(e => e.EmpresaId == empresaId))
-                    .Where(b => b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
+                    .Where(b => b.EmpresaBanner.Any(e => e.EmpresaId == empresaId) && b.CategoriaBanner.All(x => cats.Contains(x.CategoriaId)))
                     .ToList();
 
             return Ok(JsonConvert.SerializeObject(banners));
