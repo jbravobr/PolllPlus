@@ -452,11 +452,12 @@ namespace PollPlus.Controllers
                         await this.amigoRepo.InserirAmigoEnquete(new AmigoEnquete { UsuarioId = Convert.ToInt32(amigo), EnqueteId = retornoInsertEnquete.Id });
 
                         var _usuario = await this.service.RetornarUsuarioPorId(Convert.ToInt32(amigo));
+                        var _usuarioCriador = await this.service.RetornarUsuarioPorId(enqueteJson.UsuarioId);
 
-                        if (_usuario != null && !String.IsNullOrEmpty(_usuario.PushWooshToken))
+                        if (_usuario != null && !String.IsNullOrEmpty(_usuario.PushWooshToken) && _usuarioCriador != null)
                         {
                             listaEnvio.Add(_usuario.PushWooshToken);
-                            this.EnvioPushWooshResult(listaEnvio, "Você tem uma nova enquete para responder!");
+                            this.EnvioPushWooshResult(listaEnvio, String.Format("{0} convidou você para responder uma Enquete!", _usuarioCriador.Nome));
                             listaEnvio.Clear();
                         }
                     }
@@ -709,7 +710,9 @@ namespace PollPlus.Controllers
                     UrlVideo = enquete.UrlVideo,
                     UsuarioId = enquete.UsuarioId,
                     Imagem = enquete.Imagem,
-                    TemVoucher = enquete.TemVoucher
+                    TemVoucher = enquete.TemVoucher,
+                    UsuarioCriador = enquete.Usuario.Nome,
+                    AtivaNoFront = true
                 };
 
                 if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
@@ -789,6 +792,8 @@ namespace PollPlus.Controllers
         public Categoria Categoria { get; set; }
         public string Descricao { get; set; }
         public bool TemVoucher { get; set; }
+        public string UsuarioCriador { get; set; }
+        public bool AtivaNoFront { get; set; }
     }
 
     public class PerguntaMobile
