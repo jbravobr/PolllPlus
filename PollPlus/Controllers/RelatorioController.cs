@@ -422,7 +422,7 @@ namespace PollPlus.Controllers
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
                 var groupNascimento = (from n in _respostasRespondidas
-                                       group n by n.Usuario.DataNascimento.Year into porAnoNascimento
+                                       group n by n.Usuario.DataNascimento.Value.Year into porAnoNascimento
                                        select new
                                        {
                                            AnoNascimento = DateTime.Now.Year - porAnoNascimento.Key,
@@ -552,7 +552,7 @@ namespace PollPlus.Controllers
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
                 var groupNascimento = (from n in _respostasRespondidas
-                                       group n by n.Usuario.DataNascimento.Year into porAnoNascimento
+                                       group n by n.Usuario.DataNascimento.Value.Year into porAnoNascimento
                                        select new
                                        {
                                            AnoNascimento = DateTime.Now.Year - porAnoNascimento.Key,

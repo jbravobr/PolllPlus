@@ -149,40 +149,102 @@ namespace PollPlus.Controllers
             {
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
 
-                if ((await this.service.RetornarTodosUsuarios()).Any(x => x.Email == usuarioJson.Email))
+                if (!String.IsNullOrEmpty(usuarioJson.Email) && (await this.service.RetornarTodosUsuarios()).Any(x => x.Email == usuarioJson.Email))
                     return BadRequest("Email Já existe");
+
+                if (usuarioJson.DataNascimento == null && usuarioJson.Sexo == null)
+                {
+                    usuarioJson.DataNascimento = null;
+                    usuarioJson.Sexo = null;
+                }
 
                 var retornoInsertUsuario = await this.service.InserirRetornarUsuario(usuarioJson);
 
-                List<int> catIds = new List<int>();
-                foreach (var item in usuarioJson.CategoriaMobileSelection.Split(';'))
+
+                if (!String.IsNullOrEmpty(usuarioJson.CategoriaMobileSelection))
                 {
-                    var uc = new UsuarioCategoria { UsuarioId = retornoInsertUsuario.Id, CategoriaId = Convert.ToInt32(item) };
+                    List<int> catIds = new List<int>();
+                    foreach (var item in usuarioJson.CategoriaMobileSelection.Split(';'))
+                    {
+                        var uc = new UsuarioCategoria { UsuarioId = retornoInsertUsuario.Id, CategoriaId = Convert.ToInt32(item) };
+                        await this.ucRepo.InserirUsuarioCategoria(uc);
+                        catIds.Add(Convert.ToInt32(item));
+                    }
+
+                    var listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
+
+                    if (retornoInsertUsuario != null && !String.IsNullOrEmpty(retornoInsertUsuario.Email))
+                        EnviarEmailConfirmacaoCadastro(usuarioJson);
+
+                    var user = new UsuarioMobile
+                    {
+                        DataNascimento = retornoInsertUsuario.DataNascimento,
+                        DDD = retornoInsertUsuario.DDD.ToString(),
+                        Municipio = retornoInsertUsuario.Municipio,
+                        Nome = retornoInsertUsuario.Nome,
+                        Sexo = retornoInsertUsuario.Sexo,
+                        Telefone = retornoInsertUsuario.Telefone,
+                        Id = retornoInsertUsuario.Id,
+                        Email = retornoInsertUsuario.Email,
+                        Categorias = MapeiaCategoriaParaMobile(listaCategorias).ToList()
+                    };
+
+                    var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
+
+                    return Ok(user.Id);
+                }
+                else
+                {
+                    return Ok(retornoInsertUsuario);
+                }
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("atualizacategoriasFB")]
+        public async Task<IHttpActionResult> AtualizaCategoriasViaFB([FromBody]string usuarioJson)
+        {
+            try
+            {
+                var _usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+                var _usuarioBD = await this.service.RetornarUsuarioPorId(_usuario.Id);
+
+                List<int> catIds = new List<int>();
+
+                if (!String.IsNullOrEmpty(_usuario.CategoriaMobileSelection))
+                    await this.ucRepo.DeletarCategoriasDoUsuario(_usuarioBD.Id);
+
+                foreach (var item in _usuario.CategoriaMobileSelection.Split(';'))
+                {
+                    var uc = new UsuarioCategoria { UsuarioId = _usuarioBD.Id, CategoriaId = Convert.ToInt32(item) };
                     await this.ucRepo.InserirUsuarioCategoria(uc);
                     catIds.Add(Convert.ToInt32(item));
                 }
 
-                var listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
+                _usuarioBD.Email = _usuario.Email;
 
-                if (retornoInsertUsuario != null)
-                    EnviarEmailConfirmacaoCadastro(usuarioJson);
+                await this.service.AtualizarUsuario(_usuarioBD);
+
+                var listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
 
                 var user = new UsuarioMobile
                 {
-                    DataNascimento = retornoInsertUsuario.DataNascimento,
-                    DDD = retornoInsertUsuario.DDD.ToString(),
-                    Municipio = retornoInsertUsuario.Municipio,
-                    Nome = retornoInsertUsuario.Nome,
-                    Sexo = retornoInsertUsuario.Sexo,
-                    Telefone = retornoInsertUsuario.Telefone,
-                    Id = retornoInsertUsuario.Id,
-                    Email = retornoInsertUsuario.Email,
+                    DataNascimento = _usuarioBD.DataNascimento,
+                    DDD = _usuarioBD.DDD.ToString(),
+                    Municipio = _usuarioBD.Municipio,
+                    Nome = _usuarioBD.Nome,
+                    Sexo = _usuarioBD.Sexo,
+                    Telefone = _usuarioBD.Telefone,
+                    Id = _usuarioBD.Id,
+                    Email = _usuarioBD.Email,
                     Categorias = MapeiaCategoriaParaMobile(listaCategorias).ToList()
                 };
 
-                var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
-
-                return Ok(user.Id);
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -757,9 +819,9 @@ namespace PollPlus.Controllers
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
-        public DateTime DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }
         public string Senha { get; set; }
-        public EnumSexo Sexo { get; set; }
+        public EnumSexo? Sexo { get; set; }
         public string DDD { get; set; }
         public string Telefone { get; set; }
         public string Municipio { get; set; }

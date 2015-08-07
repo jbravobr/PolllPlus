@@ -12,10 +12,10 @@ namespace PollPlus.Domain
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
-        public EnumSexo Sexo { get; set; }
-        public int DDD { get; set; }
+        public EnumSexo? Sexo { get; set; }
+        public int? DDD { get; set; }
         public string Telefone { get; set; }
-        public DateTime DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }
         public string Municipio { get; set; }
         public EnumStatusUsuario Status { get; protected set; }
         public EnumPerfil Perfil { get; protected set; }
