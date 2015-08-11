@@ -10,6 +10,7 @@ namespace PollPlus.Helpers
     {
         Email = 0,
         Voucher = 1,
-        Blacklist = 2   
+        Blacklist = 2,
+        PushProgramado = 3 
     }
 }

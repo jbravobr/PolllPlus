@@ -44,13 +44,49 @@ namespace PollPlus.Service
                 this.EnviarPushNotification(_jsonPushWoosh);
                 envio = true;
             }
-            return envio;   
+            return envio;
+        }
+
+        public Boolean EnviarPushNotificationProgramado(List<KeyValuePair<string, DateTime>> p_novoPush, string texto)
+        {
+            if (p_novoPush == null || !p_novoPush.Any())
+                return false;
+
+            var envio = false;
+
+            foreach (var item in p_novoPush)
+            {
+                var _jsonPushWoosh = this.MontarJObjectPushWoosh(item.Key, texto, item.Value);
+                this.EnviarPushNotification(_jsonPushWoosh);
+                envio = true;
+            }
+            return envio;
         }
 
         protected Boolean EnviarPushNotification(JObject p_objectPushWoosh)
         {
             var _retornoPostEnvio = this.PWCall("createMessage", p_objectPushWoosh);
             return this.EnvioDaRequisicaoComSucesso(_retornoPostEnvio);
+        }
+
+        protected JObject MontarJObjectPushWoosh(string p_novoPush, string texto, DateTime data)
+        {
+            this._application = "DD549-64BF7";
+            this._auth = "2DftEBtCFBzbVsDcg6TjPkBnvigctPIbDxFg465BIdzEkMPJ0Vg0danWEYI3YNnk6zJarPPsezIT6ME6X36O";
+
+            var agg = p_novoPush;
+
+            return new JObject(
+                 new JProperty("application", this._application),
+                 new JProperty("auth", this._auth),
+                 new JProperty("notifications",
+                        new JArray(
+                         new JObject(
+                             new JProperty("send_date", data.ToString("YYYY-MM-DD")),
+                             new JProperty("content", texto),
+                             new JProperty("timezone", "America/Sao_Paulo"),
+                             new JProperty("devices", new JArray(agg))
+                             ))));
         }
 
         protected JObject MontarJObjectPushWoosh(string p_novoPush)

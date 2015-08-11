@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.IO;
 using PollPlus.Domain;
 using PollPlus.Domain.Enumeradores;
+using PollPlus.Repositorio;
 
 namespace PollPlus.Helpers
 {
@@ -249,10 +250,32 @@ namespace PollPlus.Helpers
                         return null;
                     case EnumTipoImportacao.Blacklist:
                         return ImportarParaBlackList(stream);
+                    case EnumTipoImportacao.PushProgramado:
+                        return ImportarPushProgramado(stream);
                 }
 
                 return null;
             }
+        }
+
+        private static ICollection<PushProgramado> ImportarPushProgramado(StreamReader stream)
+        {
+            List<PushProgramado> pushesProgramados = new List<PushProgramado>();
+
+            while (stream.Peek() >= 0)
+            {
+                var linha = stream.ReadLine();
+                var valorLinha = linha.Split(';');
+
+                pushesProgramados.Add(new PushProgramado
+                {
+                    UsuarioEmail = valorLinha[0].ToString(),
+                    Mensagem = valorLinha[1].ToString(),
+                    DataEnvio = Convert.ToDateTime(valorLinha[2].ToString()),
+                });
+            }
+
+            return pushesProgramados;
         }
 
         private static ICollection<Usuario> ImportarParaEmail(StreamReader stream)

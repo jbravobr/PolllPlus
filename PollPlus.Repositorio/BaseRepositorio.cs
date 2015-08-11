@@ -53,13 +53,18 @@ namespace PollPlus.Repositorio
             return await _entidades.Set<T>().Where(predicado).ToListAsync();
         }
 
+        public async Task<T> ProcurarPorFiltro(Expression<Func<T, bool>> predicado)
+        {
+            return await _entidades.Set<T>().Where(predicado).FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Retorna um único registro da entidade T
         /// </summary>
         /// <param name="entity">Entidade</param>
         /// <param name="predicate">Predicado para execução do filtro (deve-ser usar a busca por ID)</param>
         /// <returns></returns>
-        public async Task<T> RetornarPorId(Expression<Func<T,bool>> predicado)
+        public async Task<T> RetornarPorId(Expression<Func<T, bool>> predicado)
         {
             return await _entidades.Set<T>().FirstAsync(predicado);
         }

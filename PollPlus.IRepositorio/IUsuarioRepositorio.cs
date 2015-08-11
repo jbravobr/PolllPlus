@@ -15,5 +15,6 @@ namespace PollPlus.IRepositorio
         Task<bool> DeletarUsuario(Usuario e);
         Task<Usuario> RetornarUsuarioPorId(int id);
         Task<ICollection<Usuario>> RetornarTodosUsuarios();
+        Task<Usuario> RetornarUsuarioPorEmail(string email);
     }
 }

@@ -43,8 +43,8 @@ namespace PollPlus.Controllers
             var dados = MontaIndicadoresNoMapaComRadar(localizacoes);
 
             ViewData.Add("Lat", Latitude);
-            ViewData.Add("Long",Longitude);
-            ViewData.Add("Raio",Raio);
+            ViewData.Add("Long", Longitude);
+            ViewData.Add("Raio", Raio);
 
             return View(dados);
         }
@@ -132,7 +132,8 @@ namespace PollPlus.Controllers
                     //Endereco = RetornaEndereco(posicao.Latitude, posicao.Longitude),
                     Nome = item.Usuario.Nome,
                     Icon = item.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa ?
-    "IconMarkerOutrasEmpresas.png" : "IconMarkerMais.png"
+    "IconMarkerOutrasEmpresas.png" : item.Usuario.Perfil == Domain.Enumeradores.EnumPerfil.Vendedor ?
+    "IconMarkerVendedorMais.png" : "IconMarkerMais.png"
                 };
             }
         }

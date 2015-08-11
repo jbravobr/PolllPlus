@@ -349,6 +349,7 @@
     <Content Include="Content\images\excluir.png" />
     <Content Include="Content\images\IconMarkerMais.png" />
     <Content Include="Content\images\IconMarkerOutrasEmpresas.png" />
+    <Content Include="Content\images\IconMarkerVendedorMais.png" />
     <Content Include="Content\images\loader-autocomplete.gif" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\jquery-ui.css" />
@@ -3688,6 +3689,7 @@
     <Content Include="Views\Mapa\Sonar.cshtml" />
     <Content Include="Views\Menu\_MenuPush.cshtml" />
     <Content Include="Views\Push\NovoPushPorArea.cshtml" />
+    <Content Include="Views\Push\NovoAgendamentoPorAcaoImportacao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

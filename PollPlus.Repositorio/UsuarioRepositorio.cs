@@ -57,6 +57,12 @@ namespace PollPlus.Repositorio
             return await this.RetornarPorId(porId);
         }
 
+        public async Task<Usuario> RetornarUsuarioPorEmail(string email)
+        {
+            Expression<Func<Usuario, bool>> porEmail = (x) => x.Email == email;
+            return await base.ProcurarPorFiltro(porEmail);
+        }
+
         /// <summary>
         /// Método para retorno de um Usuario pelo seu identificador no Banco de Dados
         /// </summary>

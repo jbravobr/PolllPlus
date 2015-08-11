@@ -32,6 +32,52 @@ namespace PollPlus.Controllers
             return View();
         }
 
+        [HttpGet, OnlyAuthorizedUser]
+        public ActionResult NovoAgendamentoPorAcaoImportacao()
+        {
+            return View();
+        }
+
+        [HttpPost, OnlyAuthorizedUser]
+        public async Task<ActionResult> NovoAgendamentoPorAcaoImportacao(HttpPostedFileBase file)
+        {
+            if (file.ContentLength <= 0)
+                return View(0);
+
+            try
+            {
+                var pushs = (ICollection<PushProgramado>)Util.ImportarCSV(EnumTipoImportacao.PushProgramado, file);
+
+                foreach (var item in pushs)
+                {
+                    var usuario = await this.usuarioRepo.RetornarUsuarioPorEmail(item.UsuarioEmail);
+
+                    if (usuario != null)
+                    {
+                        var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
+
+                        if (_empresa.QtdePush > 0 && _empresa.QtdePush <= pushs.Count)
+                        {
+                            var lista = new List<KeyValuePair<string, DateTime>> { new KeyValuePair<string, DateTime>(usuario.PushWooshToken, item.DataEnvio) };
+                            var result = this.EnvioPushWooshResult(lista, item.Mensagem);
+
+                            if (result)
+                            {
+                                _empresa.QtdePush = _empresa.QtdePush - pushs.Count;
+                                await this.empresaRepositorio.AtualizarEmpresa(_empresa);
+                            }
+                        }
+                    }
+                }
+
+                return View(1);
+            }
+            catch (Exception ex)
+            {
+                return View(0);
+            }
+        }
+
         [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> NovoPush(NovaMensagemPushViewModel p_mensagem)
         {
@@ -110,6 +156,14 @@ namespace PollPlus.Controllers
         private bool EnvioPushWooshResult(List<string> p_mensagens, string texto)
         {
             var _retornoPushWoosh = new EnvioPush().EnviarPushNotification(p_mensagens, texto);
+
+            return _retornoPushWoosh;
+        }
+
+        [NonAction]
+        private bool EnvioPushWooshResult(List<KeyValuePair<string, DateTime>> p_novoPush, string texto)
+        {
+            var _retornoPushWoosh = new EnvioPush().EnviarPushNotificationProgramado(p_novoPush, texto);
 
             return _retornoPushWoosh;
         }

@@ -17,6 +17,9 @@ namespace PollPlus.Domain.Enumeradores
         AdministradorEmpresa = 1,
 
         [Description("Usuario App")]
-        UsuarioApp = 2
+        UsuarioApp = 2,
+
+        [Description("Vendedor")]
+        Vendedor = 3,
     }
 }

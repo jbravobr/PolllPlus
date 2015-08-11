@@ -74,6 +74,7 @@
     <Compile Include="Mensagem.cs" />
     <Compile Include="MensagemCategoria.cs" />
     <Compile Include="PerguntaResposta.cs" />
+    <Compile Include="PushProgramado.cs" />
     <Compile Include="Resposta.cs" />
     <Compile Include="Pergunta.cs" />
     <Compile Include="Permissao.cs" />
