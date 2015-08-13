@@ -56,7 +56,7 @@ namespace PollPlus.Controllers
                     {
                         var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
 
-                        if (_empresa.QtdePush > 0 && _empresa.QtdePush <= pushs.Count)
+                        if (_empresa.QtdePush > 0)
                         {
                             var lista = new List<KeyValuePair<string, DateTime>> { new KeyValuePair<string, DateTime>(usuario.PushWooshToken, item.DataEnvio) };
                             var result = this.EnvioPushWooshResult(lista, item.Mensagem);

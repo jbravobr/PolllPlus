@@ -82,7 +82,7 @@ namespace PollPlus.Service
                  new JProperty("notifications",
                         new JArray(
                          new JObject(
-                             new JProperty("send_date", data.ToString("YYYY-MM-DD")),
+                             new JProperty("send_date", data.ToString("yyyy-MM-dd HH:MM")),
                              new JProperty("content", texto),
                              new JProperty("timezone", "America/Sao_Paulo"),
                              new JProperty("devices", new JArray(agg))

@@ -56,7 +56,16 @@
                                             <td class=" ">@_voucher.DataCriacao.ToShortDateString()</td>
                                             <td class=" ">@_voucher.DataValidade</td>
                                             <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Pergunta.TextoPergunta)</td>
-                                            <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Empresa.Nome)</td>
+                                            @if (_voucher.EnqueteVoucher.FirstOrDefault() != null &&
+                            _voucher.EnqueteVoucher.FirstOrDefault().Enquete != null &&
+                            _voucher.EnqueteVoucher.FirstOrDefault().Enquete.Empresa != null)
+                                            {
+                                                <td class=" ">@(_voucher.EnqueteVoucher.First().Enquete.Empresa.Nome)</td>
+                                            }
+                                            else
+                                            {
+                                                <td class=" ">Sem Empresa associada</td>
+                                            }
                                             <td class="center ">
                                                 @if (!_voucher.Usado)
                                                 {

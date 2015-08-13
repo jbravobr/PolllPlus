@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace PollPlus.Controllers
 {
     [OnlyAuthorizedUser]
-    public class VoucherController : Controller
+    public class VoucherController : BaseController
     {
         readonly IVoucherServiceWEB _service;
 
@@ -49,9 +49,6 @@ namespace PollPlus.Controllers
         [OnlyAuthorizedUser, HttpPost]
         public async Task<ActionResult> NovoVoucher(VoucherViewModel model, string NroVoucher)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
             if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
             {
                 var enquetes = await this.serviceEnquete.RetornarTodasEnquetes();
@@ -65,6 +62,9 @@ namespace PollPlus.Controllers
                 ViewData.Add("EnqueteForSelectList", PreparaParaListaDeEnquetes(enquetes, null));
             }
 
+            if (!ModelState.IsValid)
+                return View(model);
+
             foreach (var item in NroVoucher.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
             {
                 var v = new Voucher { DataValidade = model.DataValidade, Identificador = item, Status = Domain.Enumeradores.EnumStatusVoucher.Disponivel, Usado = false };
@@ -77,7 +77,7 @@ namespace PollPlus.Controllers
             enquente.TemVoucher = true;
             await this.serviceEnquete.AtualizarEnquete(enquente);
 
-            return RedirectToAction("ListarVouchers", "Voucher");
+            return RedirectToAction("ListarVouchers");
         }
 
         [OnlyAuthorizedUser, HttpGet]
