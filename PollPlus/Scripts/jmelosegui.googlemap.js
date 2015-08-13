@@ -77,7 +77,7 @@
 
         if (config.points) {
             for (var i = 0; i < config.points.length; i++) {
-                this.points.push(new google.maps.LatLng(config.points[i].latitude, config.points[i].longitude));
+                this.points.push(new google.maps.LatLng(config.points[i].lat, config.points[i].lng));
             }
         }
 
@@ -124,7 +124,7 @@
         },
         load: function () {
             var options = {
-                center: new google.maps.LatLng(this.center.latitude, this.center.longitude),
+                center: new google.maps.LatLng(this.center.lat, this.center.lng),
                 radius: this.radius,
                 strokeColor: this.strokeColor,
                 strokeOpacity: this.strokeOpacity,
@@ -159,7 +159,7 @@
     };
 
     var infowindow;
-    var markersCluster = [];
+    var markersCluster = {};
     $jmelosegui.GoogleMarker.prototype = {
 
         isLoaded: function () {
@@ -168,7 +168,11 @@
         initialize: function () {
             //Work around to the issue https://code.google.com/p/gmaps-api-issues/issues/detail?id=7925
             if (this.window && this.clickable) {
-                google.maps.event.addListener(this.gMarker, 'click', $jmelosegui.delegate(this, this.openInfoWindow));
+                var openWindowEvent = 'click';
+                if (this.window.openOnRightClick) {
+                    openWindowEvent = 'rightclick';
+                }
+                google.maps.event.addListener(this.gMarker, openWindowEvent, $jmelosegui.delegate(this, this.openInfoWindow));
             }
 
             if (this.markerEvents) {
@@ -215,9 +219,9 @@
                 this.parent.bounds.extend(this.gMarker.position);
             }
             this.initialize();
-            if (this.enableMarkersClustering === true) {
-                markersCluster.push(this.gMarker);
-            }
+
+            markersCluster[this.id] = this.gMarker;
+
         },
         openInfoWindow: function () {
             if (this.isLoaded()) {
@@ -324,6 +328,35 @@
 
     $jmelosegui.StyledMapType.prototype = {}
 
+    // Layers
+    // HeatMapLayer
+    $jmelosegui.HeatMapLayer = function (map, config) {
+
+        this.map = map;
+        this.dissipating = (config.dissipating !== undefined) ? config.clickable : true;
+        this.maxIntensity = config.maxIntensity;
+        this.opacity = config.opacity;
+        this.radius = config.radius;
+        this.gradient = config.gradient;
+        this.data = config.data;
+    }
+
+    $jmelosegui.HeatMapLayer.prototype = {}
+
+    // KmlLayer
+    $jmelosegui.KmlLayer = function (map, config) {
+
+        this.map = map;
+        this.clickable = config.clickable;
+        this.preserveViewport = config.preserveViewport;
+        this.screenOverlays = config.screenOverlays;
+        this.suppressInfoWindows = config.suppressInfoWindows;
+        this.zIndex = config.zIndex;
+        this.url = config.url;
+    }
+
+    $jmelosegui.KmlLayer.prototype = {}
+
     $jmelosegui.Googlemap = function (element, options) {
 
         this.element = element;
@@ -375,6 +408,7 @@
         this.polygons = eval(options.polygons);
         this.imageMapTypes = eval(options.imageMapTypes);
         this.styledMapTypes = eval(options.styledMapTypes);
+        this.layers = eval(options.layers);
 
         this.bounds = new google.maps.LatLngBounds();
 
@@ -443,6 +477,9 @@
         }
         if (options.markers_geocoding_completed !== undefined) {
             this.markers_geocoding_completed = options.markers_geocoding_completed;
+        }
+        if (options.markers_geocoding_progress !== undefined) {
+            this.markers_geocoding_progress = options.markers_geocoding_progress;
         }
 
         //Marker Events
@@ -533,7 +570,7 @@
     var delay = 100;
     var markerIndex = 0;
     $jmelosegui.Googlemap.prototype = {
-        initialize: function() {
+        initialize: function () {
 
             var innerOptions = {
                 zoom: this.zoom,
@@ -586,88 +623,95 @@
 
             this.GMap = new google.maps.Map(this.getElement(), innerOptions);
         },
-        getZoomControlStyle: function() {
+        getZoomControlStyle: function () {
             switch (this.zoomControlStyle) {
-            case 'LARGE':
-                return google.maps.ZoomControlStyle.LARGE;
-            case 'SMALL':
-                return google.maps.ZoomControlStyle.SMALL;
-            default:
-                return google.maps.ZoomControlStyle.DEFAULT;
+                case 'LARGE':
+                    return google.maps.ZoomControlStyle.LARGE;
+                case 'SMALL':
+                    return google.maps.ZoomControlStyle.SMALL;
+                default:
+                    return google.maps.ZoomControlStyle.DEFAULT;
             }
         },
-        getMapTypeControlStyle: function() {
+        getMapTypeControlStyle: function () {
             switch (this.mapTypeControlStyle) {
-            case 'DROPDOWN_MENU':
-                return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
-            case 'HORIZONTAL_BAR':
-                return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
-            default:
-                return google.maps.MapTypeControlStyle.DEFAULT;
+                case 'DROPDOWN_MENU':
+                    return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+                case 'HORIZONTAL_BAR':
+                    return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
+                default:
+                    return google.maps.MapTypeControlStyle.DEFAULT;
             }
         },
-        getMapTypeId: function() {
+        getMapTypeId: function () {
             switch (this.mapTypeId) {
-            case 'HYBRID':
-                return google.maps.MapTypeId.HYBRID;
-            case 'SATELLITE':
-                return google.maps.MapTypeId.SATELLITE;
-            case 'TERRAIN':
-                return google.maps.MapTypeId.TERRAIN;
-            case 'ROADMAP':
-                return google.maps.MapTypeId.ROADMAP;
-            default:
-                return this.mapTypeId;
+                case 'HYBRID':
+                    return google.maps.MapTypeId.HYBRID;
+                case 'SATELLITE':
+                    return google.maps.MapTypeId.SATELLITE;
+                case 'TERRAIN':
+                    return google.maps.MapTypeId.TERRAIN;
+                case 'ROADMAP':
+                    return google.maps.MapTypeId.ROADMAP;
+                default:
+                    return this.mapTypeId;
             }
         },
-        getElement: function() {
+        getElement: function () {
             return document.getElementById(this.clientId);
         },
-        getControlPosition: function(position) {
+        getControlPosition: function (position) {
             switch (position) {
-            case 'TOP_CENTER':
-                return google.maps.ControlPosition.TOP_CENTER;
-            case 'TOP_LEFT':
-                return google.maps.ControlPosition.TOP_LEFT;
-            case 'LEFT_TOP':
-                return google.maps.ControlPosition.LEFT_TOP;
-            case 'BOTTOM_CENTER':
-                return google.maps.ControlPosition.BOTTOM_CENTER;
-            case 'BOTTOM_LEFT':
-                return google.maps.ControlPosition.BOTTOM_LEFT;
-            case 'BOTTOM_RIGHT':
-                return google.maps.ControlPosition.BOTTOM_RIGHT;
-            case 'LEFT_BOTTOM':
-                return google.maps.ControlPosition.LEFT_BOTTOM;
-            case 'RIGHT_BOTTOM':
-                return google.maps.ControlPosition.RIGHT_BOTTOM;
-            case 'LEFT_CENTER':
-                return google.maps.ControlPosition.LEFT_CENTER;
-            case 'RIGHT_CENTER':
-                return google.maps.ControlPosition.RIGHT_CENTER;
-            case 'TOP_RIGHT':
-                return google.maps.ControlPosition.TOP_RIGHT;
-            case 'RIGHT_TOP':
-                return google.maps.ControlPosition.RIGHT_TOP;
+                case 'TOP_CENTER':
+                    return google.maps.ControlPosition.TOP_CENTER;
+                case 'TOP_LEFT':
+                    return google.maps.ControlPosition.TOP_LEFT;
+                case 'LEFT_TOP':
+                    return google.maps.ControlPosition.LEFT_TOP;
+                case 'BOTTOM_CENTER':
+                    return google.maps.ControlPosition.BOTTOM_CENTER;
+                case 'BOTTOM_LEFT':
+                    return google.maps.ControlPosition.BOTTOM_LEFT;
+                case 'BOTTOM_RIGHT':
+                    return google.maps.ControlPosition.BOTTOM_RIGHT;
+                case 'LEFT_BOTTOM':
+                    return google.maps.ControlPosition.LEFT_BOTTOM;
+                case 'RIGHT_BOTTOM':
+                    return google.maps.ControlPosition.RIGHT_BOTTOM;
+                case 'LEFT_CENTER':
+                    return google.maps.ControlPosition.LEFT_CENTER;
+                case 'RIGHT_CENTER':
+                    return google.maps.ControlPosition.RIGHT_CENTER;
+                case 'TOP_RIGHT':
+                    return google.maps.ControlPosition.TOP_RIGHT;
+                case 'RIGHT_TOP':
+                    return google.maps.ControlPosition.RIGHT_TOP;
             }
         },
         getAddress: function (config, next) {
             var geo = new google.maps.Geocoder();
             var map = this;
             geo.geocode({ address: config.address }, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    var p = results[0].geometry.location;
-                    config.lat = p.lat();
-                    config.lng = p.lng();
-                    var marker = new $jmelosegui.GoogleMarker(map, markerIndex, config);
-                    map.renderMarker(marker);
-                }
-                else {
-                    if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                        markerIndex--;
-                        delay= delay + 10;
+                var percentageProgress = Math.round(markerIndex / map.markers.length * 100);
+                if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                    markerIndex--;
+                    delay = delay + 10;
+                } else {
+
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        var p = results[0].geometry.location;
+                        config.lat = p.lat();
+                        config.lng = p.lng();
+                        var marker = new $jmelosegui.GoogleMarker(map, markerIndex, config);
+                        map.renderMarker(marker);
+
                     } else {
                         console.log('Error: Geocode was not successful for the following reason: ' + status);
+                    }
+
+                    if (map.markers_geocoding_progress !== undefined) {
+                        var progressArgs = { 'map': map.GMap, value: percentageProgress, address: config.address, status: status };
+                        map.markers_geocoding_progress(progressArgs);
                     }
                 }
                 next(map);
@@ -682,7 +726,8 @@
                 hideSingleGroupMarker: this.markerClusteringOptions.hideSingleGroupMarker,
                 styles: this.markerClusteringOptions.customStyles
             };
-            new MarkerClusterer(this.GMap, markersCluster, options);
+            var markerArray = $.map(markersCluster, function (v) { return v; });
+            new MarkerClusterer(this.GMap, markerArray, options);
         },
         renderCircle: function (c) {
             c.load();
@@ -697,12 +742,12 @@
             }
             catch (ex) { }
         },
-        rendeMarkers: function(map) {
+        renderMarkers: function (map) {
             if (markerIndex < map.markers.length) {
                 var config = map.markers[markerIndex];
                 config.markerEvents = map.markerEvents;
-                setTimeout(function() {
-                    map.getAddress(config, map.rendeMarkers);
+                setTimeout(function () {
+                    map.getAddress(config, map.renderMarkers);
                 }, delay);
                 markerIndex++;
             }
@@ -711,7 +756,7 @@
                     map.GMap.fitBounds(map.bounds);
                 }
                 if (map.markers_geocoding_completed !== undefined) {
-                    var args = { 'map': map };
+                    var args = { 'map': map.GMap, 'markers': markersCluster };
                     map.markers_geocoding_completed(args);
                 }
             }
@@ -725,7 +770,7 @@
                 this.render();
                 this.attachMapEvents();
                 if (this.map_loaded !== undefined) {
-                    var args = { 'map': this.GMap };
+                    var args = { 'map': this.GMap, 'markers': markersCluster };
                     this.map_loaded(args);
                 }
             }
@@ -781,7 +826,7 @@
             var i;
             if (this.markers) {
                 if (this.markersFromAddress) {
-                    this.rendeMarkers(this);
+                    this.renderMarkers(this);
                 } else {
                     for (i = 0; i < this.markers.length; i++) {
                         var config = this.markers[i];
@@ -836,15 +881,30 @@
                     this.addStyledMapType(this.GMap, mapType);
                 }
             }
+            //layers
+            if (this.layers) {
+                for (i = 0; i < this.layers.length; i++) {
+                    var layer = this.layers[i];
+                    if (layer.name === 'heatmap') {
+                        var heatmapLayer = new $jmelosegui.HeatMapLayer(this.GMap, layer.options);
+                        this.addHeatMapLayer(this.GMap, heatmapLayer);
+                    }
+                    if (layer.name === 'kml') {
+                        var kmlLayer = new $jmelosegui.KmlLayer(this.GMap, layer.options);
+                        this.addKmlLayer(this.GMap, kmlLayer);
+                    }
+                    if (layer.name === 'traffic') {
+                        this.addTrafficLayer(this.GMap);
+                    }
+                    if (layer.name === 'bicycling') {
+                        this.addBicyclingLayer(this.GMap);
+                    }
+                    if (layer.name === 'transit') {
+                        this.addTransitLayer(this.GMap);
+                    }
+                }
+            }
             this.GMap.setMapTypeId(this.getMapTypeId());
-        },
-        // Items --------------------------------------------------------------------------------------
-        // Marker
-        addMarker: function (config, render) {
-            if (!this.markers) this.markers = new Array();
-            var marker = new $jmelosegui.GoogleMarker(this, this.markers.length, config);
-            this.markers.push(marker);
-            if (render) this.renderMarker(marker);
         },
         // Image MapTypes
         addImageMapType: function (map, mapType) {
@@ -855,6 +915,46 @@
         addStyledMapType: function (map, mapType) {
             var gStyledMapType = new google.maps.StyledMapType(mapType.styles, mapType);
             map.mapTypes.set(mapType.name, gStyledMapType);
+        },
+        // Heatmap
+        addHeatMapLayer: function (map, options) {
+
+            var data = [];
+            for (var j = 0; j < options.data.length; j++) {
+                data.push(new google.maps.LatLng(options.data[j].lat, options.data[j].lng));
+            }
+
+            var heatmap = new google.maps.visualization.HeatmapLayer({
+                dissipating: options.dissipating,
+                maxIntensity: options.maxIntensity,
+                opacity: options.opacity,
+                radius: options.radius,
+                gradient: options.gradient,
+                data: data
+            });
+
+            heatmap.setMap(map);
+        },
+        //Kml
+        addKmlLayer: function (map, options) {
+
+            var kmlLayer = new google.maps.KmlLayer(options);
+            kmlLayer.setMap(map);
+        },
+        //Traffic
+        addTrafficLayer: function (map) {
+            var trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+        },
+        //Bicycling
+        addBicyclingLayer: function (map) {
+            var bikeLayer = new google.maps.BicyclingLayer();
+            bikeLayer.setMap(map);
+        },
+        //Transit
+        addTransitLayer: function (map) {
+            var transitLayer = new google.maps.TransitLayer();
+            transitLayer.setMap(map);
         }
     };
 

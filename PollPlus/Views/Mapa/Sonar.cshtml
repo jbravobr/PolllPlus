@@ -3,7 +3,7 @@
 @using System.Globalization;
 @using PollPlus.Models;
 @using Jmelosegui.Mvc.Googlemap;
-@using Jmelosegui.Mvc.Googlemap.Overlays
+@using Jmelosegui.Mvc.Googlemap.Objects;
 
 @{
     ViewBag.Title = "Index";
@@ -14,9 +14,9 @@
 
     @{
 
-        var Lat = Convert.ToDouble(ViewData["Lat"]);
-        var Long = Convert.ToDouble(ViewData["Long"]);
-        var raio = Convert.ToInt32(ViewData["Raio"]);
+        double Lat = Convert.ToDouble(ViewData["Lat"]);
+        double Long = Convert.ToDouble(ViewData["Long"]);
+        int raio = Convert.ToInt32(ViewData["Raio"]);
 
         if (Model == null)
         {
@@ -60,17 +60,16 @@
                                         }
                                     )
                             )
-                )
-                .Circles(cf =>
+                ).Circles(cf =>
                 {
                     cf.Add()
-                        .Center(new Location(Lat, Long))
-                        .Radius(raio)
-                        .FillColor(System.Drawing.Color.Red)
-                        .StrokeColor(System.Drawing.Color.DarkRed)
-                        .StrokeWeight(4);
-                }
-            ).Render();
+                   .Center(new Location(Lat, Long))
+                   .Radius(raio)
+                   .FillColor(System.Drawing.Color.Red)
+                   .StrokeColor(System.Drawing.Color.DarkBlue)
+                   .StrokeWeight(4);
+                })
+                .Render();
         }
     }
 
@@ -110,27 +109,27 @@
 @section Scripts{
     @(Html.GoogleMap().ScriptRegistrar())
 
-<script>
-        $(function () {
+    <script>
+        //$(function () {
 
-            $('#Latitude').keydown(function () {
+        //    $('#Latitude').keydown(function () {
 
-                var tt = $('#Latitude').val();
+        //        var tt = $('#Latitude').val();
 
 
-                $('#Latitude').val(tt.replace(/,/g, '.'));
+        //        $('#Latitude').val(tt.replace(/,/g, '.'));
 
-            });
+        //    });
 
-            $('#Longitude').keydown(function () {
+        //    $('#Longitude').keydown(function () {
 
-                var tt = $('#Longitude').val();
+        //        var tt = $('#Longitude').val();
 
-                $('#Longitude').val(tt.replace(/,/g, '.'));
+        //        $('#Longitude').val(tt.replace(/,/g, '.'));
 
-            });
+        //    });
 
-        });
+        //});
 
-</script>
+    </script>
 }

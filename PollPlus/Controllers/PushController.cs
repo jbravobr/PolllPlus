@@ -123,7 +123,7 @@ namespace PollPlus.Controllers
                 {
                     var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
 
-                    if (_empresa.QtdePush > 0 && _empresa.QtdePush <= geoValidas.Count)
+                    if (_empresa.QtdePush > 0)
                     {
                         var _retornoPushWoosh = this.EnvioPushWooshResult(geoValidas, p_mensagem.Mensagem);
 

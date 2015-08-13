@@ -37,14 +37,15 @@ namespace PollPlus.Controllers
         }
 
         [HttpPost, OnlyAuthorizedUser]
-        public async Task<ActionResult> Sonar(double Latitude, double Longitude, int Raio)
+        public async Task<ActionResult> Sonar(string Latitude, string Longitude, string Raio)
         {
+
             var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
             var dados = MontaIndicadoresNoMapaComRadar(localizacoes);
 
-            ViewData.Add("Lat", Latitude);
-            ViewData.Add("Long", Longitude);
-            ViewData.Add("Raio", Raio);
+            ViewData.Add("Lat", Convert.ToDouble(Latitude));
+            ViewData.Add("Long", Convert.ToDouble(Longitude));
+            ViewData.Add("Raio", Convert.ToInt32(Raio));
 
             return View(dados);
         }
