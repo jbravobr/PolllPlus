@@ -149,8 +149,8 @@ namespace PollPlus.Controllers
             {
                 var usuarioJson = JsonConvert.DeserializeObject<Usuario>(usuario);
 
-                if (!String.IsNullOrEmpty(usuarioJson.Email) && (await this.service.RetornarTodosUsuarios()).Any(x => x.Email == usuarioJson.Email))
-                    return BadRequest("Email Já existe");
+                //if (!String.IsNullOrEmpty(usuarioJson.Email) && (await this.service.RetornarTodosUsuarios()).Any(x => x.Email == usuarioJson.Email))
+                //    return BadRequest("Email Já existe");
 
                 if (usuarioJson.DataNascimento == null && usuarioJson.Sexo == null)
                 {
@@ -159,7 +159,7 @@ namespace PollPlus.Controllers
                 }
 
                 var retornoInsertUsuario = await this.service.InserirRetornarUsuario(usuarioJson);
-
+                var listaCategorias = new List<Categoria>();
 
                 if (!String.IsNullOrEmpty(usuarioJson.CategoriaMobileSelection))
                 {
@@ -171,12 +171,17 @@ namespace PollPlus.Controllers
                         catIds.Add(Convert.ToInt32(item));
                     }
 
-                    var listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
+                    listaCategorias = (await this.catRepo.RetornarTodasCategorias()).Where(x => catIds.Contains(x.Id)).ToList();
+                }
 
-                    if (retornoInsertUsuario != null && !String.IsNullOrEmpty(retornoInsertUsuario.Email))
-                        EnviarEmailConfirmacaoCadastro(usuarioJson);
+                if (retornoInsertUsuario != null && !String.IsNullOrEmpty(retornoInsertUsuario.Email))
+                    EnviarEmailConfirmacaoCadastro(usuarioJson);
 
-                    var user = new UsuarioMobile
+                UsuarioMobile user;
+
+                if (listaCategorias != null && listaCategorias.Any())
+                {
+                    user = new UsuarioMobile
                     {
                         DataNascimento = retornoInsertUsuario.DataNascimento,
                         DDD = retornoInsertUsuario.DDD.ToString(),
@@ -188,15 +193,28 @@ namespace PollPlus.Controllers
                         Email = retornoInsertUsuario.Email,
                         Categorias = MapeiaCategoriaParaMobile(listaCategorias).ToList()
                     };
-
-                    var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
-
-                    return Ok(user.Id);
                 }
                 else
                 {
-                    return Ok(retornoInsertUsuario);
+                    user = new UsuarioMobile
+                    {
+                        DataNascimento = retornoInsertUsuario.DataNascimento,
+                        DDD = retornoInsertUsuario.DDD.ToString(),
+                        Municipio = retornoInsertUsuario.Municipio,
+                        Nome = retornoInsertUsuario.Nome,
+                        Sexo = retornoInsertUsuario.Sexo,
+                        Telefone = retornoInsertUsuario.Telefone,
+                        Id = retornoInsertUsuario.Id,
+                        Email = retornoInsertUsuario.Email,
+                    };
                 }
+
+                var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(user.Id));
+
+                if (usuarioJson.DataNascimento != null)
+                    return Ok(user.Id);
+                else
+                    return Ok(retornoInsertUsuario);
             }
             catch (Exception ex)
             {
@@ -226,6 +244,7 @@ namespace PollPlus.Controllers
                 }
 
                 _usuarioBD.Email = _usuario.Email;
+                _usuarioBD.CategoriaMobileSelection = _usuario.CategoriaMobileSelection;
 
                 await this.service.AtualizarUsuario(_usuarioBD);
 
