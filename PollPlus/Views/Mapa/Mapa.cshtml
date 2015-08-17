@@ -102,22 +102,22 @@
     <script>
         $(function () {
 
-            //$('#Latitude').keydown(function () {
+            $('#latitude').keydown(function () {
 
-            //    var tt = $('#Latitude').val();
+                var tt = $('#latitude').val();
                    
 
-            //    $('#Latitude').val(tt.replace(/,/g, '.'));
+                $('#latitude').val(tt.replace(/\./g, ','));
 
-            //});
+            });
 
-            //$('#Longitude').keydown(function () {
+            $('#longitude').keydown(function () {
 
-            //    var tt = $('#Longitude').val();
+                var tt = $('#longitude').val();
 
-            //    $('#Longitude').val(tt.replace(/,/g, '.'));
+                $('#longitude').val(tt.replace(/\./g, ','));
 
-            //});
+            });
 
         });
 

@@ -6,6 +6,7 @@ using PollPlus.Repositorio;
 using PollPlus.Service;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -111,11 +112,17 @@ namespace PollPlus.Controllers
 
                 var geoValidas = new List<string>();
 
-                foreach (var geo in geoCollection)
+                foreach (var geo in geoCollection.Distinct())
                 {
-                    if (distance(p_mensagem.Latitude, p_mensagem.Longitude, geo.Latitude, geo.Longitude, 'K', p_mensagem.Area))
+                    //if (distance(p_mensagem.Latitude, p_mensagem.Longitude, geo.Latitude, geo.Longitude, 'K', p_mensagem.Area))
+                    //{
+                    //    geoValidas.Add(geo.Usuario.PushWooshToken);
+                    //}
+
+                    if (CalcularDistancia(p_mensagem.Latitude, p_mensagem.Longitude, geo.Latitude, geo.Longitude, p_mensagem.Area))
                     {
-                        geoValidas.Add(geo.Usuario.PushWooshToken);
+                        if (!String.IsNullOrEmpty(geo.Usuario.PushWooshToken) && !geoValidas.Contains(geo.Usuario.PushWooshToken))
+                            geoValidas.Add(geo.Usuario.PushWooshToken);
                     }
                 }
 
@@ -185,6 +192,17 @@ namespace PollPlus.Controllers
                 dist = dist * 0.8684;
             }
             return (dist) <= (double)raio;
+        }
+
+        [NonAction]
+        private bool CalcularDistancia(double latOrigem, double lonOrigem, double latUsuario, double lonUsuario, double alcance)
+        {
+            var localOrigem = new GeoCoordinate(latOrigem, lonOrigem);
+            var localUsuario = new GeoCoordinate(latUsuario, lonUsuario);
+
+            var distancia = localOrigem.GetDistanceTo(localUsuario);
+
+            return distancia <= alcance;
         }
 
         [NonAction]

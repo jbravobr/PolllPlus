@@ -110,26 +110,26 @@
     @(Html.GoogleMap().ScriptRegistrar())
 
     <script>
-        //$(function () {
+        $(function () {
 
-        //    $('#Latitude').keydown(function () {
+            $('#Latitude').keydown(function (index,element) {
 
-        //        var tt = $('#Latitude').val();
+                var tt = $('#Latitude').val();
 
 
-        //        $('#Latitude').val(tt.replace(/,/g, '.'));
+                $('#Latitude').val(tt.replace(/\./g, ','));
 
-        //    });
+            });
 
-        //    $('#Longitude').keydown(function () {
+            $('#Longitude').keydown(function () {
 
-        //        var tt = $('#Longitude').val();
+                var tt = $('#Longitude').val();
 
-        //        $('#Longitude').val(tt.replace(/,/g, '.'));
+                $('#Longitude').val(tt.replace(/\./g, ','));
 
-        //    });
+            });
 
-        //});
+        });
 
     </script>
 }
