@@ -92,13 +92,13 @@ namespace PollPlus.Controllers
                 var _toList = _usuarios.OrderBy(x => x.Nome).ToList();
                 var mapper = _toList.Select(x => new RelUsuariosViewModel
                 {
-                    Nome = x.Nome,
-                    Email = x.Email,
-                    Telefone = x.Telefone,
+                    Nome = String.IsNullOrEmpty(x.Nome) ? "Não Informado" : x.Nome,
+                    Email = String.IsNullOrEmpty(x.Email) ? "Não Informado" : x.Email,
+                    Telefone = String.IsNullOrEmpty(x.Telefone) ? "Não Informado" : x.Telefone,
                     DataCriacao = x.DataCriacao.ToShortDateString(),
-                    DataNascimento = x.DataNascimento,
-                    Municipio = x.Municipio,
-                    Sexo = x.Sexo.GetDescription()
+                    DataNascimento = x.DataNascimento == null ? "Não Informado" : x.DataNascimento.Value.ToShortDateString(),
+                    Municipio = String.IsNullOrEmpty(x.Municipio) ? "Não Informado" : x.Municipio,
+                    Sexo = x.Sexo == null ? "Não Informado" : x.Sexo.GetDescription()
                 });
 
                 var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelUsuariosViewModel>(mapper.ToList());
@@ -110,11 +110,11 @@ namespace PollPlus.Controllers
                 var _toList = _usuarios.Where(e => e.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).OrderBy(x => x.Nome).ToList();
                 var mapper = _toList.Select(x => new RelUsuariosViewModel
                 {
-                    Nome = x.Nome,
-                    Email = x.Email,
-                    Telefone = x.Telefone,
+                    Nome = String.IsNullOrEmpty(x.Nome) ? "Não Informado" : x.Nome,
+                    Email = String.IsNullOrEmpty(x.Email) ? "Não Informado" : x.Email,
+                    Telefone = String.IsNullOrEmpty(x.Telefone) ? "Não Informado" : x.Telefone,
                     DataCriacao = x.DataCriacao.ToShortDateString(),
-                    DataNascimento = x.DataNascimento
+                    DataNascimento = x.DataNascimento == null ? "Não Informado" : x.DataNascimento.Value.ToShortDateString(),
                 });
 
                 var _arqExcelBytes = new SimpleExcelExport.ExportToExcel().ListToExcel<RelUsuariosViewModel>(mapper.ToList());

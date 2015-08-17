@@ -13,7 +13,7 @@ namespace PollPlus.Models
         public string Nome { get; set; }
 
         [ExcelExport("Data de Nascimento")]
-        public DateTime? DataNascimento { get; set; }
+        public string DataNascimento { get; set; }
 
         [ExcelExport("E-mail")]
         public string Email { get; set; }
