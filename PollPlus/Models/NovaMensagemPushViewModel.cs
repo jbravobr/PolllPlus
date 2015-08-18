@@ -13,8 +13,8 @@ namespace PollPlus.Models
         [StringLength(500, ErrorMessage = "A nova mensagem precisa conter no máximo 500 caracteres.")]
         public String Mensagem { get; set; }
 
-        public int Area { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public string Area { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

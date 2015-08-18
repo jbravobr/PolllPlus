@@ -63,6 +63,12 @@ namespace PollPlus.Repositorio
             return await base.ProcurarPorFiltro(porEmail);
         }
 
+        public async Task<Usuario> RetornarUsuarioPorPushWooshID(string pushID)
+        {
+            Expression<Func<Usuario, bool>> porPushID = (p) => p.PushWooshToken == pushID;
+            return await base.ProcurarPorFiltro(porPushID);
+        }
+
         /// <summary>
         /// Método para retorno de um Usuario pelo seu identificador no Banco de Dados
         /// </summary>

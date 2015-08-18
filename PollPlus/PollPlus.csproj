@@ -310,6 +310,7 @@
     <Compile Include="Models\RelUsuariosViewModel.cs" />
     <Compile Include="Models\RespostaViewModel.cs" />
     <Compile Include="Helpers\UsuarioLogado.cs" />
+    <Compile Include="Models\UsuariosEnvioPushPorArea.cs" />
     <Compile Include="Models\UsuarioViewModel.cs" />
     <Compile Include="Models\VoucherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -3692,6 +3693,7 @@
     <Content Include="Views\Menu\_MenuPush.cshtml" />
     <Content Include="Views\Push\NovoPushPorArea.cshtml" />
     <Content Include="Views\Push\NovoAgendamentoPorAcaoImportacao.cshtml" />
+    <Content Include="Views\Push\_ListaUsuariosEnvioPushPorArea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

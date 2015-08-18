@@ -1,4 +1,5 @@
 ﻿@model PollPlus.Models.NovaMensagemPushViewModel
+@using PagedList;
 
 @{
     ViewBag.Title = "Envio de Push";
@@ -11,9 +12,10 @@
 
 <div class="content tamanho-reduzido">
 
-    @if (ViewBag.Mesagem != null)
+    @if (ViewBag.Erro != null)
     {
-        @*@Html.RenderPartial("~/Views/Shared/_PartialExibirColecaoDeErros.cshtml", (List<string>)ViewBag.Mesagem);*@
+        var msg = Convert.ToString(ViewBag.Erro);
+        <span style="font-size:18px;color:red;padding:20px">@msg</span>
     }
 
     @using (Html.BeginForm("NovoPushPorArea", "Push", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
@@ -32,29 +34,42 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Longitude</label>
-            <div class="col-sm-10">
-                <input type="text" id="Longitude" name="Longitude" class="form-control" />
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Longitude</label>
+                <div class="col-sm-10">
+                    <input type="text" id="Longitude" name="Longitude" class="form-control" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Area</label>
-            <div class="col-sm-10">
-                <input type="text" name="Area" class="form-control" />
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Area</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Area" class="form-control" />
+                </div>
+                <spa style="font-weight:bold;font-size:12px;margin-left:35px">* Informe em metros, ex: 3K = 3000</spa>
             </div>
-            <spa style="font-weight:bold;font-size:12px;margin-left:35px">* Informe em metros, ex: 3K = 3000</spa>
-        </div>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-primary" type="submit">Salvar</button>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                </div>
             </div>
-        </div>
+
+            <br />
     }
 
 </div>
+
+@if (ViewBag.UsuariosEnviados != null)
+{
+    var usuarios = (IEnumerable<PollPlus.Models.UsuariosEnvioPushPorArea>
+)ViewBag.UsuariosEnviados;
+
+    if (usuarios != null && usuarios.Any())
+    {
+        Html.RenderPartial("_ListaUsuariosEnvioPushPorArea", usuarios);
+    }
+}
 
 @section Scripts{
 

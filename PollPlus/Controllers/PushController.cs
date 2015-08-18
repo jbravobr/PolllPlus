@@ -119,7 +119,7 @@ namespace PollPlus.Controllers
                     //    geoValidas.Add(geo.Usuario.PushWooshToken);
                     //}
 
-                    if (CalcularDistancia(p_mensagem.Latitude, p_mensagem.Longitude, geo.Latitude, geo.Longitude, p_mensagem.Area))
+                    if (CalcularDistancia(Convert.ToDouble(p_mensagem.Latitude.Replace(',', '.')), Convert.ToDouble(p_mensagem.Longitude.Replace(',', '.')), geo.Latitude, geo.Longitude, Convert.ToInt32(p_mensagem.Area)))
                     {
                         if (!String.IsNullOrEmpty(geo.Usuario.PushWooshToken) && !geoValidas.Contains(geo.Usuario.PushWooshToken))
                             geoValidas.Add(geo.Usuario.PushWooshToken);
@@ -128,27 +128,66 @@ namespace PollPlus.Controllers
 
                 if (geoValidas.Any())
                 {
+                    var enviados = new List<UsuariosEnvioPushPorArea>();
                     var _empresa = await this.empresaRepositorio.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
 
                     if (_empresa.QtdePush > 0)
+                    //if (1 == 1)//TESTE
                     {
                         var _retornoPushWoosh = this.EnvioPushWooshResult(geoValidas, p_mensagem.Mensagem);
 
                         if (_retornoPushWoosh)
+                        //if (1 == 1)//TESTE
                         {
+                            foreach (var item in geoValidas)
+                            {
+                                var _usuario = await this.RetornaUsuarioPorPushWooshID(item);
+                                enviados.Add(new UsuariosEnvioPushPorArea
+                                {
+                                    DataHoraEnvio = DateTime.Now,
+                                    Mensagem = p_mensagem.Mensagem,
+                                    Nome = _usuario.Nome,
+                                    NomeEmpresa = UsuarioLogado.UsuarioAutenticado().Empresa.Nome,
+                                    EnderecoOrigem = this.RetornaEnderecoOrigem(Convert.ToDouble(p_mensagem.Latitude.Replace(',', '.')), Convert.ToDouble(p_mensagem.Longitude.Replace(',', '.')))
+                                });
+                            }
+
+                            ViewBag.UsuariosEnviados = enviados;
+
                             _empresa.QtdePush = _empresa.QtdePush - geoValidas.Count;
                             await this.empresaRepositorio.AtualizarEmpresa(_empresa);
                         }
                     }
+
+                    ViewBag.Erro = "Envio Concluido.";
+                    return View();
                 }
+
+                ViewBag.Erro = "Nenhum usuário dentro do raio inserido.";
 
                 return View();
 
             }
 
-            ViewBag.Erro = "Nenhuma posição localizada na área informada";
+            ViewBag.Erro = "Dados informados fora do formato esperado.";
 
             return View();
+        }
+
+        [NonAction]
+        private async Task<Usuario> RetornaUsuarioPorPushWooshID(string pushWooshID)
+        {
+            return await this.usuarioRepo.RetornarUsuarioPorPushWooshID(pushWooshID);
+        }
+
+        [NonAction]
+        public string RetornaEnderecoOrigem(double lat, double lon)
+        {
+            var resolver = new CivicAddressResolver();
+            var coord = new GeoCoordinate(lat, lon);
+            var address = resolver.ResolveAddress(coord);
+
+            return address.AddressLine1;
         }
 
         [NonAction]
