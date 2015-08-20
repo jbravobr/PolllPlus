@@ -108,7 +108,7 @@ namespace PollPlus.Controllers
 
             if ((await this.service.RetornarTodosUsuarios()).Any(x => x.Email == email && x.Senha == senha))
             {
-                var u = (await this.service.RetornarTodosUsuarios()).First(x => x.Email == email && x.Senha == senha);
+                var u = (await this.service.RetornarTodosUsuarios()).Where(x => x.Email == email && x.Senha == senha).First();
 
                 var user = new UsuarioMobile
                 {
