@@ -68,18 +68,42 @@ namespace PollPlus.Controllers
             if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorMaster)
             {
                 var _usuarios = await this.srvUsuario.RetornarTodosUsuarios();
-                var _toList = _usuarios.OrderBy(x => x.Nome).ToList();
-                this.Cache = _toList;
+                var _toList = _usuarios.GroupBy(x => x.Email);
 
-                return View("RelUsuarios", _toList.ToPagedList(1, 10));
+                var listaUsuarios = new List<Usuario>();
+
+                foreach (var usuarios in _toList)
+                {
+                    foreach (var usuario in usuarios)
+                    {
+                        if (!listaUsuarios.Any(x => x.Email == usuario.Email))
+                            listaUsuarios.Add(usuario);
+                    }
+                }
+
+                this.Cache = listaUsuarios;
+
+                return View("RelUsuarios", listaUsuarios.OrderByDescending(c => c.DataCriacao).ToPagedList(1, 10));
             }
             else
             {
                 var _usuarios = await this.srvUsuario.RetornarTodosUsuarios();
-                var _toList = _usuarios.Where(e => e.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).OrderBy(x => x.Nome).ToList();
-                this.Cache = _toList;
+                var _toList = _usuarios.Where(e => e.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).GroupBy(x => x.Email);
 
-                return View("RelUsuarios", _toList.ToPagedList(1, 10));
+                var listaUsuarios = new List<Usuario>();
+
+                foreach (var usuarios in _toList)
+                {
+                    foreach (var usuario in usuarios)
+                    {
+                        if (!listaUsuarios.Any(x => x.Email == usuario.Email))
+                            listaUsuarios.Add(usuario);
+                    }
+                }
+
+                this.Cache = listaUsuarios;
+
+                return View("RelUsuarios", listaUsuarios.OrderByDescending(c => c.DataCriacao).ToPagedList(1, 10));
             }
         }
 
@@ -90,7 +114,20 @@ namespace PollPlus.Controllers
             {
                 var _usuarios = await this.srvUsuario.RetornarTodosUsuarios();
                 var _toList = _usuarios.OrderBy(x => x.Nome).ToList();
-                var mapper = _toList.Select(x => new RelUsuariosViewModel
+
+                var listaUsuarios = new List<Usuario>();
+
+                foreach (var usuarios in _toList)
+                {
+                    foreach (var usuario in _usuarios)
+                    {
+                        if (!listaUsuarios.Any(x => x.Email == usuario.Email))
+                            listaUsuarios.Add(usuario);
+                    }
+                }
+
+
+                var mapper = listaUsuarios.Select(x => new RelUsuariosViewModel
                 {
                     Nome = String.IsNullOrEmpty(x.Nome) ? "Não Informado" : x.Nome,
                     Email = String.IsNullOrEmpty(x.Email) ? "Não Informado" : x.Email,
@@ -108,7 +145,19 @@ namespace PollPlus.Controllers
             {
                 var _usuarios = await this.srvUsuario.RetornarTodosUsuarios();
                 var _toList = _usuarios.Where(e => e.EmpresaId == UsuarioLogado.UsuarioAutenticado().EmpresaId).OrderBy(x => x.Nome).ToList();
-                var mapper = _toList.Select(x => new RelUsuariosViewModel
+
+                var listaUsuarios = new List<Usuario>();
+
+                foreach (var usuarios in _toList)
+                {
+                    foreach (var usuario in _usuarios)
+                    {
+                        if (!listaUsuarios.Any(x => x.Email == usuario.Email))
+                            listaUsuarios.Add(usuario);
+                    }
+                }
+
+                var mapper = listaUsuarios.Select(x => new RelUsuariosViewModel
                 {
                     Nome = String.IsNullOrEmpty(x.Nome) ? "Não Informado" : x.Nome,
                     Email = String.IsNullOrEmpty(x.Email) ? "Não Informado" : x.Email,

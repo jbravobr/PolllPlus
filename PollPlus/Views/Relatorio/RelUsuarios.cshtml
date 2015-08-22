@@ -19,7 +19,7 @@
         <h3>Relatório Gerencial - Usuários Cadatrados</h3>
     </div>
 
-    @using (Html.BeginForm("RelUsuariosCadastrados", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("RelUsuariosCadastrados", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
         {

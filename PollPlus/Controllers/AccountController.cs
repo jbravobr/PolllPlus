@@ -34,7 +34,7 @@ namespace PollPlus.Controllers
 
         public AccountController() { }
 
-        [OnlyAuthorizedUser,HttpGet]
+        [OnlyAuthorizedUser, HttpGet]
         public ActionResult Logout()
         {
             UsuarioLogado.Logout();
@@ -214,12 +214,25 @@ namespace PollPlus.Controllers
         [HttpGet, OnlyAuthorizedUser]
         public async Task<ActionResult> ListarUsuarios(int? pagina)
         {
-            var listaUsuarios = await this.service.RetornarTodosUsuarios();
+            var lista = await this.service.RetornarTodosUsuarios();
+            var group = lista.GroupBy(x => x.Email);
+            var listaUsuarios = new List<Usuario>();
+
+            foreach (var usuarios in group)
+            {
+                foreach (var usuario in usuarios)
+                {
+                    if (!listaUsuarios.Any(x => x.Email == usuario.Email))
+                        listaUsuarios.Add(usuario);
+                }
+            }
 
             ViewBag.ContUsuariosTotal = listaUsuarios.Count;
             ViewBag.ContUsuariosAtivosTotal = listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).Count();
 
-            return View(listaUsuarios.Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo).OrderByDescending(x=>x.DataCriacao).ToPagedList(pagina ?? 1, 10));
+            return View(listaUsuarios
+                .Where(u => u.Status == Domain.Enumeradores.EnumStatusUsuario.Ativo)
+                .OrderByDescending(x => x.DataCriacao).ToPagedList(pagina ?? 1, 10));
         }
 
         [HttpGet, OnlyAuthorizedUser]
