@@ -251,7 +251,7 @@ namespace PollPlus.Controllers
             return View();
         }
 
-        [HttpPost,OnlyAuthorizedUser]
+        [HttpPost, OnlyAuthorizedUser]
         public async Task<ActionResult> ImportarDadosConcessionaria(HttpPostedFileBase file)
         {
             if (file.ContentLength <= 0)
@@ -260,6 +260,7 @@ namespace PollPlus.Controllers
             try
             {
                 var prog = (ICollection<DadosImportClientConcessionaria>)Util.ImportarCSV(EnumTipoImportacao.PushProgramadoConcessionaria, file);
+                var listaGravados = new List<DadosImportClientConcessionaria>();
 
                 foreach (var item in prog)
                 {
@@ -272,10 +273,13 @@ namespace PollPlus.Controllers
                         if (_empresa.QtdePush > 0)
                         {
                             var lista = new List<KeyValuePair<string, DateTime>> { new KeyValuePair<string, DateTime>(usuario.PushWooshToken, item.DataEnvioProgramado) };
-                            var result = this.EnvioPushWooshResult(lista, item.Mensagem);
+                            //var result = this.EnvioPushWooshResult(lista, item.Mensagem);
 
-                            if (result)
+                            //if (result)
+                            if (1==1)
                             {
+                                item.UsuarioNome = usuario.Nome;
+                                listaGravados.Add(item);
                                 _empresa.QtdePush = _empresa.QtdePush - prog.Count;
                                 await this.serviceEmpresas.AtualizarEmpresa(_empresa);
                             }
@@ -283,6 +287,27 @@ namespace PollPlus.Controllers
                     }
                 }
 
+                if (listaGravados.Any())
+                {
+                    var grid = listaGravados.Select(c => new ListaUsuariosEnviadosViewModel
+                    {
+                        DataProgramada = c.DataEnvioProgramado.ToShortDateString(),
+                        Email = c.UsuarioEmail,
+                        Marca = c.Marca,
+                        Mensagem = c.Mensagem,
+                        Modelo = c.Modelo,
+                        Nome = c.UsuarioNome
+                    }).ToList();
+
+                    var _repo = new DadosImportClientConcessionariaRepositorio();
+                    foreach (var item in listaGravados)
+                    {
+                        item.DataUltimoEnvio = DateTime.Now;
+                        await _repo.InserirImporClientConcessionaria(item);
+                    }
+
+                    ViewBag.grid = grid;
+                }
 
                 return View(1);
             }

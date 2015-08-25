@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PollPlus.Models.ListaUsuariosEnviadosViewModel>
+@using GridMvc.Html;
+@using PollPlus.Helpers;
+
+<div>
+
+    <div class="header">
+        <h3>Detalhes do Envio</h3>
+    </div>
+
+    <div class="content" id="DadosRelatorio">
+        <div id="tabelaListaColaboradores" class="table-responsive">
+            <div role="grid" class="dataTables_wrapper form-inline" id="datatable_wrapper">
+                @if (Model != null && Model.Any())
+                {
+                    @Html.Grid(Model).Columns(col =>
+               {
+                   col.Add(b => b.Nome).Titled("Nome do usuário");
+                   col.Add(b => b.Email).Titled("Email do usuário");
+                   col.Add(b => b.Marca).Titled("Marca do veículo");
+                   col.Add(b => b.Modelo).Titled("Modelo do veículo");
+                   col.Add(b => b.Mensagem);
+                   col.Add(b => b.DataProgramada).Titled("Data Programada do Envio").Format("{0:dd/MM/yyy HH:MM}");
+               }).WithPaging(10);
+                }
+                else
+                {
+                    <p>Nenhum usuário encontrado para envio.</p>
+                }
+            </div>
+            <span style="font-size:9px">Informações exibidas somente após o envio programado.</span>
+        </div>
+    </div>
+</div>
+

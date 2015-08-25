@@ -297,6 +297,7 @@
     <Compile Include="Models\EmpresaViewModel.cs" />
     <Compile Include="Models\EnqueteViewModel.cs" />
     <Compile Include="Models\FilialViewModel.cs" />
+    <Compile Include="Models\ListaUsuariosEnviadosModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\NovaMensagemPushViewModel.cs" />
     <Compile Include="Models\PerguntaViewModel.cs" />
@@ -3695,6 +3696,7 @@
     <Content Include="Views\Push\NovoAgendamentoPorAcaoImportacao.cshtml" />
     <Content Include="Views\Push\_ListaUsuariosEnvioPushPorArea.cshtml" />
     <Content Include="Views\Account\ImportarDadosConcessionaria.cshtml" />
+    <Content Include="Views\Account\_GridEnvioConcessionaria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

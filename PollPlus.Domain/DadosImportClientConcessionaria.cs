@@ -9,6 +9,7 @@ namespace PollPlus.Domain
     public class DadosImportClientConcessionaria : EntityBase
     {
         public string UsuarioEmail { get; set; }
+        public string UsuarioNome { get; set; }
         public string Modelo { get; set; }
         public string Marca { get; set; }
         public string Mensagem { get; set; }

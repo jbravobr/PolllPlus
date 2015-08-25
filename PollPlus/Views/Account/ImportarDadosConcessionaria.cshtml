@@ -46,3 +46,13 @@ else if (Model == 0)
     }
 
 </div>
+
+@if (ViewBag.grid != null)
+{
+    var usuarios = (IEnumerable<PollPlus.Models.ListaUsuariosEnviadosViewModel>)ViewBag.grid;
+
+    if (usuarios != null && usuarios.Any())
+    {
+        Html.RenderPartial("_GridEnvioConcessionaria", usuarios);
+    }
+}

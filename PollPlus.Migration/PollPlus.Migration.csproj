@@ -49,13 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201507212005187_Cria_Banco.cs" />
-    <Compile Include="Migrations\201507212005187_Cria_Banco.Designer.cs">
-      <DependentUpon>201507212005187_Cria_Banco.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201507221728432_cria_AmigoEnquete.cs" />
-    <Compile Include="Migrations\201507221728432_cria_AmigoEnquete.Designer.cs">
-      <DependentUpon>201507221728432_cria_AmigoEnquete.cs</DependentUpon>
+    <Compile Include="Migrations\201508251940014_cria_DadosImportClientConcessionaria.cs" />
+    <Compile Include="Migrations\201508251940014_cria_DadosImportClientConcessionaria.Designer.cs">
+      <DependentUpon>201508251940014_cria_DadosImportClientConcessionaria.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,11 +68,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201507212005187_Cria_Banco.resx">
-      <DependentUpon>201507212005187_Cria_Banco.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507221728432_cria_AmigoEnquete.resx">
-      <DependentUpon>201507221728432_cria_AmigoEnquete.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201508251940014_cria_DadosImportClientConcessionaria.resx">
+      <DependentUpon>201508251940014_cria_DadosImportClientConcessionaria.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
