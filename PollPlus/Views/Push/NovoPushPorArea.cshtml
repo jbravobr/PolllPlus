@@ -62,8 +62,7 @@
 
 @if (ViewBag.UsuariosEnviados != null)
 {
-    var usuarios = (IEnumerable<PollPlus.Models.UsuariosEnvioPushPorArea>
-)ViewBag.UsuariosEnviados;
+    var usuarios = (IEnumerable<PollPlus.Models.UsuariosEnvioPushPorArea>)ViewBag.UsuariosEnviados;
 
     if (usuarios != null && usuarios.Any())
     {
@@ -81,7 +80,7 @@
                 var tt = $('#Latitude').val();
 
 
-                $('#Latitude').val(tt.replace(/,/g, '.'));
+                $('#Latitude').val(tt.replace(/\./g, ','));
 
             });
 
@@ -89,12 +88,12 @@
 
                 var tt = $('#Longitude').val();
 
-                $('#Longitude').val(tt.replace(/,/g, '.'));
+                $('#Longitude').val(tt.replace(/\./g, ','));
 
             });
 
         });
 
-    </script>
+</script>
 
 }

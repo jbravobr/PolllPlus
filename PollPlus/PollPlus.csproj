@@ -3694,6 +3694,7 @@
     <Content Include="Views\Push\NovoPushPorArea.cshtml" />
     <Content Include="Views\Push\NovoAgendamentoPorAcaoImportacao.cshtml" />
     <Content Include="Views\Push\_ListaUsuariosEnvioPushPorArea.cshtml" />
+    <Content Include="Views\Account\ImportarDadosConcessionaria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

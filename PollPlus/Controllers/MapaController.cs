@@ -105,7 +105,7 @@ namespace PollPlus.Controllers
 
             foreach (var posicao in group)
             {
-                foreach (var item in posicao.Where(x=>x.DataCriacao >= tempo))
+                foreach (var item in posicao.Where(x => x.DataCriacao >= tempo))
                 {
                     yield return new MapViewModel
                     {
@@ -143,6 +143,19 @@ namespace PollPlus.Controllers
         private async Task<Usuario> RetornaDadosDoUsuario(int usuarioId)
         {
             return await this.user.RetornarUsuarioPorId(usuarioId);
+        }
+
+        [HttpGet, OnlyAuthorizedUser]
+        public async Task<JsonResult> AtualizaContadorMapaPessoas(string Latitude, string Longitude, string Raio)
+        {
+            var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
+            var dados = MontaIndicadoresNoMapaComRadar(localizacoes);
+
+            var queryPessoas = dados.SelectMany(x => x.Nome).Distinct();
+
+            var totalPessoas = queryPessoas.Count();
+
+            return Json(totalPessoas, JsonRequestBehavior.AllowGet);
         }
     }
 

@@ -252,10 +252,35 @@ namespace PollPlus.Helpers
                         return ImportarParaBlackList(stream);
                     case EnumTipoImportacao.PushProgramado:
                         return ImportarPushProgramado(stream);
+                    case EnumTipoImportacao.PushProgramadoConcessionaria:
+                        return ImportarPushProgramadoParaConcessionaria(stream);
                 }
 
                 return null;
             }
+        }
+
+        private static ICollection<DadosImportClientConcessionaria> ImportarPushProgramadoParaConcessionaria(StreamReader stream)
+        {
+            List<DadosImportClientConcessionaria> pushesProgramados = new List<DadosImportClientConcessionaria>();
+
+            while (stream.Peek() >= 0)
+            {
+                var linha = stream.ReadLine();
+                var valorLinha = linha.Split(';');
+
+                pushesProgramados.Add(new DadosImportClientConcessionaria
+                {
+                    UsuarioEmail = valorLinha[0].ToString(),
+                    Marca = valorLinha[1].ToString(),
+                    Modelo = valorLinha[2].ToString(),
+                    Mensagem = valorLinha[3].ToString(),
+                    DataUltimaCompra = Convert.ToDateTime(valorLinha[4].ToString()),
+                    DataEnvioProgramado = Convert.ToDateTime(valorLinha[5].ToString()),
+                });
+            }
+
+            return pushesProgramados;
         }
 
         private static ICollection<PushProgramado> ImportarPushProgramado(StreamReader stream)

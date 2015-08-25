@@ -50,6 +50,7 @@
     <Compile Include="Categoria.cs" />
     <Compile Include="CategoriaBanner.cs" />
     <Compile Include="ControleAcesso.cs" />
+    <Compile Include="DadosImportClientConcessionaria.cs" />
     <Compile Include="Documento.cs" />
     <Compile Include="Empresa.cs" />
     <Compile Include="EmpresaBanner.cs" />

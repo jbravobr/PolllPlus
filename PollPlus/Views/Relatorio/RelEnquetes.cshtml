@@ -19,7 +19,7 @@
         <h3>Relatório Gerencial - Enquetes Cadatradas</h3>
     </div>
 
-    @using (Html.BeginForm("RelEnquetesCadastradas", "Relatorio", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+    @using (Html.BeginForm("RelEnquetesCadastradas", "Relatorio", FormMethod.Get, new { role = "form", @class = "form-horizontal" }))
     {
         if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
         {
@@ -45,7 +45,7 @@
                 </div>
                 <br />
                 @{
-                    Html.RenderPartial("_GridRelatorioEnquetesPorSexo", Model);
+                    Html.RenderPartial("_GridRelatorioEnquetes", Model);
                 }
             </div>
         </div>

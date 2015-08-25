@@ -13,6 +13,8 @@ using System.Text;
 using PollPlus.Helpers;
 using System.Configuration;
 using System.Web;
+using PollPlus.Repositorio;
+using PollPlus.Service;
 
 namespace PollPlus.Controllers
 {
@@ -24,6 +26,8 @@ namespace PollPlus.Controllers
         readonly IEmpresaServiceWEB serviceEmpresas;
 
         readonly IEnqueteServiceWEB serviceEnquete;
+
+        private UsuarioRepositorio userRepo = new UsuarioRepositorio();
 
         public AccountController(IUsuarioServiceWEB Service, IEmpresaServiceWEB ServiceEmpresas, IEnqueteServiceWEB ServiceEnquete)
         {
@@ -239,6 +243,61 @@ namespace PollPlus.Controllers
         public ActionResult ImportarEmail()
         {
             return View();
+        }
+
+        [HttpGet, OnlyAuthorizedUser]
+        public ActionResult ImportarDadosConcessionaria()
+        {
+            return View();
+        }
+
+        [HttpPost,OnlyAuthorizedUser]
+        public async Task<ActionResult> ImportarDadosConcessionaria(HttpPostedFileBase file)
+        {
+            if (file.ContentLength <= 0)
+                return View("Arquivo inválido");
+
+            try
+            {
+                var prog = (ICollection<DadosImportClientConcessionaria>)Util.ImportarCSV(EnumTipoImportacao.PushProgramadoConcessionaria, file);
+
+                foreach (var item in prog)
+                {
+                    var usuario = await this.userRepo.RetornarUsuarioPorEmail(item.UsuarioEmail);
+
+                    if (usuario != null)
+                    {
+                        var _empresa = await this.serviceEmpresas.RetornarEmpresaPorId((int)UsuarioLogado.UsuarioAutenticado().EmpresaId);
+
+                        if (_empresa.QtdePush > 0)
+                        {
+                            var lista = new List<KeyValuePair<string, DateTime>> { new KeyValuePair<string, DateTime>(usuario.PushWooshToken, item.DataEnvioProgramado) };
+                            var result = this.EnvioPushWooshResult(lista, item.Mensagem);
+
+                            if (result)
+                            {
+                                _empresa.QtdePush = _empresa.QtdePush - prog.Count;
+                                await this.serviceEmpresas.AtualizarEmpresa(_empresa);
+                            }
+                        }
+                    }
+                }
+
+
+                return View(1);
+            }
+            catch (Exception ex)
+            {
+                return View(0);
+            }
+        }
+
+        [NonAction]
+        private bool EnvioPushWooshResult(List<KeyValuePair<string, DateTime>> p_novoPush, string texto)
+        {
+            var _retornoPushWoosh = new EnvioPush().EnviarPushNotificationProgramado(p_novoPush, texto);
+
+            return _retornoPushWoosh;
         }
 
         [HttpPost, OnlyAuthorizedUser]

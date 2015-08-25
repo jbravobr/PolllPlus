@@ -12,6 +12,10 @@
 
 <div class="content" style="padding-bottom: 2%;">
 
+    <div>
+        <span> Quantidade de pessoas dentro da área de alcance:</span><span id="countPessoas"> @ViewData["countPessoas"]</span>
+    </div>
+
     @{
 
         double Lat = Convert.ToDouble(ViewData["Lat"]);
@@ -130,6 +134,22 @@
             });
 
         });
+
+        function RefreshContadorPessoas() {
+            setInterval(function () { CallAjax, 5000 });
+        }
+
+        function CallAjax() {
+            var latitude = $('#Latitude').val();
+            var longitude = $('#Longitude').val();
+            var raio = $('#Raio').val();
+
+            $.get(@Url.Action("AtualizaContadorMapaPessoas","Mapa"),{Latitude: latitude, Longitude: longitude, Raio: raio}, function(data){
+
+                $('#countPessoas').html(data);
+
+            } );
+        }
 
     </script>
 }
