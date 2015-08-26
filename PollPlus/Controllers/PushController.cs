@@ -120,7 +120,7 @@ namespace PollPlus.Controllers
                     //    geoValidas.Add(geo.Usuario.PushWooshToken);
                     //}
 
-                    if (CalcularDistancia(Convert.ToDouble(p_mensagem.Latitude.Replace(',','.')), Convert.ToDouble(p_mensagem.Longitude.Replace(',', '.')), geo.Latitude, geo.Longitude, Convert.ToInt32(p_mensagem.Area)))
+                    if (CalcularDistancia(Convert.ToDouble(p_mensagem.Latitude), Convert.ToDouble(p_mensagem.Longitude), geo.Latitude, geo.Longitude, Convert.ToInt32(p_mensagem.Area)))
                     {
                         if (!String.IsNullOrEmpty(geo.Usuario.PushWooshToken) && !geoValidas.Contains(geo.Usuario.PushWooshToken))
                             geoValidas.Add(geo.Usuario.PushWooshToken);
@@ -149,7 +149,7 @@ namespace PollPlus.Controllers
                                     Mensagem = p_mensagem.Mensagem,
                                     Nome = _usuario.Nome,
                                     NomeEmpresa = UsuarioLogado.UsuarioAutenticado().Empresa.Nome,
-                                    EnderecoOrigem = this.RetornaEnderecoOrigem(Convert.ToDouble(p_mensagem.Latitude), Convert.ToDouble(p_mensagem.Longitude))
+                                    //EnderecoOrigem = this.RetornaEnderecoOrigem(Convert.ToDouble(p_mensagem.Latitude.Replace(',', '.'), Convert.ToDouble(p_mensagem.Longitude.Replace(',', '.'))))
                                 });
                             }
 

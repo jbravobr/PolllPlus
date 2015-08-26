@@ -101,7 +101,7 @@ namespace PollPlus.Controllers
         {
             var lista = new List<MapViewModel>();
             var group = posicoes.GroupBy(x => x.UsuarioId).Distinct();
-            var tempo = DateTime.Now.AddMinutes(-10);
+            var tempo = DateTime.Now.AddDays(-180);
 
             foreach (var posicao in group)
             {
