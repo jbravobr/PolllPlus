@@ -8,6 +8,7 @@ using PollPlus.Repositorio;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Device.Location;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -149,13 +150,31 @@ namespace PollPlus.Controllers
         public async Task<JsonResult> AtualizaContadorMapaPessoas(string Latitude, string Longitude, string Raio)
         {
             var localizacoes = await geoRepo.RetornarTodasGeolocalizacoes();
-            var dados = MontaIndicadoresNoMapaComRadar(localizacoes);
 
-            var queryPessoas = dados.SelectMany(x => x.Nome).Distinct();
+            var listaUsuario = new List<Usuario>();
 
-            var totalPessoas = queryPessoas.Count();
+            foreach (var geo in localizacoes)
+            {
+                if (CalcularDistancia(Convert.ToDouble(Latitude.Replace(',','.')), Convert.ToDouble(Longitude.Replace(',','.')), geo.Latitude, geo.Longitude, Convert.ToInt32(Raio)))
+                {
+                    if (!listaUsuario.Contains(geo.Usuario))
+                        listaUsuario.Add(geo.Usuario);
+                }
+            }
 
-            return Json(totalPessoas, JsonRequestBehavior.AllowGet);
+            //return Json(listaUsuario.Count, JsonRequestBehavior.AllowGet);
+            return Json(new Random().Next(0, 100), JsonRequestBehavior.AllowGet);
+        }
+
+        [NonAction]
+        private bool CalcularDistancia(double latOrigem, double lonOrigem, double latUsuario, double lonUsuario, double alcance)
+        {
+            var localOrigem = new GeoCoordinate(latOrigem, lonOrigem);
+            var localUsuario = new GeoCoordinate(latUsuario, lonUsuario);
+
+            var distancia = localOrigem.GetDistanceTo(localUsuario);
+
+            return distancia <= alcance;
         }
     }
 

@@ -16,7 +16,29 @@
         <span> Quantidade de pessoas dentro da área de alcance:</span><span id="countPessoas"> @ViewData["countPessoas"]</span>
     </div>
 
-    @{
+    <div data-example="example9">
+        <div class="counter counter-wheel counter-wheel-themed"
+             data-style="wheel"
+             data-max="12"
+             data-value="8"
+             data-pad="2"
+             data-value-color="#E71232"
+             data-max-color="#131432"
+             data-vertical-align="justify"
+             data-line-width="15">
+            <script type="text/x-handlebars-template">
+                <div>
+                    <div>your</div>
+                    <div class="counter-values">
+                        <span style="color: {{valueColor}}">{{count}}</span><span class="counter-separator">/</span><span style="color: {{maxColor}}">{{max}}</span>
+                    </div>
+                    <div>score</div>
+                </div>
+            </script>
+        </div>
+    </div>
+
+    @*@{
 
         double Lat = Convert.ToDouble(ViewData["Lat"]);
         double Long = Convert.ToDouble(ViewData["Long"]);
@@ -75,7 +97,7 @@
                 })
                 .Render();
         }
-    }
+    }*@
 
     @using (Html.BeginForm("Sonar", "Mapa", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
@@ -109,12 +131,50 @@
 
 </div>
 @*<script src="~/Scripts/jquery-2.1.3.min.js"></script>*@
+<script src="~/Scripts/jquery.countimator.js"></script>
+<script src="~/Scripts/jquery.countimator.wheel.js"></script>
+<link href="~/Content/countimator.wheel.css" rel="stylesheet" />
+
+<style data-example="example9">
+    .counter.counter-wheel.counter-wheel-themed {
+        background-color: transparent;
+        border: lightgray solid 10px;
+        color: #000;
+        width: 200px;
+        padding: 15px;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 1em;
+    }
+
+        .counter.counter-wheel.counter-wheel-themed .counter-values {
+            font-size: 42px;
+            font-weight: bold;
+            line-height: 1.2em;
+        }
+
+        .counter.counter-wheel.counter-wheel-themed .counter-separator {
+            margin: 0 2px 0 3px;
+        }
+
+        .counter.counter-wheel.counter-wheel-themed .counter-body {
+            border: lightgray solid 10px;
+            border-radius: 50%;
+            padding: 25px 0;
+        }
+</style>
+
+
 
 @section Scripts{
-    @(Html.GoogleMap().ScriptRegistrar())
+    @*@(Html.GoogleMap().ScriptRegistrar())*@
 
-    <script>
+    <script type="text/javascript">
         $(function () {
+
+            $(".counter").countimator();
+
+            RefreshContadorPessoas();
 
             $('#Latitude').keydown(function (index,element) {
 
@@ -136,7 +196,7 @@
         });
 
         function RefreshContadorPessoas() {
-            setInterval(function () { CallAjax, 5000 });
+            setInterval(function () { CallAjax();}, 15000 );
         }
 
         function CallAjax() {
@@ -144,7 +204,7 @@
             var longitude = $('#Longitude').val();
             var raio = $('#Raio').val();
 
-            $.get(@Url.Action("AtualizaContadorMapaPessoas","Mapa"),{Latitude: latitude, Longitude: longitude, Raio: raio}, function(data){
+            $.get('@Url.Action("AtualizaContadorMapaPessoas","Mapa")',{Latitude: latitude, Longitude: longitude, Raio: raio}, function(data){
 
                 $('#countPessoas').html(data);
 
