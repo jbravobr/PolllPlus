@@ -12,92 +12,71 @@
 
 <div class="content" style="padding-bottom: 2%;">
 
-    <div>
-        <span> Quantidade de pessoas dentro da área de alcance:</span><span id="countPessoas"> @ViewData["countPessoas"]</span>
-    </div>
+    <div id="odometer" class="odometer">0</div><span style="font-size:14px;color:crimson;font-weight:bold"> Usuários estão dentro da área de alcance</span>
+    <br />
+    <br />
+    <br />
 
-    <div data-example="example9">
-        <div class="counter counter-wheel counter-wheel-themed"
-             data-style="wheel"
-             data-max="12"
-             data-value="8"
-             data-pad="2"
-             data-value-color="#E71232"
-             data-max-color="#131432"
-             data-vertical-align="justify"
-             data-line-width="15">
-            <script type="text/x-handlebars-template">
-                <div>
-                    <div>your</div>
-                    <div class="counter-values">
-                        <span style="color: {{valueColor}}">{{count}}</span><span class="counter-separator">/</span><span style="color: {{maxColor}}">{{max}}</span>
-                    </div>
-                    <div>score</div>
-                </div>
-            </script>
-        </div>
-    </div>
+    @{
 
-    @*@{
+            double Lat = Convert.ToDouble(ViewData["Lat"]);
+            double Long = Convert.ToDouble(ViewData["Long"]);
+            int raio = Convert.ToInt32(ViewData["Raio"]);
 
-        double Lat = Convert.ToDouble(ViewData["Lat"]);
-        double Long = Convert.ToDouble(ViewData["Long"]);
-        int raio = Convert.ToInt32(ViewData["Raio"]);
+            if (Model == null)
+            {
+                <p>Nenhum informação Encontrada.</p>
+            }
+            else
+            {
 
-        if (Model == null)
-        {
-            <p>Nenhum informação Encontrada.</p>
-        }
-        else
-        {
+                var latInicial = Model.First().Latitude;
+                var LongInicial = Model.First().Longitude;
 
-            var latInicial = Model.First().Latitude;
-            var LongInicial = Model.First().Longitude;
-
-            Html.GoogleMap()
-                .Name("map")
-                .Culture(CultureInfo.CurrentCulture)
-                .Height(600)
-                .Center(c => c.Latitude(Lat)
-                              .Longitude(Long))
-                .Zoom(10)
-                .BindTo<MapViewModel, Marker>
-                (Model, mappings => mappings.For<MapViewModel>
-                            (
-                                binding => binding.ItemDataBound
-                                    (
-                                        (marker, markerModel) =>
-                                        {
-                                            marker.Latitude = markerModel.Latitude;
-                                            marker.Longitude = markerModel.Longitude;
-                                            marker.Title = "Coordenadas por Usuário";
-                                            marker.zIndex = 0;
-                                            marker.Icon = new MarkerImage(Url.Content(String.Format("{0}{1}", "~/Content/images/", markerModel.Icon)),
-                                                new System.Drawing.Size(32, 32),
-                                                new System.Drawing.Point(0, 0),
-                                                new System.Drawing.Point(0, 32));
-                                            marker.Window = new InfoWindow(marker)
+                Html.GoogleMap()
+                    .Name("map")
+                    .Culture(CultureInfo.CurrentCulture)
+                    .Height(600)
+                    .Center(c => c.Latitude(Lat)
+                                  .Longitude(Long))
+                    .Zoom(10)
+                    .BindTo<MapViewModel, Marker>
+                    (Model, mappings => mappings.For<MapViewModel>
+                                (
+                                    binding => binding.ItemDataBound
+                                        (
+                                            (marker, markerModel) =>
                                             {
-                                                Template =
-                                                                {
-                                                                Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, markerModel.Endereco))
-                                                                }
-                                            };
-                                        }
-                                    )
-                            )
-                ).Circles(cf =>
-                {
-                    cf.Add()
-                   .Center(new Location(Lat, Long))
-                   .Radius(raio)
-                   .FillColor(System.Drawing.Color.Red)
-                   .StrokeColor(System.Drawing.Color.DarkBlue)
-                   .StrokeWeight(4);
-                })
-                .Render();
+                                                marker.Latitude = markerModel.Latitude;
+                                                marker.Longitude = markerModel.Longitude;
+                                                marker.Title = "Coordenadas por Usuário";
+                                                marker.zIndex = 0;
+                                                marker.Icon = new MarkerImage(Url.Content(String.Format("{0}{1}", "~/Content/images/", markerModel.Icon)),
+                                                    new System.Drawing.Size(32, 32),
+                                                    new System.Drawing.Point(0, 0),
+                                                    new System.Drawing.Point(0, 32));
+                                                marker.Window = new InfoWindow(marker)
+                                                {
+                                                    Template =
+                                                                    {
+                                                                    Content = () => ViewContext.Writer.Write(string.Format("<span>{0}</span><br /><span style:\"font-weight:bold\">{1}</span>", markerModel.Nome, markerModel.Endereco))
+                                                                    }
+                                                };
+                                            }
+                                        )
+                                )
+                    ).Circles(cf =>
+                    {
+                        cf.Add()
+                       .Center(new Location(Lat, Long))
+                       .Radius(raio)
+                       .FillColor(System.Drawing.Color.Red)
+                       .StrokeColor(System.Drawing.Color.DarkBlue)
+                       .StrokeWeight(4);
+                    })
+                    .Render();
+            }
         }
-    }*@
 
     @using (Html.BeginForm("Sonar", "Mapa", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
     {
@@ -131,52 +110,20 @@
 
 </div>
 @*<script src="~/Scripts/jquery-2.1.3.min.js"></script>*@
-<script src="~/Scripts/jquery.countimator.js"></script>
-<script src="~/Scripts/jquery.countimator.wheel.js"></script>
-<link href="~/Content/countimator.wheel.css" rel="stylesheet" />
-
-<style data-example="example9">
-    .counter.counter-wheel.counter-wheel-themed {
-        background-color: transparent;
-        border: lightgray solid 10px;
-        color: #000;
-        width: 200px;
-        padding: 15px;
-        font-size: 14px;
-        text-transform: uppercase;
-        line-height: 1em;
-    }
-
-        .counter.counter-wheel.counter-wheel-themed .counter-values {
-            font-size: 42px;
-            font-weight: bold;
-            line-height: 1.2em;
-        }
-
-        .counter.counter-wheel.counter-wheel-themed .counter-separator {
-            margin: 0 2px 0 3px;
-        }
-
-        .counter.counter-wheel.counter-wheel-themed .counter-body {
-            border: lightgray solid 10px;
-            border-radius: 50%;
-            padding: 25px 0;
-        }
-</style>
-
-
 
 @section Scripts{
-    @*@(Html.GoogleMap().ScriptRegistrar())*@
+    @(Html.GoogleMap().ScriptRegistrar())
 
     <script type="text/javascript">
         $(function () {
 
-            $(".counter").countimator();
+            //setTimeout(function () {
+            //    odometer.innerHTML = 456;
+            //}, 1000);
 
             RefreshContadorPessoas();
 
-            $('#Latitude').keydown(function (index,element) {
+            $('#Latitude').keydown(function (index, element) {
 
                 var tt = $('#Latitude').val();
 
@@ -196,7 +143,7 @@
         });
 
         function RefreshContadorPessoas() {
-            setInterval(function () { CallAjax();}, 15000 );
+            setInterval(function () { CallAjax(); }, 1000);
         }
 
         function CallAjax() {
@@ -204,11 +151,11 @@
             var longitude = $('#Longitude').val();
             var raio = $('#Raio').val();
 
-            $.get('@Url.Action("AtualizaContadorMapaPessoas","Mapa")',{Latitude: latitude, Longitude: longitude, Raio: raio}, function(data){
+            $.get('@Url.Action("AtualizaContadorMapaPessoas","Mapa")', { Latitude: latitude, Longitude: longitude, Raio: raio }, function (data) {
 
-                $('#countPessoas').html(data);
+                odometer.innerHTML = data;
 
-            } );
+            });
         }
 
     </script>

@@ -35,6 +35,11 @@
         .field-validation-error {
             color: red;
         }
+
+        .odometer {
+            font-size: 25px;
+            line-height : 45px
+        }
     </style>
 
 </head>
@@ -92,8 +97,8 @@
                             @if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
                             {
                                 @*<Banners>*@
-                               { Html.RenderAction("MontaMenuBanners", "Menu"); }
-                                @*</Banners>*@
+                            { Html.RenderAction("MontaMenuBanners", "Menu"); }
+                            @*</Banners>*@
                             }
 
                             @*<Relatórios>*@
@@ -103,8 +108,8 @@
                             @if (UsuarioLogado.UsuarioAutenticado().Perfil == PollPlus.Domain.Enumeradores.EnumPerfil.AdministradorMaster)
                             {
                                 @*<ControleAcesso>*@
-                                { Html.RenderAction("MontaControleAcesso", "Menu"); }
-                                @*</ControleAcesso>*@
+                            { Html.RenderAction("MontaControleAcesso", "Menu"); }
+                            @*</ControleAcesso>*@
                             }
                         </ul>
                     </div>
@@ -209,6 +214,7 @@
 
             $("#example2").multiselect();
             $("#example3").multiselect();
+
         });
 
     </script>
@@ -235,6 +241,10 @@
     <link href="~/Content/jqx.base.css" rel="stylesheet" />
     <script src="~/Scripts/jqxcore.js"></script>
     <script src="~/Scripts/jqxcolorpicker.js"></script>
+
+    <!-- Odometr includes -->
+    <link href="~/Content/odometer-theme-car.css" rel="stylesheet" />
+    <script src="~/Scripts/odometer.min.js"></script>
 
     @RenderSection("Scripts", false)
 

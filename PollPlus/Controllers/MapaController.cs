@@ -155,15 +155,13 @@ namespace PollPlus.Controllers
 
             foreach (var geo in localizacoes)
             {
-                if (CalcularDistancia(Convert.ToDouble(Latitude.Replace(',','.')), Convert.ToDouble(Longitude.Replace(',','.')), geo.Latitude, geo.Longitude, Convert.ToInt32(Raio)))
+                if (CalcularDistancia(Convert.ToDouble(Latitude), Convert.ToDouble(Longitude), geo.Latitude, geo.Longitude, Convert.ToInt32(Raio)))
                 {
                     if (!listaUsuario.Contains(geo.Usuario))
                         listaUsuario.Add(geo.Usuario);
                 }
             }
-
-            //return Json(listaUsuario.Count, JsonRequestBehavior.AllowGet);
-            return Json(new Random().Next(0, 100), JsonRequestBehavior.AllowGet);
+            return Json(listaUsuario.Count, JsonRequestBehavior.AllowGet);
         }
 
         [NonAction]
