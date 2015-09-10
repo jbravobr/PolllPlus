@@ -102,20 +102,37 @@
     <script>
         $(function () {
 
-            $('#latitude').keydown(function () {
+            $('#Latitude').keydown(function () {
 
-                var tt = $('#latitude').val();
+                var tt = $('#Latitude').val();
                    
 
-                $('#latitude').val(tt.replace(/\./g, ','));
+                $('#Latitude').val(tt.replace(/\./g, ','));
 
             });
 
-            $('#longitude').keydown(function () {
+            $('#Latitude').focusout(function () {
 
-                var tt = $('#longitude').val();
+                var tt = $('#Latitude').val();
 
-                $('#longitude').val(tt.replace(/\./g, ','));
+
+                $('#Latitude').val(tt.replace(/\./g, ','));
+
+            });
+
+            $('#Longitude').keydown(function () {
+
+                var tt = $('#Longitude').val();
+
+                $('#Longitude').val(tt.replace(/\./g, ','));
+
+            });
+
+            $('#Longitude').focusout(function () {
+
+                var tt = $('#Longitude').val();
+
+                $('#Longitude').val(tt.replace(/\./g, ','));
 
             });
 

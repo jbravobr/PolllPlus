@@ -451,8 +451,8 @@ namespace PollPlus.Controllers
                 {
                     Id = resposta.Id,
                     TextoResposta = resposta.TextoResposta,
-                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Masculino),
-                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Feminino)
+                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo.HasValue && r.Usuario.Sexo.Value == EnumSexo.Masculino),
+                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo.HasValue && r.Usuario.Sexo.Value == EnumSexo.Feminino)
                 });
             }
             return Json(_respostaJsonToList);
@@ -470,7 +470,7 @@ namespace PollPlus.Controllers
             {
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
-                var groupNascimento = (from n in _respostasRespondidas
+                var groupNascimento = (from n in _respostasRespondidas.Where(c => c.Usuario.DataNascimento.HasValue)
                                        group n by n.Usuario.DataNascimento.Value.Year into porAnoNascimento
                                        select new
                                        {
@@ -504,7 +504,7 @@ namespace PollPlus.Controllers
             {
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
-                var groupMunicipio = (from mun in _respostasRespondidas
+                var groupMunicipio = (from mun in _respostasRespondidas.Where(c => !String.IsNullOrEmpty(c.Usuario.Municipio))
                                       group mun by mun.Usuario.Municipio into porMunicipio
                                       select new
                                       {
@@ -538,7 +538,7 @@ namespace PollPlus.Controllers
             {
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
-                var groupMunicipio = (from mun in _respostasRespondidas
+                var groupMunicipio = (from mun in _respostasRespondidas.Where(c => !String.IsNullOrEmpty(c.Usuario.Municipio))
                                       group mun by mun.Usuario.Municipio into porMunicipio
                                       select new
                                       {
@@ -578,8 +578,8 @@ namespace PollPlus.Controllers
                 {
                     Id = resposta.Id,
                     TextoResposta = resposta.TextoResposta,
-                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Masculino),
-                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo == EnumSexo.Feminino)
+                    PorHomens = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo.HasValue && r.Usuario.Sexo.Value == EnumSexo.Masculino),
+                    PorMulheres = resposta.PerguntaResposta.Count(r => r.Usuario.Sexo.HasValue && r.Usuario.Sexo.Value == EnumSexo.Feminino)
                 });
             }
 
@@ -600,7 +600,7 @@ namespace PollPlus.Controllers
             {
                 var _respostasRespondidas = await this.srvPerguntaResposta.RetornarPerguntaRespostaPorResposta(resposta.Id);
 
-                var groupNascimento = (from n in _respostasRespondidas
+                var groupNascimento = (from n in _respostasRespondidas.Where(c => c.Usuario.DataNascimento.HasValue)
                                        group n by n.Usuario.DataNascimento.Value.Year into porAnoNascimento
                                        select new
                                        {

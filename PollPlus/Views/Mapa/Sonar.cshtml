@@ -132,7 +132,24 @@
 
             });
 
+            $('#Latitude').focusout(function (index, element) {
+
+                var tt = $('#Latitude').val();
+
+
+                $('#Latitude').val(tt.replace(/\./g, ','));
+
+            });
+
             $('#Longitude').keydown(function () {
+
+                var tt = $('#Longitude').val();
+
+                $('#Longitude').val(tt.replace(/\./g, ','));
+
+            });
+
+            $('#Longitude').focusout(function () {
 
                 var tt = $('#Longitude').val();
 

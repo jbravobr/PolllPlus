@@ -436,7 +436,8 @@ namespace PollPlus.Controllers
 
             try
             {
-                if (enquetesAmigos != null)
+                //if (enquetesAmigos != null && enquetesAmigos.Any())
+                if(enquetesAmigos !=null)
                 {
 
                     /*foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
@@ -447,6 +448,7 @@ namespace PollPlus.Controllers
                     }*/
 
 
+                    //var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetesAmigos).ToList();
                     var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes).ToList();
                     //var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
                     //var todas = e.Union(_e);
