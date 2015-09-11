@@ -402,42 +402,41 @@ namespace PollPlus.Controllers
             List<Enquete> enquetes = null;
             List<Enquete> enquetesAmigos = new List<Enquete>();
 
-            if (id > 0)
-            {
-                Expression<Func<Enquete, bool>> filtro = (x) => x.Id > id && x.Tipo == EnumTipoEnquete.Interesse
-                && x.Status == EnumStatusEnquete.Publicada;
-                enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
-
-                if (enquetes.Any(x => x.AmigoEnquete.Any()))
-                {
-                    foreach (var enquete in enquetes)
-                    {
-                        if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
-                            enquetesAmigos.Add(enquete);
-                    }
-                }
-
-            }
-            else
-            {
-                Expression<Func<Enquete, bool>> filtro = (x) => x.Tipo == EnumTipoEnquete.Interesse
-                && x.Status == EnumStatusEnquete.Publicada;
-                enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
-
-                if (enquetes.Any(x => x.AmigoEnquete.Any()))
-                {
-                    foreach (var enquete in enquetes)
-                    {
-                        if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
-                            enquetesAmigos.Add(enquete);
-                    }
-                }
-            }
-
             try
             {
+                //if (id > 0)
+                //{
+                //    Expression<Func<Enquete, bool>> filtro = (x) => x.Id > id && x.Tipo == EnumTipoEnquete.Interesse
+                //    && x.Status == EnumStatusEnquete.Publicada;
+                //    enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+
+                //    if (enquetes.Any(x => x.AmigoEnquete.Any()))
+                //    {
+                //        foreach (var enquete in enquetes)
+                //        {
+                //            if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
+                //                enquetesAmigos.Add(enquete);
+                //        }
+                //    }
+
+                //}
+                //else
+                //{
+                Expression<Func<Enquete, bool>> filtro = (x) => x.Tipo == EnumTipoEnquete.Interesse
+            && x.Status == EnumStatusEnquete.Publicada;
+                enquetes = (await enqueteRepo.ProcurarPorColecao(filtro)).ToList();
+
+                if (enquetes.Any(x => x.AmigoEnquete.Any()))
+                {
+                    foreach (var enquete in enquetes)
+                    {
+                        if (enquete.AmigoEnquete.FirstOrDefault(x => x.UsuarioId == usuarioId) != null)
+                            enquetesAmigos.Add(enquete);
+                    }
+                    //}
+                }
                 //if (enquetesAmigos != null && enquetesAmigos.Any())
-                if(enquetesAmigos !=null)
+                if (enquetesAmigos != null)
                 {
 
                     /*foreach (var enquete in enquetes.Where(w => w.PerguntaId != null))
@@ -446,6 +445,16 @@ namespace PollPlus.Controllers
                         var respostas = (await this.respostaRepo.ProcurarPorColecao(filtro));
                         enquete.Pergunta.Resposta = respostas.ToList();
                     }*/
+
+
+                    foreach (var _enquete in enquetes)
+                    {
+                        var achou = enquetesAmigos.FirstOrDefault(x => x.Id == _enquete.Id);
+                        if (achou == null)
+                            enquetes.FirstOrDefault(x => x.Id == _enquete.Id).AtivaNoFront = false;
+                        else
+                            enquetes.FirstOrDefault(x => x.Id == _enquete.Id).AtivaNoFront = true;
+                    }
 
 
                     //var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetesAmigos).ToList();
@@ -795,7 +804,7 @@ namespace PollPlus.Controllers
                     Imagem = enquete.Imagem,
                     TemVoucher = enquete.TemVoucher,
                     UsuarioCriador = enquete.Usuario.Nome,
-                    AtivaNoFront = true
+                    AtivaNoFront = enquete.AtivaNoFront
                 };
 
                 if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
@@ -876,7 +885,7 @@ namespace PollPlus.Controllers
         public string Descricao { get; set; }
         public bool TemVoucher { get; set; }
         public string UsuarioCriador { get; set; }
-        public bool AtivaNoFront { get; set; }
+        public bool? AtivaNoFront { get; set; }
     }
 
     public class PerguntaMobile

@@ -20,6 +20,7 @@ namespace PollPlus.Domain
         public string UrlVideo { get; set; }
         public bool TemVoucher { get; set; }
         public int QtdePush { get; set; }
+        public bool? AtivaNoFront { get; set; }
 
         public string colegas { get; set; }
 
