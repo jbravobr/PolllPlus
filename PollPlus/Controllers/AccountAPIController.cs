@@ -382,7 +382,7 @@ namespace PollPlus.Controllers
             {
                 if (enquetes != null)
                 {
-                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes);
+                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes, true);
                     var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(e));
                     return Ok(enquetesJson);
                 }
@@ -458,7 +458,7 @@ namespace PollPlus.Controllers
 
 
                     //var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetesAmigos).ToList();
-                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes).ToList();
+                    var e = MapeiaEnqueteDomainParaEnqueteMobile(enquetes, false).ToList();
                     //var _e = MapeiaMensagemParaMensagemMobile(enquetes.Where(x => x.PerguntaId == null).ToList()).ToList(); ;
                     //var todas = e.Union(_e);
                     var enquetesJson = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(e));
@@ -771,7 +771,7 @@ namespace PollPlus.Controllers
             }
         }
 
-        private List<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes)
+        private List<EnqueteMobile> MapeiaEnqueteDomainParaEnqueteMobile(ICollection<Enquete> enquetes, bool publica)
         {
             var lista = new List<EnqueteMobile>();
 
@@ -804,7 +804,7 @@ namespace PollPlus.Controllers
                     Imagem = enquete.Imagem,
                     TemVoucher = enquete.TemVoucher,
                     UsuarioCriador = enquete.Usuario.Nome,
-                    AtivaNoFront = enquete.AtivaNoFront
+                    AtivaNoFront = publica == true ? false : enquete.AtivaNoFront
                 };
 
                 if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
@@ -833,7 +833,8 @@ namespace PollPlus.Controllers
                     UsuarioId = enquete.UsuarioId,
                     Imagem = enquete.Imagem,
                     Categoria = GetCategoriaById(enquete.EnqueteCategoria.First().CategoriaId).Result,
-                    Descricao = enquete.Descricao
+                    Descricao = enquete.Descricao,
+                    AtivaNoFront = false
                 };
             }
         }
