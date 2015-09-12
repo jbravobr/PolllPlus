@@ -454,6 +454,12 @@ namespace PollPlus.Controllers
                             enquetes.FirstOrDefault(x => x.Id == _enquete.Id).AtivaNoFront = false;
                         else
                             enquetes.FirstOrDefault(x => x.Id == _enquete.Id).AtivaNoFront = true;
+
+                        if (_enquete.propria && _enquete.UsuarioId == usuarioId)
+                            enquetes.FirstOrDefault(x => x.Id == _enquete.Id).AtivaNoFront = true;
+
+                        if (_enquete.propria && _enquete.UsuarioId != usuarioId)
+                            enquetes.FirstOrDefault(x => x.Id == _enquete.Id).propria = false;
                     }
 
 
@@ -804,7 +810,8 @@ namespace PollPlus.Controllers
                     Imagem = enquete.Imagem,
                     TemVoucher = enquete.TemVoucher,
                     UsuarioCriador = enquete.Usuario.Nome,
-                    AtivaNoFront = publica == true ? false : enquete.AtivaNoFront
+                    AtivaNoFront = publica == true ? false : enquete.AtivaNoFront,
+                    propria = enquete.propria
                 };
 
                 if (enquete.EnqueteCategoria != null && enquete.EnqueteCategoria.Any())
@@ -887,6 +894,7 @@ namespace PollPlus.Controllers
         public bool TemVoucher { get; set; }
         public string UsuarioCriador { get; set; }
         public bool? AtivaNoFront { get; set; }
+        public bool propria { get; set; }
     }
 
     public class PerguntaMobile

@@ -21,6 +21,7 @@ namespace PollPlus.Domain
         public bool TemVoucher { get; set; }
         public int QtdePush { get; set; }
         public bool? AtivaNoFront { get; set; }
+        public bool propria { get; set; }
 
         public string colegas { get; set; }
 
