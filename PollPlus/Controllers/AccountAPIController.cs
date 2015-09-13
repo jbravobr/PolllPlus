@@ -654,7 +654,7 @@ namespace PollPlus.Controllers
                         {
                             var u = await this.service.RetornarUsuarioPorId(respondeJson.UsuarioId);
 
-                            if (EnviarEmailConfirmacaoVoucher(u, item.Voucher.Identificador, item.Voucher.DataValidade, item.Voucher.Descricao))
+                            if (EnviarEmailConfirmacaoVoucher(u, item.Voucher.Identificador, item.Voucher.DataValidade, item.Voucher.Descricao, item.Voucher.ImagemEmail))
                             {
                                 var v = await this.voucherRepo.RetornarVoucherPorId(item.Id);
                                 v.Status = EnumStatusVoucher.Indisponivel;
@@ -688,7 +688,7 @@ namespace PollPlus.Controllers
             _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", usuario.Email));
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais", String.Empty);
 
             return Util.SendMail(_message);
         }
@@ -702,22 +702,30 @@ namespace PollPlus.Controllers
             _corpoMessage.AppendLine(String.Format("<p>Sua senha é: {0}.</p>", senha));
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Sistema Mais - Recuperação de senha");
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Sistema Mais - Recuperação de senha", String.Empty);
 
             return Util.SendMail(_message);
         }
 
         [NonAction]
-        private bool EnviarEmailConfirmacaoVoucher(Usuario usuario, string voucherNro, DateTime dataValidade, string voucherDescricao)
+        private bool EnviarEmailConfirmacaoVoucher(Usuario usuario, string voucherNro, DateTime dataValidade, string voucherDescricao, string imagemEmail)
         {
             var _corpoMessage = new StringBuilder();
 
             _corpoMessage.Append(String.Format("<p>Está é a confirmação da criação do seu voucher número {0}.</p>", voucherNro));
             _corpoMessage.AppendLine(String.Format("<p>Este voucher é valido até {0}.</p>", dataValidade.ToString()));
             _corpoMessage.AppendLine(String.Format("<p>{0}</p>", voucherDescricao));
+
+            if (!String.IsNullOrEmpty(imagemEmail))
+            {
+                _corpoMessage.AppendLine("<br />");
+                _corpoMessage.AppendLine("<img src=cid:ImagemPromo>");
+                _corpoMessage.AppendLine("<br />");
+            }
+
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Aviso de Sistema - Sistema Mais");
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Aviso de Sistema - Sistema Mais", imagemEmail);
 
             return Util.SendMail(_message);
         }

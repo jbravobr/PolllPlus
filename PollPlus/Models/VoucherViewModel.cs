@@ -16,6 +16,7 @@ namespace PollPlus.Models
         public DateTime DataValidade { get; set; }
         public int EmpresaId { get; set; }
         public int EnqueteId { get; set; }
+        public string ImagemEmail { get; set; }
 
         public List<string> NroVoucher { get; set; }
     }

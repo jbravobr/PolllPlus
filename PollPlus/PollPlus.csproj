@@ -3702,6 +3702,7 @@
     <Content Include="Views\Push\_ListaUsuariosEnvioPushPorArea.cshtml" />
     <Content Include="Views\Account\ImportarDadosConcessionaria.cshtml" />
     <Content Include="Views\Account\_GridEnvioConcessionaria.cshtml" />
+    <Content Include="Views\Categoria\EditarCategoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

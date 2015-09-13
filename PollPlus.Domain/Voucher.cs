@@ -15,6 +15,7 @@ namespace PollPlus.Domain
         public DateTime DataValidade { get; set; }
         public bool Usado { get; set; }
         public string Descricao { get; set; }
+        public string ImagemEmail { get; set; }
 
 
         public int? UsuarioId { get; set; }

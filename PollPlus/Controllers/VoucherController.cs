@@ -47,7 +47,7 @@ namespace PollPlus.Controllers
         }
 
         [OnlyAuthorizedUser, HttpPost]
-        public async Task<ActionResult> NovoVoucher(VoucherViewModel model, string NroVoucher)
+        public async Task<ActionResult> NovoVoucher(VoucherViewModel model, string NroVoucher, HttpPostedFileBase file)
         {
             if (UsuarioLogado.UsuarioAutenticado().Perfil == Domain.Enumeradores.EnumPerfil.AdministradorEmpresa)
             {
@@ -65,9 +65,16 @@ namespace PollPlus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            if (file.ContentLength > 0)
+            {
+                model.ImagemEmail = file.FileName;
+
+                Util.SalvarImagem(file);
+            }
+
             foreach (var item in NroVoucher.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
             {
-                var v = new Voucher { DataValidade = model.DataValidade, Identificador = item, Status = Domain.Enumeradores.EnumStatusVoucher.Disponivel, Usado = false };
+                var v = new Voucher { DataValidade = model.DataValidade, Identificador = item, Status = Domain.Enumeradores.EnumStatusVoucher.Disponivel, Usado = false, ImagemEmail = file.ContentLength > 0 ? file.FileName : string.Empty };
                 var voucher = await this._service.InserirRetornarVoucher(v);
                 if (voucher != null)
                     await this._service.AssociaVoucherEnquete(model.EnqueteId, voucher.Id);

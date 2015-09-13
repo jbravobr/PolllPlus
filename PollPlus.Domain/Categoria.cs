@@ -12,6 +12,7 @@ namespace PollPlus.Domain
     {
         public string Nome { get; set; }
         public EnumStatusCategoria Status { get; set; }
+        public string Imagem { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<CategoriaBanner> CategoriaBanner { get; set; }

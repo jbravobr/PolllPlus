@@ -91,7 +91,7 @@ namespace PollPlus.Controllers
                     _corpoMessage.AppendLine(String.Format("<p><strong>Acesse {0}Usuario/AlteraSenha para alterar a sua senha (OBRIGATÓRIO).</strong></p>", ConfigurationManager.AppSettings["SiteUrl"].ToString()));
                     _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-                    var _message = Util.MontaMailMessage(email, _corpoMessage.ToString(), "Cadastro de usuário - Mais");
+                    var _message = Util.MontaMailMessage(email, _corpoMessage.ToString(), "Cadastro de usuário - Mais", String.Empty);
 
                     Util.SendMail(_message);
 
@@ -162,7 +162,7 @@ namespace PollPlus.Controllers
             _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", usuario.Email));
             _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
 
-            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais");
+            var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais", String.Empty);
 
             return Util.SendMail(_message);
         }
@@ -276,7 +276,7 @@ namespace PollPlus.Controllers
                             //var result = this.EnvioPushWooshResult(lista, item.Mensagem);
 
                             //if (result)
-                            if (1==1)
+                            if (1 == 1)
                             {
                                 item.UsuarioNome = usuario.Nome;
                                 listaGravados.Add(item);

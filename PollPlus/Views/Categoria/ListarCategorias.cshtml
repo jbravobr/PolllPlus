@@ -47,7 +47,8 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("RemoverCategoria", "Categoria", new { categoriaId = _categoria.Id })">Remover</a></li>
+                                                    @*<li><a href="@Url.Action("RemoverCategoria", "Categoria", new { categoriaId = _categoria.Id })">Remover</a></li>*@
+                                                    <li><a href="@Url.Action("EditarCategoria", "Categoria", new { categoriaId = _categoria.Id })">Editar</a></li>
                                                 </ul>
                                             </div>
                                         </td>

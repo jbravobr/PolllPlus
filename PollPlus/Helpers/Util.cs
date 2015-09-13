@@ -130,14 +130,32 @@ namespace PollPlus.Helpers
         /// <param name="destinatarios"></param>
         /// <param name="corpo"></param>
         /// <param name="titulo"></param>
-        public static MailMessage MontaMailMessage(string destinatario, string corpo, string titulo)
+        public static MailMessage MontaMailMessage(string destinatario, string corpo, string titulo, string imagemEmail)
         {
             var _mailMessage = new MailMessage(ConfigurationManager.AppSettings["SmtpLogin"].ToString(), destinatario);
 
             _mailMessage.BodyEncoding = Encoding.UTF8;
             _mailMessage.HeadersEncoding = Encoding.UTF8;
             _mailMessage.IsBodyHtml = true;
-            _mailMessage.Body = corpo;
+
+            if (!String.IsNullOrEmpty(imagemEmail))
+            {
+                AlternateView htmlView = AlternateView.CreateAlternateViewFromString(corpo, null, "text/html");
+
+                var path = ConfigurationManager.AppSettings["CaminhoParaSalvarImagens"].ToString();
+                var imagem = Path.Combine(path, imagemEmail);
+
+                LinkedResource mailImagem = new LinkedResource(imagem);
+                mailImagem.ContentId = "ImagemPromo";
+
+                htmlView.LinkedResources.Add(mailImagem);
+
+                _mailMessage.AlternateViews.Add(htmlView);
+            }
+            else
+                _mailMessage.Body = corpo;
+
+            //_mailMessage.Body = corpo;
             _mailMessage.Subject = titulo;
 
             return _mailMessage;

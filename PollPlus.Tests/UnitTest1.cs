@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PollPlus.Domain.Enumeradores;
+using System.Net.Mail;
+using System.Text;
+using System.Net;
 
 namespace PollPlus.Tests
 {
@@ -57,6 +60,63 @@ namespace PollPlus.Tests
 
                 Assert.IsNotNull(listaPalavras);
             }
+        }
+
+        [TestMethod]
+        public void EnviaEmailComImagem()
+        {
+            var _mailMessage = new MailMessage("jbravo.br@gmail.com", "jbravo.br@gmail.com");
+
+            _mailMessage.BodyEncoding = Encoding.UTF8;
+            _mailMessage.HeadersEncoding = Encoding.UTF8;
+            _mailMessage.IsBodyHtml = true;
+
+            var _corpoMessage = new StringBuilder();
+
+            _corpoMessage.Append(String.Format("<p>Está é a confirmação da criação do seu voucher número {0}.</p>", "00000000000000001"));
+            _corpoMessage.AppendLine(String.Format("<p>Este voucher é valido até {0}.</p>", DateTime.Now.ToShortDateString()));
+            _corpoMessage.AppendLine(String.Format("<p>{0}</p>", "Teste de Voucher com Imagem no e-mail"));
+            _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
+            _corpoMessage.AppendLine("<img src=cid:ImagemPromo>");
+
+
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(_corpoMessage.ToString(), null, "text/html");
+
+            var imgMail = @"C:\ImagemParaEmail\imagemTeste.jpg";
+
+            LinkedResource mailImagem = new LinkedResource(imgMail);
+            mailImagem.ContentId = "ImagemPromo";
+
+            htmlView.LinkedResources.Add(mailImagem);
+
+            _mailMessage.AlternateViews.Add(htmlView);
+
+            _mailMessage.Subject = "Teste de envio com imagem";
+
+            var _msgErro = string.Empty;
+            var _envioOk = false;
+
+            try
+            {
+                var _client = new SmtpClient();
+
+                _client.Port = Convert.ToInt32(587);
+                _client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                _client.EnableSsl = true;
+                _client.DeliveryFormat = SmtpDeliveryFormat.International;
+                _client.UseDefaultCredentials = false;
+                _client.Host = "smtp.gmail.com";
+                _client.Credentials = new NetworkCredential("jbravo.br@gmail.com", "r48xmxdmc44w");
+
+                _client.Send(_mailMessage);
+                _envioOk = true;
+            }
+            catch (Exception p_ex)
+            {
+                _msgErro = p_ex.Message;
+            }
+
+            Assert.IsTrue(_envioOk);
         }
     }
 }
