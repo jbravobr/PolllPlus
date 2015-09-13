@@ -15,6 +15,7 @@ namespace PollPlus.Models
         [Required(ErrorMessage = "Campo obrigatório.")]
         [MaxLength(150)]
         public string TextoResposta { get; set; }
+        public bool correta { get; set; }
 
         public int PerguntaId { get; set; }
     }

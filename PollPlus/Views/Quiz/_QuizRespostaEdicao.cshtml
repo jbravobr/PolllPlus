@@ -1,0 +1,46 @@
+﻿@{
+    List<PollPlus.Models.RespostaViewModel> respostas = null;
+
+    if (ViewData.ContainsKey("Respostas"))
+    {
+        respostas = (List<PollPlus.Models.RespostaViewModel>)ViewData["Respostas"];
+    }
+}
+
+@if (respostas != null && respostas.Any())
+{
+    foreach (var resposta in respostas)
+    {
+        <div id="form-respostas" class="form-group">
+            <div class="col-sm-10">
+                <input type="text" id="resposta" class="form-control" value="@resposta.TextoResposta" />
+            </div>
+            @*<a id="excluir" class="excluir" href="javascript:void(0);" onclick="Remover($(this));"><img src="~/Content/images/excluir.png" /></a>*@
+            <span>Correta ?</span><input class="icheck" type="checkbox" checked="" style="position: absolute; opacity: 0;float:left">
+        </div>
+        <input type="file" name="imagemResposta" id="imagemResposta" />
+        <br />
+    }
+}
+
+        @*<div id="novaRespostas2" style="display:block">
+                <div id="form-respostas" class="form-group">
+                    <div class="col-sm-10">
+                        <input type="text" id="resposta" class="form-control" name="resposta" />
+                    </div>
+                    <a id="excluir" class="excluir" href="javascript:void(0);" onclick="Remover($(this));"><img src="~/Content/images/excluir.png" /></a>
+                </div>
+                <input type="file" name="imagemResposta" id="imagemResposta" />
+                <br />
+            </div>
+
+            <div id="novaRespostas" style="display:block">
+                <div id="form-respostas" class="form-group">
+                    <div class="col-sm-10">
+                        <input type="text" id="resposta" class="form-control" name="resposta" />
+                    </div>
+                    <a id="excluir" class="excluir" href="javascript:void(0);" onclick="Remover($(this));"><img src="~/Content/images/excluir.png" /></a>
+                </div>
+                <input type="file" name="imagemResposta" id="imagemResposta" />
+                <br />
+            </div>*@

@@ -1,0 +1,97 @@
+﻿@model PollPlus.Models.EnqueteViewModel
+
+@{
+    ViewBag.Title = "Editar Quiz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="header">
+    <h3>Edição de Quiz</h3>
+</div>
+
+<div class="content">
+    @using (Html.BeginForm("EditarQuiz", "Quiz", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Pergunta.TextoPergunta, "Título", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.Pergunta.TextoPergunta, new { placeholder = "Título", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Pergunta.TextoPergunta)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.UrlVideo, "URL para Vídeo", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.UrlVideo, new { placeholder = "URL do vídeo", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.UrlVideo)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.file, "Imagem", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.file, new { type = "file" })
+                @Html.ValidationMessageFor(x => x.file)
+                <span style="font-size:9px;font-weight:bold">Tamanho permitido é 640 x 325 pixels</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Categoria", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.Partial("_MultiSelectCategorias")
+            </div>
+        </div>
+        @*<div class="form-group">
+            @Html.Label("Tipo", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-10">
+                @Html.EnumDropDownListFor(x => x.Tipo, "Selecione uma opção")
+            </div>
+        </div>*@
+
+            <div class="header">
+                <h3>Respostas</h3>
+            </div>
+
+            <div class="row">
+                <div id="respostas" class="content">
+                    @{Html.RenderPartial("_QuizRespostaEdicao");}
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <a class="btn btn-primary" id="btnNovaResposta">Nova Resposta</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                    </div>
+                </div>
+            </div>
+                        }
+</div>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/Theme/bootstrap.multiselect/js/bootstrap-multiselect.js"></script>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("#btnNovaResposta").click(function () {
+
+            var html = $("#novaRespostas").clone();
+            $('input[id="resposta"]', html).val("");
+
+            $("#respostas").append(html);
+        });
+
+        function Remover(obj) {
+            $(obj).parent().parent().remove();
+        }
+
+        $(function () {
+
+            $("#example2").multiselect();
+        });
+
+    </script>
+}

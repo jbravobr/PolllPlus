@@ -62,5 +62,10 @@ namespace PollPlus.Controllers
         {
             return PartialView("_MenuPush");
         }
+
+        public PartialViewResult MontaMenuQuiz()
+        {
+            return PartialView("_MenuQuiz");
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace PollPlus.Domain
         public int QtdePush { get; set; }
         public bool? AtivaNoFront { get; set; }
         public bool propria { get; set; }
+        public string correta { get; set; }
 
         public string colegas { get; set; }
 

@@ -12,6 +12,7 @@ namespace PollPlus.Domain
 
         public int PerguntaId { get; set; }
         public virtual Pergunta Pergunta { get; set; }
+        public bool correta { get; set; }
 
         public virtual ICollection<PerguntaResposta> PerguntaResposta { get; set; }
 

@@ -10,6 +10,7 @@ namespace PollPlus.Domain.Enumeradores
     {
         Publica =1, 
         Interesse = 2,
-        Mensagem
+        Mensagem = 3,
+        Quiz = 4
     }
 }

@@ -86,6 +86,10 @@
                             @{Html.RenderAction("MontaMenuEnquetes", "Menu"); }
                             @*</Enquetes>*@
 
+                            @*<Quiz>*@
+                            @{Html.RenderAction("MontaMenuQuiz", "Menu"); }
+                            @*</Quiz>*@
+
                             @*<Mensagens>*@
                             @{Html.RenderAction("MontaMenuMensagens", "Menu");}
                             @*</Mensagens>*@
@@ -195,10 +199,10 @@
             });
 
             // Aplicação de estilo nos inputs do tipo 'radio' e 'checkbox'
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_flat-blue',
-                radioClass: 'iradio_flat-blue'
-            });
+            //$('input').iCheck({
+            //    checkboxClass: 'icheckbox_flat-blue',
+            //    radioClass: 'iradio_flat-blue'
+            //});
 
             // Inicialiação do Datepicker nos campos com class '.datetime'.
             $('.datepicker').datepicker({
