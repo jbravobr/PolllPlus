@@ -917,6 +917,7 @@
     <Content Include="Content\themes\flat-dream\css\style.less" />
     <Content Include="PollPlus.wpp.targets" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <None Include="Properties\PublishProfiles\Mais - Homologação.pubxml" />
     <None Include="Properties\PublishProfiles\Mais - Temporário.pubxml" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
