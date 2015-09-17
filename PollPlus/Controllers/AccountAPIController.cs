@@ -272,6 +272,39 @@ namespace PollPlus.Controllers
         }
 
         [HttpGet]
+        [Route("quiz")]
+        public async Task<IHttpActionResult> RetornarQuizERespostasCertas()
+        {
+            try
+            {
+                var listaQuiz = await enqueteRepo.RetornarTodosOsQuiz();
+
+                var result = MapeiaParaListaQuiz(listaQuiz);
+
+                if (result != null && result.Any())
+                    return Ok(await Task.Factory.StartNew(() => JsonConvert.SerializeObject(result)));
+                else
+                    return BadRequest("Não há quiz");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        private List<RespostaQuiz> MapeiaParaListaQuiz(ICollection<Enquete> listaQuiz)
+        {
+            var lista = new List<RespostaQuiz>();
+
+            foreach (var item in listaQuiz)
+            {
+                lista.Add(new RespostaQuiz { EnqueteId = item.Id, PerguntaId = item.Pergunta.Id, RespostaId = item.Pergunta.Resposta.First(c => c.correta).Id });
+            }
+
+            return lista;
+        }
+
+        [HttpGet]
         [Route("atualizapush/{pushWooshToken}/{usuarioId}")]
         public async Task<IHttpActionResult> AtualizaDadosPush(string pushWooshToken, int usuarioId)
         {
@@ -372,10 +405,11 @@ namespace PollPlus.Controllers
             List<Enquete> enquetes = null;
 
             if (id > 0)
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id && e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Id > id &&
+                (e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica || e.Tipo == EnumTipoEnquete.Quiz)
                 && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
             else
-                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica
+                enquetes = (await enqueteRepo.RetornarTodos()).Where(e => (e.Tipo == Domain.Enumeradores.EnumTipoEnquete.Publica || e.Tipo == EnumTipoEnquete.Quiz)
                 && e.Status == Domain.Enumeradores.EnumStatusEnquete.Publicada).ToList();
 
             try
@@ -644,7 +678,10 @@ namespace PollPlus.Controllers
 
                 var enquete = (await this.enqueteRepo.RetornarTodasEnquetes()).First(e => e.PerguntaId == respondeJson.PerguntaId);
 
-                if (enquete.TemVoucher)
+                var correta = (await this.respostaRepo.RetornarRespostaPorId(respondeJson.RespostaId)).correta;
+
+                if (((enquete.Tipo == EnumTipoEnquete.Quiz && correta) && enquete.TemVoucher) ||
+                    (enquete.Tipo != EnumTipoEnquete.Quiz && enquete.TemVoucher))
                 {
                     var vouchers = await this.enqueteVoucherRepo.RetornarEnqueteVoucherPorEnquete(enquete.Id);
 
@@ -883,6 +920,13 @@ namespace PollPlus.Controllers
         public int PerguntaServerId { get; set; }
         public int RespostaServerId { get; set; }
         public string Imagem { get; set; }
+    }
+
+    public class RespostaQuiz
+    {
+        public int RespostaId { get; set; }
+        public int PerguntaId { get; set; }
+        public int EnqueteId { get; set; }
     }
 
     public class EnqueteMobile

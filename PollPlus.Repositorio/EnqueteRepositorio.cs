@@ -72,5 +72,12 @@ namespace PollPlus.Repositorio
         {
             return await this.RetornarTodos();
         }
+
+        public async Task<ICollection<Enquete>> RetornarTodosOsQuiz()
+        {
+            Expression<Func<Enquete, bool>> quiz = (x) => x.Tipo == Domain.Enumeradores.EnumTipoEnquete.Quiz;
+
+            return await base.ProcurarPorColecao(quiz);
+        }
     }
 }

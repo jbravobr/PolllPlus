@@ -86,7 +86,7 @@ namespace PollPlus.Controllers
                 {
                     var _corpoMessage = new StringBuilder();
 
-                    _corpoMessage.Append("<p>Você solicitou a alteração por esquecimento da sua senha de acesso ao Sistema de Lojistas do Metrô Rio.</p>");
+                    _corpoMessage.Append("<p>Você solicitou a alteração por esquecimento da sua senha de acesso ao Sistema Mais.</p>");
                     _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", email));
                     _corpoMessage.AppendLine(String.Format("<p><strong>Acesse {0}Usuario/AlteraSenha para alterar a sua senha (OBRIGATÓRIO).</strong></p>", ConfigurationManager.AppSettings["SiteUrl"].ToString()));
                     _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
@@ -158,9 +158,9 @@ namespace PollPlus.Controllers
         {
             var _corpoMessage = new StringBuilder();
 
-            _corpoMessage.Append("<p>Está é a confirmação da criação do seu usuário para acesso ao Sistema de Mais.</p>");
+            _corpoMessage.Append("<p>Esta é a confirmação da criação do seu usuário para acesso ao Sistema de Mais.</p>");
             _corpoMessage.AppendLine(String.Format("<p>Seu login é: {0}.</p>", usuario.Email));
-            _corpoMessage.AppendLine("Caso você não entenda do que este e-mail trata-se, favor desconsiderar o mesmo.");
+            _corpoMessage.AppendLine("Caso você não entenda do que se trata este e-mail, favor desconsiderar.");
 
             var _message = Util.MontaMailMessage(usuario.Email, _corpoMessage.ToString(), "Cadastro de usuário - Sistema Mais", String.Empty);
 
