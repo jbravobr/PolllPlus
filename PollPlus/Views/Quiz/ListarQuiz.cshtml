@@ -57,7 +57,7 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("EditarQuiz", "Quiz", new { enqueteId = _enquete.Id })">Alter>Alterar</a></li>
+                                                    <li><a href="@Url.Action("EditarQuiz", "Quiz", new { enqueteId = _enquete.Id })">Alterar</a></li>
                                                     <li><a href="javascript: if(confirm('Deseja Desabilitar este Quiz?')) {window.location.href='@Url.Action("DespublicarQuiz", "Quiz", new { enqueteId = _enquete.Id })';}">Desabilitar</a></li>
                                                     <li><a href="javascript: if(confirm('Deseja Encerrar este Quiz?')) {window.location.href='@Url.Action("DesativarQuiz", "Quiz", new { enqueteId = _enquete.Id })';}">Encerrar</a></li>
                                                 </ul>

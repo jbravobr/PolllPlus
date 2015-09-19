@@ -183,7 +183,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Publicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarQuiz");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -193,7 +193,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Despublicada;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarQuiz");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -203,7 +203,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Ativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarQuiz");
         }
 
         [OnlyAuthorizedUser, HttpGet]
@@ -213,7 +213,7 @@ namespace PollPlus.Controllers
             enquete.Status = Domain.Enumeradores.EnumStatusEnquete.Inativa;
 
             await this.service.AtualizarEnquete(enquete);
-            return Redirect("ListarEnquetes");
+            return Redirect("ListarQuiz");
         }
 
         private static IEnumerable<Resposta> MapeiaListaDeRespostas(List<string> respostas, int perguntaId, string correta)
