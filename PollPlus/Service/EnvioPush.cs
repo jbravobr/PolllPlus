@@ -71,8 +71,8 @@ namespace PollPlus.Service
 
         protected JObject MontarJObjectPushWoosh(string p_novoPush, string texto, DateTime data)
         {
-            this._application = "DD549-64BF7";
-            this._auth = "2DftEBtCFBzbVsDcg6TjPkBnvigctPIbDxFg465BIdzEkMPJ0Vg0danWEYI3YNnk6zJarPPsezIT6ME6X36O";
+            this._application = "10E35-78C8B";
+            this._auth = "7EG8UT0luoxm1Y5Sa03VuzJ29zKl2ueq84c0NrprNBBUSJkYMpQtVmyIEvmRGVJIYzKEki0gfBxLDTGZtbL7";
 
             var agg = p_novoPush;
 
@@ -91,8 +91,8 @@ namespace PollPlus.Service
 
         protected JObject MontarJObjectPushWoosh(string p_novoPush)
         {
-            this._application = "DD549-64BF7";
-            this._auth = "2DftEBtCFBzbVsDcg6TjPkBnvigctPIbDxFg465BIdzEkMPJ0Vg0danWEYI3YNnk6zJarPPsezIT6ME6X36O";
+            this._application = "10E35-78C8B";
+            this._auth = "7EG8UT0luoxm1Y5Sa03VuzJ29zKl2ueq84c0NrprNBBUSJkYMpQtVmyIEvmRGVJIYzKEki0gfBxLDTGZtbL7";
 
             return new JObject(
                 new JProperty("application", this._application),
